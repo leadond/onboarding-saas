@@ -1,0 +1,42 @@
+      // Check if all active steps have basic content (more lenient validation)
+      kit.kit_steps?.forEach((step: any, index: number) => {
+        if (!step.is_active) return
+
+        // Basic validation - just check that steps have titles
+        if (!step.title || step.title.trim() === '') {
+          validationErrors.push(
+            `Step ${index + 1} needs a title`
+          )
+        }
+
+        // More lenient content validation - only require complex config for advanced features
+        switch (step.step_type) {
+          case 'welcome_message':
+            // Welcome message just needs instructions or can be empty for basic setup
+            break
+          case 'welcome_video':
+            // Video step can work with just instructions, video_url is optional
+            break
+          case 'intake_form':
+            // Intake form can work with basic setup, form_fields will be auto-generated if not provided
+            break
+          case 'file_upload':
+            // File upload can work with default config
+            break
+          case 'contract_signing':
+            // Contract signing can work with basic setup
+            break
+          case 'scheduling':
+            // Scheduling can work with basic setup
+            break
+          case 'payment':
+            // Payment needs at least amount and description if configured
+            if (step.content?.payment_config && 
+                (!step.content.payment_config.amount || !step.content.payment_config.description)) {
+              validationErrors.push(
+                `Step ${index + 1} (${step.title}) payment configuration needs amount and description`
+              )
+            }
+            break
+        }
+      })

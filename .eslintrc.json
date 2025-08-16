@@ -1,0 +1,16 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "prefer-const": "error",
+    "no-irregular-whitespace": "error",
+    "no-trailing-spaces": "warn",
+    "no-unused-vars": "warn",
+    "no-var": "error",
+    "semi": ["error", "never"]
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2023,
+    "sourceType": "module"
+  }
+}

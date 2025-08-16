@@ -1,0 +1,176 @@
+{
+  "passed": [
+    {
+      "testName": "Security Headers - /",
+      "passed": true,
+      "details": "All required headers present",
+      "timestamp": "2025-08-15T23:39:18.369Z"
+    },
+    {
+      "testName": "X-Content-Type-Options",
+      "passed": true,
+      "details": "Correctly set to nosniff",
+      "timestamp": "2025-08-15T23:39:18.369Z"
+    },
+    {
+      "testName": "X-Frame-Options",
+      "passed": true,
+      "details": "Correctly set to DENY",
+      "timestamp": "2025-08-15T23:39:18.369Z"
+    },
+    {
+      "testName": "Security Headers - /login",
+      "passed": true,
+      "details": "All required headers present",
+      "timestamp": "2025-08-15T23:39:18.470Z"
+    },
+    {
+      "testName": "X-Content-Type-Options",
+      "passed": true,
+      "details": "Correctly set to nosniff",
+      "timestamp": "2025-08-15T23:39:18.470Z"
+    },
+    {
+      "testName": "X-Frame-Options",
+      "passed": true,
+      "details": "Correctly set to DENY",
+      "timestamp": "2025-08-15T23:39:18.470Z"
+    },
+    {
+      "testName": "Security Headers - /api/auth/login",
+      "passed": true,
+      "details": "All required headers present",
+      "timestamp": "2025-08-15T23:39:18.496Z"
+    },
+    {
+      "testName": "X-Content-Type-Options",
+      "passed": true,
+      "details": "Correctly set to nosniff",
+      "timestamp": "2025-08-15T23:39:18.496Z"
+    },
+    {
+      "testName": "X-Frame-Options",
+      "passed": true,
+      "details": "Correctly set to DENY",
+      "timestamp": "2025-08-15T23:39:18.496Z"
+    },
+    {
+      "testName": "Security Headers - /dashboard",
+      "passed": true,
+      "details": "All required headers present",
+      "timestamp": "2025-08-15T23:39:18.638Z"
+    },
+    {
+      "testName": "X-Content-Type-Options",
+      "passed": true,
+      "details": "Correctly set to nosniff",
+      "timestamp": "2025-08-15T23:39:18.638Z"
+    },
+    {
+      "testName": "X-Frame-Options",
+      "passed": true,
+      "details": "Correctly set to DENY",
+      "timestamp": "2025-08-15T23:39:18.638Z"
+    },
+    {
+      "testName": "CORS Security",
+      "passed": true,
+      "details": "Properly restricted origin: https://malicious.com",
+      "timestamp": "2025-08-15T23:39:20.750Z"
+    },
+    {
+      "testName": "CORS Security",
+      "passed": true,
+      "details": "Properly restricted origin: https://phishing-site.com",
+      "timestamp": "2025-08-15T23:39:20.771Z"
+    },
+    {
+      "testName": "CORS Security",
+      "passed": true,
+      "details": "Properly restricted origin: null",
+      "timestamp": "2025-08-15T23:39:20.797Z"
+    },
+    {
+      "testName": "Information Disclosure - /api/auth/login",
+      "passed": true,
+      "details": "No sensitive information disclosed",
+      "timestamp": "2025-08-15T23:39:21.190Z"
+    },
+    {
+      "testName": "Server Information Disclosure",
+      "passed": true,
+      "details": "No server information disclosed",
+      "timestamp": "2025-08-15T23:39:21.190Z"
+    },
+    {
+      "testName": "Server Information Disclosure",
+      "passed": true,
+      "details": "No server information disclosed",
+      "timestamp": "2025-08-15T23:39:21.233Z"
+    }
+  ],
+  "failed": [
+    {
+      "testName": "Rate Limiting",
+      "passed": false,
+      "details": "Expected 429 on attempt 6, got 401",
+      "timestamp": "2025-08-15T23:39:18.236Z"
+    },
+    {
+      "testName": "Session Security",
+      "passed": false,
+      "details": "Login failed with status 401",
+      "timestamp": "2025-08-15T23:39:20.704Z"
+    },
+    {
+      "testName": "Information Disclosure - /api/auth/signup",
+      "passed": false,
+      "details": "Sensitive information may be disclosed",
+      "timestamp": "2025-08-15T23:39:21.233Z"
+    },
+    {
+      "testName": "Information Disclosure - /nonexistent-endpoint",
+      "passed": false,
+      "details": "Request failed: Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON",
+      "timestamp": "2025-08-15T23:39:21.262Z"
+    }
+  ],
+  "warnings": [
+    {
+      "testName": "SQL Injection Protection",
+      "passed": "warning",
+      "details": "Potential vulnerability with input: ' OR '1'='1",
+      "timestamp": "2025-08-15T23:39:18.939Z"
+    },
+    {
+      "testName": "SQL Injection Protection",
+      "passed": "warning",
+      "details": "Potential vulnerability with input: admin'--",
+      "timestamp": "2025-08-15T23:39:19.195Z"
+    },
+    {
+      "testName": "SQL Injection Protection",
+      "passed": "warning",
+      "details": "Potential vulnerability with input: test@example.com'; DROP TABLE users;--",
+      "timestamp": "2025-08-15T23:39:19.526Z"
+    },
+    {
+      "testName": "XSS Protection",
+      "passed": "warning",
+      "details": "Potential XSS vulnerability with input: <script>alert('xss')</script>@example.com",
+      "timestamp": "2025-08-15T23:39:19.853Z"
+    },
+    {
+      "testName": "XSS Protection",
+      "passed": "warning",
+      "details": "Potential XSS vulnerability with input: test@example.com",
+      "timestamp": "2025-08-15T23:39:20.200Z"
+    },
+    {
+      "testName": "XSS Protection",
+      "passed": "warning",
+      "details": "Potential XSS vulnerability with input: javascript:alert('xss')@example.com",
+      "timestamp": "2025-08-15T23:39:20.413Z"
+    }
+  ]
+}

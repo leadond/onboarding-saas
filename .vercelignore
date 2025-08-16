@@ -1,0 +1,32 @@
+# Development files
+.env.local
+.env.development
+node_modules/
+.next/
+coverage/
+.DS_Store
+
+# Documentation and temp files
+*.md
+temp_publish_fix.txt
+DEBUGGING_REPORT.md
+IMPLEMENTATION_STATUS_REPORT.md
+
+# Test files
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Build artifacts
+.tsbuildinfo
+*.log
+
+# IDE files
+.vscode/
+.zencoder/
+.kilocode/
+
+# Backup files
+*.backup
