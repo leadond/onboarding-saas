@@ -5,42 +5,27 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = createClient()
 
-    // Get current session to log the user out
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-
-    if (session?.user) {
-      // Log audit event before signing out
-      await supabase.from('audit_logs').insert({
-        user_id: session.user.id,
-        action: 'logout',
-        resource_type: 'user',
-        resource_id: session.user.id,
-        details: {
-          method: 'manual_signout',
-          user_agent: request.headers.get('user-agent'),
-        },
-        ip_address:
-          request.headers.get('x-forwarded-for') ||
-          request.headers.get('x-real-ip') ||
-          '127.0.0.1',
-      })
-    }
-
-    // Sign out the user
+    // Sign out from Supabase
     const { error } = await supabase.auth.signOut()
 
     if (error) {
+      console.error('Signout error:', error)
       return NextResponse.json(
-        { error: 'Failed to sign out', message: error.message },
-        { status: 400 }
+        { error: 'Failed to sign out' },
+        { status: 500 }
       )
     }
 
-    return NextResponse.json({
+    // Create response
+    const response = NextResponse.json({
       message: 'Successfully signed out',
     })
+
+    // Clear any auth cookies
+    response.cookies.delete('access_token')
+    response.cookies.delete('refresh_token')
+
+    return response
   } catch (error) {
     console.error('Signout API error:', error)
     return NextResponse.json(

@@ -124,6 +124,8 @@ export const SECURITY_CONFIG = {
     'http://localhost:3000',
     'https://localhost:3000',
     'http://127.0.0.1:3000',
+    'https://onboard.devapphero.com',
+    'https://onboarding-saas-ab1k26jeb-derrick-ls-projects.vercel.app',
   ],
 
   // API rate limits

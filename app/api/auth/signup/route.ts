@@ -1,65 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient, createAdminClient } from '@/lib/supabase/server'
-import { signupSchema } from '@/lib/validations/auth'
-import {
-  securityMiddleware,
-  validateRequestBody,
-  logSecurityEvent,
-  validateCSRFToken
-} from '@/lib/security/security-middleware'
-import { signupRateLimiter } from '@/lib/security/rate-limiter'
-import { applyRateLimit } from '@/lib/security/rate-limiter'
+import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
   try {
-    // Apply security middleware
-    const securityResponse = await securityMiddleware(request)
-    if (securityResponse) {
-      return securityResponse
-    }
+    const body = await request.json()
+    const { email, password, fullName, companyName } = body
 
-    // Apply rate limiting
-    const rateLimitResponse = await applyRateLimit(request, signupRateLimiter)
-    if (rateLimitResponse) {
-      return rateLimitResponse
-    }
-
-    // Validate CSRF token
-    if (!validateCSRFToken(request)) {
+    // Basic input validation
+    if (!email || !password || !fullName) {
       return NextResponse.json(
-        { error: 'Invalid CSRF token' },
-        { status: 403 }
+        { error: 'Email, password, and full name are required' },
+        { status: 400 }
       )
     }
 
-    // Validate and sanitize request body
-    const validation = await validateRequestBody(request, signupSchema)
-    if (!validation.isValid) {
-      return validation.error!
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email format' },
+        { status: 400 }
+      )
     }
 
-    const { email, password, fullName, companyName } = validation.data!
+    // Basic password validation
+    if (password.length < 8) {
+      return NextResponse.json(
+        { error: 'Password must be at least 8 characters long' },
+        { status: 400 }
+      )
+    }
+
     const supabase = createClient()
-    const adminSupabase = createAdminClient()
-
-    // Check if user already exists (use generic error to prevent enumeration)
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('email')
-      .eq('email', email)
-      .single()
-
-    if (existingUser) {
-      await logSecurityEvent('signup_duplicate_email', {
-        email,
-        user_agent: request.headers.get('user-agent'),
-      }, request)
-
-      return NextResponse.json(
-        { error: 'An account with this email already exists' },
-        { status: 409 }
-      )
-    }
 
     // Create user in Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -70,18 +42,13 @@ export async function POST(request: NextRequest) {
           full_name: fullName,
           company_name: companyName || null,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/verify-email`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'https://onboard.devapphero.com'}/api/auth/callback`,
       },
     })
 
     if (authError) {
-      // Log failed signup attempt
-      await logSecurityEvent('signup_failed', {
-        email,
-        error: authError.message,
-        user_agent: request.headers.get('user-agent'),
-      }, request)
-
+      console.error('Signup error:', authError)
+      
       // Handle specific auth errors
       if (authError.message === 'User already registered') {
         return NextResponse.json(
@@ -90,7 +57,6 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      // Generic error message for other auth failures
       return NextResponse.json(
         { error: 'Failed to create account' },
         { status: 400 }
@@ -104,86 +70,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Calculate trial end date (14 days from now)
-    const trialEndDate = new Date()
-    trialEndDate.setDate(trialEndDate.getDate() + 14)
-
-    // Create user profile in our users table using admin client
-    const { error: profileError } = await adminSupabase.from('users').insert({
-      id: authData.user.id,
-      email: authData.user.email!,
-      full_name: fullName,
-      company_name: companyName || null,
-      subscription_status: 'unpaid',
-      subscription_tier: 'free',
-      trial_ends_at: trialEndDate.toISOString(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    })
-
-    if (profileError) {
-      console.error('Failed to create user profile:', profileError)
-
-      // Log security event
-      await logSecurityEvent('signup_profile_creation_failed', {
-        email,
-        error: profileError.message,
-        user_agent: request.headers.get('user-agent'),
-      }, request)
-
-      // Clean up auth user if profile creation fails
-      await adminSupabase.auth.admin.deleteUser(authData.user.id)
-
-      return NextResponse.json(
-        { error: 'Failed to create user profile' },
-        { status: 500 }
-      )
-    }
-
-    // Log successful signup
-    await logSecurityEvent('signup_success', {
-      method: 'email_signup',
-      full_name: fullName,
-      company_name: companyName,
-      user_agent: request.headers.get('user-agent'),
-    }, request, authData.user.id)
-
     // If user is immediately confirmed (e.g., in development)
     if (authData.session) {
-      const { data: userProfile } = await adminSupabase
-        .from('users')
-        .select('*')
-        .eq('id', authData.user.id)
-        .single()
-
       const response = NextResponse.json({
         user: {
           id: authData.user.id,
           email: authData.user.email,
-          fullName: userProfile?.full_name,
-          companyName: userProfile?.company_name,
-          avatarUrl: userProfile?.avatar_url,
-          subscriptionStatus: userProfile?.subscription_status,
-          subscriptionTier: userProfile?.subscription_tier,
-          trialEndsAt: userProfile?.trial_ends_at,
-          onboardingCompletedAt: userProfile?.onboarding_completed_at,
-          createdAt: userProfile?.created_at,
-          updatedAt: userProfile?.updated_at,
+          fullName: authData.user.user_metadata?.full_name || fullName,
+          companyName: authData.user.user_metadata?.company_name || companyName,
+          avatarUrl: authData.user.user_metadata?.avatar_url,
+          subscriptionStatus: 'free',
+          subscriptionTier: 'free',
+          createdAt: authData.user.created_at,
         },
         session: authData.session,
         message: 'Account created successfully',
       })
-
-      // Set secure session cookie
-      if (authData.session?.access_token) {
-        response.cookies.set('access_token', authData.session.access_token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          maxAge: 24 * 60 * 60, // 1 day
-          path: '/',
-        })
-      }
 
       return response
     }
@@ -192,8 +94,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       user: null,
       session: null,
-      message:
-        'Account created successfully! Please check your email to confirm your account.',
+      message: 'Account created successfully! Please check your email to confirm your account.',
       requiresEmailConfirmation: true,
     })
   } catch (error) {
