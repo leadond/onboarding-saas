@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "regions": ["iad1", "sfo1"],
   "build": {
     "env": {
       "NODE_ENV": "production"
