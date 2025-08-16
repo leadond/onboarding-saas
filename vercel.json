@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "name": "onboardkit-flagship",
-  "alias": ["app.onboardkit.com"],
   "regions": ["iad1", "sfo1"],
   "build": {
     "env": {
@@ -10,7 +8,6 @@
   },
   "env": {
     "NODE_ENV": "production",
-    "NEXT_PUBLIC_APP_URL": "https://app.onboardkit.com",
     "NEXT_PUBLIC_APP_NAME": "OnboardKit",
     "NEXT_PUBLIC_APP_VERSION": "1.0.0"
   },
@@ -29,10 +26,6 @@
     {
       "source": "/api/(.*)",
       "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://app.onboardkit.com"
-        },
         {
           "key": "Access-Control-Allow-Methods",
           "value": "GET, POST, PUT, DELETE, OPTIONS"
@@ -76,20 +69,6 @@
     {
       "source": "/api/webhooks/:path*",
       "destination": "/api/webhooks/:path*"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/analytics",
-      "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/cron/cleanup",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/backups",
-      "schedule": "0 3 * * *"
     }
   ]
 }
