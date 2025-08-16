@@ -7,6 +7,7 @@
   },
   "env": {
     "NODE_ENV": "production",
+    "NEXT_PUBLIC_APP_URL": "https://onboard.devapphero.com",
     "NEXT_PUBLIC_APP_NAME": "OnboardKit",
     "NEXT_PUBLIC_APP_VERSION": "1.0.0"
   },
@@ -35,7 +36,7 @@
         },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "https://onboard.devapphero.com"
         }
       ]
     },
