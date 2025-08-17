@@ -79,7 +79,7 @@ export interface Database {
           description: string | null
           step_type: string
           content: any
-          order_index: number
+          step_order: number
           is_required: boolean
           created_at: string
           updated_at: string
@@ -91,7 +91,7 @@ export interface Database {
           description?: string | null
           step_type: string
           content?: any
-          order_index: number
+          step_order: number
           is_required?: boolean
           created_at?: string
           updated_at?: string
@@ -103,7 +103,7 @@ export interface Database {
           description?: string | null
           step_type?: string
           content?: any
-          order_index?: number
+          step_order?: number
           is_required?: boolean
           created_at?: string
           updated_at?: string

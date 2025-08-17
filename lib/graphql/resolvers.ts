@@ -394,7 +394,7 @@ export const resolvers = {
         .from('kit_steps')
         .select('*')
         .eq('kit_id', parent.id)
-        .order('order_index', { ascending: true })
+        .order('step_order', { ascending: true })
 
       if (error) return []
       return data || []

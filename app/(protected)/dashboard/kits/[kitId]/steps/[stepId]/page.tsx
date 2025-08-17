@@ -39,7 +39,7 @@ export default function StepEditorPage() {
     step_type: 'welcome',
     content: {},
     is_required: true,
-    order_index: 0,
+    step_order: 0,
   })
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function StepEditorPage() {
         step_type: data.step_type,
         content: data.content || {},
         is_required: data.is_required,
-        order_index: data.order_index,
+        step_order: data.step_order,
       })
     } catch (error) {
       console.error('Error loading step:', error)
@@ -80,15 +80,15 @@ export default function StepEditorPage() {
     try {
       const { data, error } = await supabase
         .from('kit_steps')
-        .select('order_index')
+        .select('step_order')
         .eq('kit_id', kitId)
-        .order('order_index', { ascending: false })
+        .order('step_order', { ascending: false })
         .limit(1)
 
       if (error) throw error
 
-      const nextIndex = data.length > 0 ? data[0].order_index + 1 : 0
-      setFormData(prev => ({ ...prev, order_index: nextIndex }))
+      const nextIndex = data.length > 0 ? data[0].step_order + 1 : 0
+      setFormData(prev => ({ ...prev, step_order: nextIndex }))
     } catch (error) {
       console.error('Error loading order index:', error)
     }
@@ -104,7 +104,7 @@ export default function StepEditorPage() {
         step_type: formData.step_type,
         content: formData.content,
         is_required: formData.is_required,
-        order_index: formData.order_index,
+        step_order: formData.step_order,
       }
 
       if (isNew) {

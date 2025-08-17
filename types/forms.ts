@@ -29,7 +29,7 @@ export interface FormData {
   step_type: string
   content: StepContent
   is_required: boolean
-  order_index: number
+  step_order: number
 }
 
 export interface KitFormData {

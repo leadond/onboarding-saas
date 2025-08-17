@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       .from('kit_steps')
       .select('*')
       .eq('kit_id', kitId)
-      .order('order_index')
+      .order('step_order')
 
     if (stepsError) {
       console.error('Steps fetch error:', stepsError)
