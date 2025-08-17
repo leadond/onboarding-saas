@@ -1,0 +1,50 @@
+# Page snapshot
+
+```yaml
+- complementary:
+  - heading "Onboard Hero" [level=1]
+  - navigation:
+    - link "Dashboard":
+      - /url: /dashboard
+    - link "Kits":
+      - /url: /dashboard/kits
+    - link "Clients":
+      - /url: /dashboard/clients
+    - link "Teams":
+      - /url: /dashboard/teams
+    - link "Analytics":
+      - /url: /dashboard/analytics
+    - link "Integrations":
+      - /url: /dashboard/integrations
+    - link "Branding":
+      - /url: /dashboard/branding
+    - link "Billing":
+      - /url: /dashboard/billing
+    - link "Settings":
+      - /url: /dashboard/settings
+- main:
+  - img
+  - heading "Nylas Integration Featured" [level=3]:
+    - text: Nylas Integration
+    - img
+    - text: Featured
+  - paragraph: Advanced email, calendar, and contact management platform
+  - link "Configure":
+    - /url: /dashboard/integrations/nylas
+    - button "Configure":
+      - text: Configure
+      - img
+  - img
+  - text: Interactive Emails
+  - img
+  - text: Calendar Sync
+  - img
+  - text: Contact Management
+  - img
+  - text: Email Tracking
+  - paragraph: Enhance your onboarding with two-way email conversations, unified calendar availability, automated scheduling, and comprehensive email analytics. Perfect for personalized client communication.
+  - heading "Email Marketing Integrations" [level=1]
+  - paragraph: Loading integrations...
+- region "Notifications (F8)":
+  - list
+```

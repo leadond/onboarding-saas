@@ -1,6 +1,6 @@
-# OnboardKit Supabase Database Setup Guide
+# Onboard Hero Supabase Database Setup Guide
 
-This guide will walk you through setting up the complete Supabase database configuration for OnboardKit, including schema creation, Row Level Security policies, storage buckets, and all necessary configurations for a production-ready multi-tenant SaaS application.
+This guide will walk you through setting up the complete Supabase database configuration for Onboard Hero, including schema creation, Row Level Security policies, storage buckets, and all necessary configurations for a production-ready multi-tenant SaaS application.
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ Before you begin, ensure you have:
 2. Click "New Project"
 3. Choose your organization
 4. Enter project details:
-   - **Name**: `OnboardKit`
+   - **Name**: `Onboard Hero`
    - **Database Password**: Generate a secure password (save this!)
    - **Region**: Choose the region closest to your users
 5. Click "Create new project"
@@ -399,7 +399,7 @@ SELECT * FROM pg_stat_statements ORDER BY total_time DESC;
 
 ## Summary
 
-You now have a complete Supabase setup for OnboardKit with:
+You now have a complete Supabase setup for Onboard Hero with:
 
 ✅ **7 core database tables** with proper relationships and constraints
 ✅ **Comprehensive RLS policies** for multi-tenant security
@@ -409,6 +409,6 @@ You now have a complete Supabase setup for OnboardKit with:
 ✅ **Authentication configuration** with social login support
 ✅ **TypeScript types** for full type safety
 
-Your OnboardKit application is now ready for development and can scale to handle thousands of users with proper multi-tenant data isolation and security.
+Your Onboard Hero application is now ready for development and can scale to handle thousands of users with proper multi-tenant data isolation and security.
 
 For ongoing maintenance, monitor your database performance via the Supabase dashboard and adjust indexes as needed based on query patterns.

@@ -32,14 +32,14 @@ interface ApiResponse {
     total_pages: number
   }
   message?: string
-  mock?: boolean
+  error?: string
 }
 
 export default function KitsPage() {
   const [kits, setKits] = useState<Kit[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [usingMockData, setUsingMockData] = useState(false)
+
 
   useEffect(() => {
     const fetchKits = async () => {
@@ -54,9 +54,8 @@ export default function KitsPage() {
         const data: ApiResponse = await response.json()
         if (data.success) {
           setKits(data.data)
-          setUsingMockData(data.mock || false)
         } else {
-          throw new Error('API returned unsuccessful response')
+          throw new Error(data.error || 'API returned unsuccessful response')
         }
       } catch (err) {
         console.error('Error fetching kits:', err)
@@ -124,11 +123,7 @@ export default function KitsPage() {
           <p className="text-gray-600">
             Create and manage your client onboarding workflows.
           </p>
-          {usingMockData && (
-            <div className="mt-2 inline-flex items-center rounded-md bg-yellow-50 px-3 py-1 text-sm font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
-              ⚠️ Demo mode - Database temporarily unavailable
-            </div>
-          )}
+
         </div>
         <Button asChild>
           <Link href="/dashboard/kits/new">Create New Kit</Link>

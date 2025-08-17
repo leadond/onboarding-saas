@@ -276,7 +276,7 @@ export function IntegrationTestSuite({ className }: IntegrationTestSuiteProps) {
               Integration Test Suite
             </h2>
             <p className="text-gray-600">
-              End-to-end testing of OnboardKit components and workflows
+              End-to-end testing of Onboard Hero components and workflows
             </p>
           </div>
 
@@ -430,7 +430,7 @@ export function IntegrationTestSuite({ className }: IntegrationTestSuiteProps) {
       {/* Component Architecture Overview */}
       <Card className="p-6">
         <h3 className="mb-4 text-lg font-semibold text-gray-900">
-          OnboardKit Architecture Overview
+          Onboard Hero Architecture Overview
         </h3>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

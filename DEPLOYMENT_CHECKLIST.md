@@ -1,4 +1,4 @@
-# OnboardKit Deployment Checklist
+# Onboard Hero Deployment Checklist
 
 ## ✅ Completed
 - [x] Fixed authentication system

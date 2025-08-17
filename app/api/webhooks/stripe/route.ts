@@ -8,7 +8,7 @@ import type { StripeWebhookEvent, WebhookProcessingResult } from '@/types'
  * Process different Stripe webhook events
  */
 async function processWebhookEvent(event: StripeWebhookEvent): Promise<WebhookProcessingResult> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     switch (event.type) {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -14,12 +14,13 @@ import { cn } from '@/lib/utils/cn'
 interface LoginFormProps {
   className?: string
   redirectTo?: string
+  initialError?: string
 }
 
-export function LoginForm({ className, redirectTo }: LoginFormProps) {
+export function LoginForm({ className, redirectTo, initialError }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false)
   const { signIn, signInWithOAuth, loading, error, clearError } = useAuth()
-
+  
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,6 +29,17 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
       remember: false,
     },
   })
+
+  // Set initial error if provided
+  useEffect(() => {
+    if (initialError) {
+      // Set the error in the form state
+      form.setError('root', {
+        type: 'manual',
+        message: initialError,
+      })
+    }
+  }, [initialError, form])
 
   const onSubmit = async (data: LoginFormData) => {
     clearError()
@@ -55,11 +67,11 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
 
   return (
     <div className={cn('w-full space-y-8', className)}>
-      <div className="text-center space-y-3">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+      <div className="text-center space-y-4">
+        <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
           Sign in to your account
         </h1>
-        <p className="text-base text-gray-600 leading-relaxed">
+        <p className="text-base text-muted-foreground leading-relaxed">
           Welcome back! Please enter your details to continue.
         </p>
       </div>
@@ -70,7 +82,7 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
           variant="outline"
           onClick={() => handleOAuthSignIn('google')}
           disabled={loading}
-          className="w-full h-12 text-base font-medium border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+          className="w-full h-14 text-base font-medium"
         >
           {loading ? (
             <Loader2 className="mr-3 h-5 w-5 animate-spin" />
@@ -101,7 +113,7 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
           variant="outline"
           onClick={() => handleOAuthSignIn('azure')}
           disabled={loading}
-          className="w-full h-12 text-base font-medium border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+          className="w-full h-14 text-base font-medium"
         >
           {loading ? (
             <Loader2 className="mr-3 h-5 w-5 animate-spin" />
@@ -117,12 +129,13 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
         </Button>
       </div>
 
+      {/* Color Line Separator */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t border-gray-300" />
+          <span className="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="bg-white px-4 text-gray-500 font-medium">
+          <span className="bg-card px-6 text-muted-foreground font-medium">
             Or continue with email
           </span>
         </div>
@@ -130,10 +143,10 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
 
       {/* Email/Password Form */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label
             htmlFor="email"
-            className="block text-sm font-semibold text-gray-900"
+            className="block text-sm font-semibold text-foreground"
           >
             Email address
           </label>
@@ -145,23 +158,16 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
             autoComplete="email"
             autoCorrect="off"
             disabled={loading}
+            icon="📧"
+            error={form.formState.errors.email?.message}
             {...form.register('email')}
-            className={cn(
-              'h-12 text-base',
-              form.formState.errors.email && 'border-red-500 focus:border-red-500 focus:ring-red-500'
-            )}
           />
-          {form.formState.errors.email && (
-            <p className="text-sm text-red-600 font-medium">
-              {form.formState.errors.email.message}
-            </p>
-          )}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <label
             htmlFor="password"
-            className="block text-sm font-semibold text-gray-900"
+            className="block text-sm font-semibold text-foreground"
           >
             Password
           </label>
@@ -172,15 +178,13 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
               type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               disabled={loading}
+              icon="🔒"
+              error={form.formState.errors.password?.message}
               {...form.register('password')}
-              className={cn(
-                'h-12 text-base pr-12',
-                form.formState.errors.password && 'border-red-500 focus:border-red-500 focus:ring-red-500'
-              )}
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-10"
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
@@ -190,42 +194,38 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
               )}
             </button>
           </div>
-          {form.formState.errors.password && (
-            <p className="text-sm text-red-600 font-medium">
-              {form.formState.errors.password.message}
-            </p>
-          )}
         </div>
+
+        {/* Color Line Separator */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent"></div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <input
               id="remember"
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-2"
+              className="h-4 w-4 rounded border-border text-primary-600 focus:ring-primary-500 focus:ring-2"
               disabled={loading}
               {...form.register('remember')}
             />
-            <label htmlFor="remember" className="text-sm font-medium text-gray-700">
+            <label htmlFor="remember" className="text-sm font-medium text-foreground">
               Remember me for 30 days
             </label>
           </div>
 
           <Link
             href="/forgot-password"
-            className="text-sm font-semibold text-blue-600 hover:text-blue-500 transition-colors"
+            className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
           >
             Forgot password?
           </Link>
         </div>
 
         {(error || form.formState.errors.root) && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+          <div className="rounded-xl border-2 border-error-200 bg-error-50/50 p-4 backdrop-blur-sm">
             <div className="flex items-center">
-              <svg className="h-5 w-5 text-red-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-              <p className="text-sm text-red-700 font-medium">
+              <span className="text-error-500 mr-3 text-lg">⚠️</span>
+              <p className="text-sm text-error-700 font-medium">
                 {error || form.formState.errors.root?.message}
               </p>
             </div>
@@ -234,8 +234,9 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
 
         <Button
           type="submit"
-          className="w-full h-12 text-base font-semibold bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 transition-all duration-200"
+          className="w-full h-14 text-base font-semibold shadow-glow"
           disabled={loading}
+          size="lg"
         >
           {loading ? (
             <>
@@ -248,12 +249,15 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
         </Button>
       </form>
 
+      {/* Color Line Separator */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-secondary-200 to-transparent"></div>
+
       <div className="text-center">
-        <p className="text-base text-gray-600">
+        <p className="text-base text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link
             href="/signup"
-            className="font-semibold text-blue-600 hover:text-blue-500 transition-colors"
+            className="font-semibold text-primary-600 hover:text-primary-700 transition-colors"
           >
             Create one now
           </Link>
@@ -262,7 +266,8 @@ export function LoginForm({ className, redirectTo }: LoginFormProps) {
 
       {/* Security notice */}
       <div className="text-center">
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground/80 flex items-center justify-center gap-2">
+          <span>🔒</span>
           Protected by industry-standard security. Your data is encrypted and secure.
         </p>
       </div>

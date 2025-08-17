@@ -7,7 +7,7 @@ export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     try {
       const { organizationId } = context.params
-      const supabase = createClient()
+      const supabase = await createClient()
 
       // Get current user
       const {
@@ -78,7 +78,7 @@ export const POST = createProtectedRoute(
         )
       }
 
-      const supabase = createClient()
+      const supabase = await createClient()
 
       // Get current user
       const {

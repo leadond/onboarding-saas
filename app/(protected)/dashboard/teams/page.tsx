@@ -1,18 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+'use client'
+
 import { SimpleTeamDashboard } from '@/components/teams/simple-team-dashboard'
 
-export default async function TeamsPage() {
-  const supabase = createClient()
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session) {
-    redirect('/login')
-  }
-
+export default function TeamsPage() {
   return (
     <div className="space-y-6">
       <div>

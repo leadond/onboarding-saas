@@ -1,4 +1,4 @@
-# OnboardKit Flagship Platform - Production Deployment Guide
+# Onboard Hero Flagship Platform - Production Deployment Guide
 ## Complete Guide for Production Launch
 
 **Version:** 1.0  
@@ -9,7 +9,7 @@
 
 ## 🎯 Executive Summary
 
-OnboardKit Flagship Platform is **100% complete** with all 21 flagship features implemented and tested. This guide provides step-by-step instructions for deploying to production on Vercel, Netlify, or AWS.
+Onboard Hero Flagship Platform is **100% complete** with all 21 flagship features implemented and tested. This guide provides step-by-step instructions for deploying to production on Vercel, Netlify, or AWS.
 
 ### ✅ Implementation Status
 - **21 Flagship Features:** All implemented and functional
@@ -33,7 +33,7 @@ OnboardKit Flagship Platform is **100% complete** with all 21 flagship features 
 
 ### ✅ Infrastructure Requirements
 - [ ] Supabase production instance provisioned
-- [ ] Domain name configured (app.onboardkit.com)
+- [ ] Domain name configured (app.onboardhero.com)
 - [ ] SSL certificates ready
 - [ ] CDN configured (optional)
 - [ ] Monitoring tools set up
@@ -82,7 +82,7 @@ OnboardKit Flagship Platform is **100% complete** with all 21 flagship features 
    ```
 
 4. **Configure Custom Domain**
-   - Add `app.onboardkit.com` in Vercel dashboard
+   - Add `app.onboardhero.com` in Vercel dashboard
    - Update DNS records as instructed
 
 ### Option 2: Netlify Deployment
@@ -171,8 +171,8 @@ Create `.env.production` with the following variables:
 
 ```bash
 # App Configuration
-NEXT_PUBLIC_APP_URL=https://app.onboardkit.com
-NEXT_PUBLIC_APP_NAME=OnboardKit
+NEXT_PUBLIC_APP_URL=https://app.onboardhero.com
+NEXT_PUBLIC_APP_NAME=Onboard Hero
 NEXT_PUBLIC_APP_VERSION=1.0.0
 
 # Supabase (Replace with production values)
@@ -207,7 +207,7 @@ AWS_S3_BUCKET=onboardkit-production-files
 
 # Security
 NEXTAUTH_SECRET=your-32-character-secret
-NEXTAUTH_URL=https://app.onboardkit.com
+NEXTAUTH_URL=https://app.onboardhero.com
 ```
 
 ---
@@ -223,7 +223,7 @@ NEXTAUTH_URL=https://app.onboardkit.com
 ```javascript
 // next.config.js
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://app.onboardkit.com',
+  'Access-Control-Allow-Origin': 'https://app.onboardhero.com',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 }
@@ -285,9 +285,9 @@ npm run production-ready
 ### 2. Post-Deployment Validation
 
 **Critical Endpoints to Test:**
-- [ ] `https://app.onboardkit.com/api/health` - Health check
-- [ ] `https://app.onboardkit.com/test-dashboard` - Main dashboard
-- [ ] `https://app.onboardkit.com/api/auth/session` - Authentication
+- [ ] `https://app.onboardhero.com/api/health` - Health check
+- [ ] `https://app.onboardhero.com/test-dashboard` - Main dashboard
+- [ ] `https://app.onboardhero.com/api/auth/session` - Authentication
 - [ ] All 21 flagship feature tabs functional
 
 **Feature Validation Checklist:**
@@ -460,7 +460,7 @@ vercel --prod  # or netlify deploy --prod
 
 ## 🎯 Conclusion
 
-OnboardKit Flagship Platform is **production-ready** with:
+Onboard Hero Flagship Platform is **production-ready** with:
 
 ✅ **21 Complete Flagship Features**  
 ✅ **Enterprise-Grade Security**  

@@ -1,4 +1,4 @@
-// Form data types for OnboardKit
+// Form data types for Onboard Hero
 
 export interface StepContent {
   instructions?: string

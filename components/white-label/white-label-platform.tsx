@@ -121,7 +121,7 @@ const mockTenants: WhiteLabelTenant[] = [
   {
     id: '1',
     name: 'Acme Consulting',
-    domain: 'acme-consulting.onboardkit.com',
+    domain: 'acme-consulting.onboardhero.com',
     custom_domain: 'onboarding.acmeconsulting.com',
     status: 'active',
     plan: 'enterprise',
@@ -157,7 +157,7 @@ const mockTenants: WhiteLabelTenant[] = [
   {
     id: '2',
     name: 'Digital Marketing Pro',
-    domain: 'digitalmarketing-pro.onboardkit.com',
+    domain: 'digitalmarketing-pro.onboardhero.com',
     status: 'active',
     plan: 'professional',
     created_at: '2024-07-01T00:00:00Z',
@@ -190,7 +190,7 @@ const mockTenants: WhiteLabelTenant[] = [
   {
     id: '3',
     name: 'StartupLaunch',
-    domain: 'startup-launch.onboardkit.com',
+    domain: 'startup-launch.onboardhero.com',
     status: 'trial',
     plan: 'starter',
     created_at: '2024-08-01T00:00:00Z',
@@ -424,7 +424,7 @@ export function WhiteLabelPlatform() {
                   <div className="flex">
                     <Input placeholder="partner-name" />
                     <span className="flex items-center px-3 bg-gray-100 border border-l-0 rounded-r text-sm text-gray-600">
-                      .onboardkit.com
+                      .onboardhero.com
                     </span>
                   </div>
                 </div>

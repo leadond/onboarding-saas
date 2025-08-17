@@ -527,7 +527,7 @@ export function MarketPositioningDashboard() {
                 Competitive Advantages
               </CardTitle>
               <p className="text-sm text-gray-600">
-                Key differentiators that set OnboardKit apart from competitors
+                Key differentiators that set Onboard Hero apart from competitors
               </p>
             </CardHeader>
             <CardContent>

@@ -76,7 +76,7 @@ export default function IntegrationDemoPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                OnboardKit Enhancement Demo
+                Onboard Hero Enhancement Demo
               </h1>
               <p className="text-gray-600">
                 Comprehensive integration testing and validation
@@ -145,7 +145,7 @@ export default function IntegrationDemoPage() {
                 <Card className="p-8 text-center">
                   <div className="mb-4 text-6xl">🎉</div>
                   <h2 className="mb-4 text-2xl font-bold text-gray-900">
-                    OnboardKit Enhancement Complete!
+                    Onboard Hero Enhancement Complete!
                   </h2>
                   <p className="mx-auto mb-6 max-w-2xl text-gray-600">
                     The comprehensive client experience and progress tracking

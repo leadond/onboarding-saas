@@ -1,4 +1,4 @@
-// Global type declarations for OnboardKit
+// Global type declarations for Onboard Hero
 
 declare global {
   interface Window {

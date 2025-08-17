@@ -93,7 +93,7 @@ export function AIChatbot({ isMinimized = false, onToggleMinimize, onClose, cont
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: `Hi! I'm your AI assistant for OnboardKit. I can help you optimize your onboarding processes, generate content, and provide insights based on your data.${context?.currentTask ? `\n\nI see you're working on: ${context.currentTask}. How can I help?` : ''}`,
+      content: `Hi! I'm your AI assistant for Onboard Hero. I can help you optimize your onboarding processes, generate content, and provide insights based on your data.${context?.currentTask ? `\n\nI see you're working on: ${context.currentTask}. How can I help?` : ''}`,
       role: 'assistant',
       timestamp: new Date(),
       type: 'text'

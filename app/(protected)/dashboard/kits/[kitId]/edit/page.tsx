@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -30,8 +30,10 @@ type Kit = {
   completion_redirect_url: string | null
 }
 
-export default function EditKitPage({ params }: { params: { kitId: string } }) {
+export default function EditKitPage() {
   const router = useRouter()
+  const pathname = usePathname()
+  const kitId = pathname.split('/')[3] // Extract kitId from path
   const [kit, setKit] = useState<Kit | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -54,7 +56,7 @@ export default function EditKitPage({ params }: { params: { kitId: string } }) {
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
 
         if (!response.ok) {
           throw new Error('Kit not found')
@@ -86,7 +88,7 @@ export default function EditKitPage({ params }: { params: { kitId: string } }) {
     }
 
     fetchKit()
-  }, [params.kitId])
+  }, [kitId])
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -104,7 +106,7 @@ export default function EditKitPage({ params }: { params: { kitId: string } }) {
     setError(null)
 
     try {
-      const response = await fetch(`/api/kits/${params.kitId}`, {
+      const response = await fetch(`/api/kits/${kitId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +131,7 @@ export default function EditKitPage({ params }: { params: { kitId: string } }) {
         throw new Error(errorData.error || 'Failed to update kit')
       }
 
-      router.push(`/dashboard/kits/${params.kitId}`)
+      router.push(`/dashboard/kits/${kitId}`)
     } catch (error) {
       console.error('Error updating kit:', error)
       setError(error instanceof Error ? error.message : 'Failed to update kit')
@@ -429,7 +431,7 @@ export default function EditKitPage({ params }: { params: { kitId: string } }) {
 
             <div className="flex justify-between pt-4">
               <Button type="button" variant="outline" asChild>
-                <Link href={`/dashboard/kits/${params.kitId}`}>Cancel</Link>
+                <Link href={`/dashboard/kits/${kitId}`}>Cancel</Link>
               </Button>
 
               <Button

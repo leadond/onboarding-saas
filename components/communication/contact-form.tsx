@@ -32,7 +32,7 @@ export function ContactForm({
   clientIdentifier,
   clientName = '',
   clientEmail = '',
-  companyName = 'OnboardKit',
+  companyName = 'Onboard Hero',
   brandColor = '#3B82F6',
   className,
   onSubmit,

@@ -702,6 +702,231 @@ export interface Database {
           updated_at?: string
         }
       }
+      data_access_requests: {
+        Row: {
+          id: string
+          user_id: string
+          table_name: string
+          record_id: string | null
+          access_type: string
+          reason: string | null
+          status: 'pending' | 'approved' | 'rejected' | 'completed'
+          approved_by: string | null
+          approved_at: string | null
+          rejected_by: string | null
+          rejected_at: string | null
+          rejection_reason: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          table_name: string
+          record_id?: string | null
+          access_type: string
+          reason?: string | null
+          status?: 'pending' | 'approved' | 'rejected' | 'completed'
+          approved_by?: string | null
+          approved_at?: string | null
+          rejected_by?: string | null
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          table_name?: string
+          record_id?: string | null
+          access_type?: string
+          reason?: string | null
+          status?: 'pending' | 'approved' | 'rejected' | 'completed'
+          approved_by?: string | null
+          approved_at?: string | null
+          rejected_by?: string | null
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      companies: {
+        Row: {
+          id: string
+          name: string
+          legal_name: string | null
+          description: string | null
+          website_url: string | null
+          logo_url: string | null
+          industry: string | null
+          company_size: string | null
+          founded_year: number | null
+          employee_count: number | null
+          street_address: string | null
+          city: string | null
+          state_province: string | null
+          postal_code: string | null
+          country: string | null
+          phone: string | null
+          email: string | null
+          support_email: string | null
+          linkedin_url: string | null
+          twitter_url: string | null
+          facebook_url: string | null
+          tax_id: string | null
+          vat_number: string | null
+          duns_number: string | null
+          created_by: string | null
+          created_at: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          legal_name?: string | null
+          description?: string | null
+          website_url?: string | null
+          logo_url?: string | null
+          industry?: string | null
+          company_size?: string | null
+          founded_year?: number | null
+          employee_count?: number | null
+          street_address?: string | null
+          city?: string | null
+          state_province?: string | null
+          postal_code?: string | null
+          country?: string | null
+          phone?: string | null
+          email?: string | null
+          support_email?: string | null
+          linkedin_url?: string | null
+          twitter_url?: string | null
+          facebook_url?: string | null
+          tax_id?: string | null
+          vat_number?: string | null
+          duns_number?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          legal_name?: string | null
+          description?: string | null
+          website_url?: string | null
+          logo_url?: string | null
+          industry?: string | null
+          company_size?: string | null
+          founded_year?: number | null
+          employee_count?: number | null
+          street_address?: string | null
+          city?: string | null
+          state_province?: string | null
+          postal_code?: string | null
+          country?: string | null
+          phone?: string | null
+          email?: string | null
+          support_email?: string | null
+          linkedin_url?: string | null
+          twitter_url?: string | null
+          facebook_url?: string | null
+          tax_id?: string | null
+          vat_number?: string | null
+          duns_number?: string | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+      }
+      company_representatives: {
+        Row: {
+          id: string
+          company_id: string
+          user_id: string | null
+          first_name: string | null
+          last_name: string | null
+          full_name: string | null
+          email: string | null
+          phone: string | null
+          mobile_phone: string | null
+          job_title: string | null
+          department: string | null
+          role: string | null
+          preferred_contact_method: string | null
+          timezone: string | null
+          availability: string | null
+          status: string | null
+          is_primary: boolean | null
+          can_approve: boolean | null
+          can_view_pricing: boolean | null
+          notes: string | null
+          tags: string[] | null
+          created_by: string | null
+          created_at: string | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          id?: string
+          company_id: string
+          user_id?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          full_name?: string | null
+          email?: string | null
+          phone?: string | null
+          mobile_phone?: string | null
+          job_title?: string | null
+          department?: string | null
+          role?: string | null
+          preferred_contact_method?: string | null
+          timezone?: string | null
+          availability?: string | null
+          status?: string | null
+          is_primary?: boolean | null
+          can_approve?: boolean | null
+          can_view_pricing?: boolean | null
+          notes?: string | null
+          tags?: string[] | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          id?: string
+          company_id?: string
+          user_id?: string | null
+          first_name?: string | null
+          last_name?: string | null
+          full_name?: string | null
+          email?: string | null
+          phone?: string | null
+          mobile_phone?: string | null
+          job_title?: string | null
+          department?: string | null
+          role?: string | null
+          preferred_contact_method?: string | null
+          timezone?: string | null
+          availability?: string | null
+          status?: string | null
+          is_primary?: boolean | null
+          can_approve?: boolean | null
+          can_view_pricing?: boolean | null
+          notes?: string | null
+          tags?: string[] | null
+          created_by?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never

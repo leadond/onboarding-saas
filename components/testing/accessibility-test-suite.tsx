@@ -300,7 +300,7 @@ export function AccessibilityTestSuite({
               Accessibility Test Suite
             </h2>
             <p className="text-gray-600">
-              WCAG 2.1 AA compliance testing for OnboardKit components
+              WCAG 2.1 AA compliance testing for Onboard Hero components
             </p>
           </div>
 

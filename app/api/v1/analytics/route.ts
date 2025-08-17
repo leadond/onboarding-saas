@@ -21,7 +21,7 @@ const behaviorEventSchema = z.object({
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = createClient()
+    const supabase = await createClient()
 
     try {
       const searchParams = request.nextUrl.searchParams
@@ -81,7 +81,7 @@ export const GET = createProtectedRoute(
 export const POST = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = createClient()
+    const supabase = await createClient()
 
     try {
       const body = await request.json()

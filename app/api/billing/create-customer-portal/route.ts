@@ -1,19 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import {
-  createCustomerPortalSession,
-  getOrCreateStripeCustomer,
-} from '@/lib/stripe/billing'
-import type { CustomerPortalRequest, User } from '@/types'
+import { createCustomerPortalSession, getOrCreateStripeCustomer } from '@/lib/stripe/billing'
+import { handleApiError } from '@/lib/utils/api-error-handler'
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const body = await request.json()
+    const { returnUrl } = body
 
-    // Get authenticated user
-    const { data: { user: authUser }, error: authError } = await supabase.auth.getUser()
+    if (!returnUrl) {
+      return NextResponse.json(
+        { success: false, error: 'Return URL is required' },
+        { status: 400 }
+      )
+    }
 
-    if (authError || !authUser) {
+    const supabase = await createClient()
+
+    // Get current user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
+
+    if (authError || !user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -21,63 +31,71 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user profile
-    const { data: user, error: userError } = await supabase
-      .from('users')
+    let { data: userProfile, error: profileError } = await supabase
+      .from('profiles')
       .select('*')
-      .eq('id', authUser.id)
+      .eq('id', user.id)
       .single()
 
-    if (userError || !user) {
-      return NextResponse.json(
-        { success: false, error: 'User not found' },
-        { status: 404 }
-      )
-    }
+    if (profileError || !userProfile) {
+      // Create profile if it doesn't exist
+      const { data: newProfile, error: createError } = await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: user.id,
+            email: user.email || '',
+            full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || '',
+          }
+        ])
+        .select()
+        .single()
 
-    const body = await request.json()
-    const { returnUrl } = body as CustomerPortalRequest
+      if (createError || !newProfile) {
+        return NextResponse.json(
+          { success: false, error: 'Failed to create user profile' },
+          { status: 500 }
+        )
+      }
+
+      // Use the newly created profile
+      userProfile = newProfile
+    }
 
     // Get or create Stripe customer
-    const customerResult = await getOrCreateStripeCustomer(user as User)
-
-    if (!customerResult.success || !customerResult.data) {
-      return NextResponse.json(
-        { success: false, error: customerResult.success ? 'No customer data' : (customerResult as any).error },
-        { status: 500 }
-      )
+    const customerResult = await getOrCreateStripeCustomer(userProfile)
+    if (!customerResult.success) {
+      return NextResponse.json(customerResult, { status: 400 })
     }
 
-    const customerId = 'customerId' in customerResult.data
-      ? customerResult.data.customerId
-      : customerResult.data.id
-
     // Create customer portal session
-    const defaultReturnUrl = `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing`
     const portalResult = await createCustomerPortalSession(
-      customerId,
-      returnUrl || defaultReturnUrl
+      customerResult.data.customerId,
+      returnUrl
     )
 
-    if (!portalResult.success || !portalResult.data) {
-      return NextResponse.json(
-        { success: false, error: portalResult.success ? 'No portal data' : (portalResult as any).error },
-        { status: 500 }
-      )
+    if (!portalResult.success) {
+      return NextResponse.json(portalResult, { status: 400 })
     }
 
     return NextResponse.json({
       success: true,
-      data: { url: portalResult.data.url },
+      data: {
+        url: portalResult.data.url,
+      },
     })
   } catch (error) {
-    console.error('Error in create customer portal API:', error)
-
-    return NextResponse.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : 'Internal server error',
-      },
-      { status: 500 }
-    )
+    return handleApiError(error, 'POST /api/billing/create-customer-portal')
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
 }

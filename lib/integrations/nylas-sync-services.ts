@@ -1,4 +1,4 @@
-// NYLAS Sync Services for OnboardKit
+// NYLAS Sync Services for Onboard Hero
 // Provides comprehensive email, calendar, and contact synchronization
 
 import { nylasClient, createNylasEmailService, createNylasCalendarService } from './nylas-client';

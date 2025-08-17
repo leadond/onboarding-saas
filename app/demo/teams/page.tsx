@@ -7,7 +7,7 @@ export default function DemoTeamsPage() {
         {/* Sidebar */}
         <aside className="min-h-screen w-64 border-r border-gray-200 bg-white">
           <div className="p-6">
-            <h1 className="text-xl font-bold text-gray-900">OnboardKit</h1>
+            <h1 className="text-xl font-bold text-gray-900">Onboard Hero</h1>
             <p className="text-sm text-gray-500 mt-1">Demo Mode</p>
           </div>
           <nav className="px-6">

@@ -289,7 +289,7 @@ export function AdvancedBrandingCustomizer() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Advanced Branding</h1>
           <p className="text-gray-600">
-            Customize every aspect of your OnboardKit experience to match your brand.
+            Customize every aspect of your Onboard Hero experience to match your brand.
           </p>
         </div>
         <div className="flex items-center space-x-3">
@@ -682,7 +682,7 @@ export function AdvancedBrandingCustomizer() {
                           fontFamily: config.heading_font
                         }}
                       >
-                        Welcome to OnboardKit
+                        Welcome to Onboard Hero
                       </h1>
                       <p style={{ color: config.secondary_color }}>
                         Experience your custom branding in action

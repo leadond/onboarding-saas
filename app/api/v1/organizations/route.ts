@@ -53,7 +53,7 @@ export const GET = createProtectedRoute(
 export const POST = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
-    const supabase = createClient()
+    const supabase = await createClient()
 
     try {
       const body = await request.json()

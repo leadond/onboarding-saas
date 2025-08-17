@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Supabase client
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get kit details with user info
     const { data: kit, error: kitError } = await supabase

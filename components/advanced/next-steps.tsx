@@ -36,7 +36,7 @@ export function NextSteps({
   clientIdentifier,
   completionPercentage,
   brandColor = '#3B82F6',
-  companyName = 'OnboardKit',
+  companyName = 'Onboard Hero',
   className,
   onStepComplete,
   onActionClick,

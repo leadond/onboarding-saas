@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const requestUrl = new URL(request.url)
     const code = requestUrl.searchParams.get('code')
-    const next = requestUrl.searchParams.get('next') || '/test-dashboard'
+    const next = requestUrl.searchParams.get('next') || '/dashboard'
     const error = requestUrl.searchParams.get('error')
     const error_description = requestUrl.searchParams.get('error_description')
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(redirectUrl)
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Exchange code for session
     const { data, error: exchangeError } =

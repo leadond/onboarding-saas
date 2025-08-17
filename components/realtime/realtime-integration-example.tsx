@@ -15,7 +15,7 @@ interface RealtimeIntegrationExampleProps {
 
 /**
  * Example component showing how to integrate all real-time features
- * This demonstrates the complete real-time experience for OnboardKit
+ * This demonstrates the complete real-time experience for Onboard Hero
  */
 export function RealtimeIntegrationExample({
   kitId,

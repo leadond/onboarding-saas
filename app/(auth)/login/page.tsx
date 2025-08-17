@@ -1,125 +1,90 @@
 import { Metadata } from 'next'
-import { Suspense } from 'react'
 import Link from 'next/link'
-import { LoginForm } from '@/components/auth/login-form'
-import { AuthLoadingSpinner } from '@/components/auth/auth-provider'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils/cn'
+import { LoginPageClient } from '@/components/auth/login-page-client'
+import { LogoIcon as Logo, ChevronLeftIcon as ChevronLeft } from '@/components/icons'
 
 export const metadata: Metadata = {
-  title: 'Sign In | OnboardKit',
+  title: 'Sign In | Onboard Hero',
   description:
-    'Sign in to your OnboardKit account to manage your client onboarding experiences.',
-}
-
-// Component to handle URL search params (like error messages)
-function LoginPageContent() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="flex min-h-screen">
-        {/* Left side - Enhanced Branding */}
-        <div className="relative hidden overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 lg:flex lg:w-1/2">
-          {/* Background pattern */}
-          <div className="absolute inset-0 bg-black/10" />
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-          
-          <div className="relative z-10 flex flex-col justify-between p-12 text-white">
-            {/* Header */}
-            <div className="space-y-8">
-              <Link href="/" className="inline-flex items-center space-x-3 transition-opacity hover:opacity-80">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-lg">
-                  <span className="text-xl font-black text-blue-600">O</span>
-                </div>
-                <span className="text-3xl font-black">OnboardKit</span>
-              </Link>
-
-              <div className="space-y-6">
-                <h1 className="text-5xl font-black leading-tight tracking-tight">
-                  Welcome back
-                </h1>
-                <p className="text-xl leading-relaxed text-blue-100 font-medium">
-                  Continue building extraordinary client onboarding experiences that drive growth and satisfaction.
-                </p>
-              </div>
-            </div>
-
-            {/* Features */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-400 shadow-lg">
-                  <svg className="h-4 w-4 text-green-900" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="text-lg font-semibold text-white">
-                  Streamline complex onboarding workflows
-                </span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-400 shadow-lg">
-                  <svg className="h-4 w-4 text-emerald-900" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="text-lg font-semibold text-white">
-                  Boost client satisfaction & retention rates
-                </span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-400 shadow-lg">
-                  <svg className="h-4 w-4 text-teal-900" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span className="text-lg font-semibold text-white">
-                  Automate repetitive tasks and save hours
-                </span>
-              </div>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="flex items-center justify-between pt-8 border-t border-white/20">
-              <div className="text-center">
-                <div className="text-2xl font-black text-white">10k+</div>
-                <div className="text-sm font-medium text-blue-200">Active Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-black text-white">99.9%</div>
-                <div className="text-sm font-medium text-blue-200">Uptime</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-black text-white">4.9★</div>
-                <div className="text-sm font-medium text-blue-200">Rating</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Enhanced decorative elements */}
-          <div className="absolute right-0 top-0 h-64 w-64 -translate-y-32 translate-x-32 rounded-full bg-gradient-to-br from-white/10 to-transparent" />
-          <div className="absolute bottom-0 left-0 h-48 w-48 -translate-x-24 translate-y-24 rounded-full bg-gradient-to-tr from-white/10 to-transparent" />
-          <div className="absolute top-1/2 right-1/4 h-32 w-32 -translate-y-16 translate-x-16 rounded-full bg-gradient-to-bl from-white/5 to-transparent" />
-        </div>
-
-        {/* Right side - Enhanced Login form */}
-        <div className="flex flex-1 items-center justify-center px-6 py-12 lg:px-8">
-          <div className="w-full max-w-lg">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 lg:p-10">
-              <LoginForm />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+    'Sign in to your Onboard Hero account to manage your client onboarding experiences.',
 }
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<AuthLoadingSpinner />}>
-      <LoginPageContent />
-    </Suspense>
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-background relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-mesh opacity-20"></div>
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl"></div>
+      
+      {/* Color Line Separator - Top */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700"></div>
+      
+      <div className="container flex h-screen w-screen flex-col items-center justify-center relative z-10">
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: 'glass' }),
+            'absolute left-4 top-4 md:left-8 md:top-8 backdrop-blur-md'
+          )}
+        >
+          <>
+            <ChevronLeft className="mr-2 h-4 w-4" />
+            Back
+          </>
+        </Link>
+        
+        <div className="mx-auto flex w-full flex-col justify-center space-y-8 sm:w-[420px]">
+          {/* Header Section */}
+          <div className="relative">
+            <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl blur-lg opacity-30"></div>
+                <div className="relative bg-gradient-to-r from-primary-500 to-primary-600 p-4 rounded-2xl shadow-glow">
+                  <Logo className="h-12 w-12 text-white" />
+                </div>
+              </div>
+              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+                Welcome to Onboard Hero
+              </h1>
+              <p className="text-base text-muted-foreground">
+                Enter your email to sign in to your account
+              </p>
+            </div>
+            
+            {/* Color Line Separator */}
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"></div>
+          </div>
+          
+          {/* Login Form Section */}
+          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card/80 backdrop-blur-sm shadow-strong p-8">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-50/20 to-transparent"></div>
+            <div className="relative z-10">
+              <LoginPageClient />
+            </div>
+          </div>
+          
+          {/* Footer Section */}
+          <div className="relative">
+            {/* Color Line Separator */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-full"></div>
+            
+            <p className="text-center text-sm text-muted-foreground pt-4">
+              <Link
+                href="/register"
+                className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4 transition-colors"
+              >
+                Don't have an account? Sign Up
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      {/* Color Line Separator - Bottom */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500"></div>
+    </div>
   )
 }

@@ -29,7 +29,7 @@ export default function TestDashboardPage() {
       <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">OnboardKit Ultimate Flagship Platform</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Onboard Hero Ultimate Flagship Platform</h1>
           <p className="text-gray-600">Complete enterprise onboarding solution with 17 comprehensive flagship features</p>
         </div>
 

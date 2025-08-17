@@ -1,84 +1,80 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { PWAInstallPrompt } from '@/components/pwa/pwa-install-prompt'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/toaster'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'OnboardKit - Professional Client Onboarding',
+  title: 'Onboard Hero - Professional Client Onboarding',
   description:
-    'Create beautiful, step-by-step client onboarding experiences that delight your customers and streamline your business processes.',
+    'Create professional client onboarding experiences with ease using Onboard Hero',
   keywords: ['onboarding', 'client onboarding', 'saas', 'business automation'],
-  authors: [{ name: 'OnboardKit' }],
-  creator: 'OnboardKit',
+  authors: [{ name: 'Onboard Hero' }],
+  creator: 'Onboard Hero',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   ),
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'OnboardKit',
-    startupImage: [
-      '/icons/apple-splash-2048-2732.jpg',
-      '/icons/apple-splash-1668-2224.jpg',
-      '/icons/apple-splash-1536-2048.jpg',
-      '/icons/apple-splash-1125-2436.jpg',
-      '/icons/apple-splash-1242-2208.jpg',
-      '/icons/apple-splash-750-1334.jpg',
-      '/icons/apple-splash-828-1792.jpg'
-    ]
-  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-    siteName: 'OnboardKit',
-    title: 'OnboardKit - Professional Client Onboarding',
+    siteName: 'Onboard Hero',
+    title: 'Onboard Hero - Professional Client Onboarding',
     description:
-      'Create beautiful, step-by-step client onboarding experiences that delight your customers and streamline your business processes.',
+      'Create professional client onboarding experiences with ease using Onboard Hero',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'OnboardKit - Professional Client Onboarding'
+        alt: 'Onboard Hero - Professional Client Onboarding'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'OnboardKit - Professional Client Onboarding',
+    title: 'Onboard Hero - Professional Client Onboarding',
     description:
-      'Create beautiful, step-by-step client onboarding experiences that delight your customers and streamline your business processes.',
-    images: ['/og-image.png']
+      'Create professional client onboarding experiences with ease using Onboard Hero',
+    images: ['/og-image.jpg'],
+    creator: '@onboardhero'
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  manifest: '/manifest.json',
   icons: {
-    icon: [
-      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' }
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+    other: [
+      {
+        rel: 'apple-touch-icon-precomposed',
+        url: '/apple-touch-icon-precomposed.png',
+      },
     ],
-    apple: [
-      { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }
-    ]
-  }
+  },
+  applicationName: 'Onboard Hero',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Onboard Hero',
+    startupImage: [
+      {
+        url: '/splash_screens/iphone5_splash.png',
+        media: '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)',
+      },
+    ],
+  },
+  formatDetection: {
+    telephone: false,
+  },
 }
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#0066cc' },
-    { media: '(prefers-color-scheme: dark)', color: '#0066cc' }
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  viewportFit: 'cover'
 }
 
 export default function RootLayout({
@@ -87,19 +83,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <head>
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="OnboardKit" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta name="msapplication-TileColor" content="#0066cc" />
-      </head>
-      <body className={`${inter.className} antialiased`}>
-        <div id="root">{children}</div>
-        <PWAInstallPrompt />
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -43,27 +43,27 @@ http://localhost:3000/login
 Go to: https://supabase.com/dashboard/project/tfuhfrjokvmectwfrazm/auth/templates
 
 #### Confirm Signup Template:
-**Subject**: `Welcome to OnboardKit - Confirm Your Email`
+**Subject**: `Welcome to Onboard Hero - Confirm Your Email`
 
 **Body**:
 ```html
-<h2>Welcome to OnboardKit!</h2>
+<h2>Welcome to Onboard Hero!</h2>
 <p>Thanks for signing up! Please confirm your email address by clicking the link below:</p>
 <p><a href="{{ .ConfirmationURL }}">Confirm your email</a></p>
 <p>If you didn't create an account, you can safely ignore this email.</p>
-<p>Best regards,<br>The OnboardKit Team</p>
+<p>Best regards,<br>The Onboard Hero Team</p>
 ```
 
 #### Reset Password Template:
-**Subject**: `Reset Your OnboardKit Password`
+**Subject**: `Reset Your Onboard Hero Password`
 
 **Body**:
 ```html
 <h2>Reset Your Password</h2>
-<p>You requested to reset your password for your OnboardKit account.</p>
+<p>You requested to reset your password for your Onboard Hero account.</p>
 <p><a href="{{ .ConfirmationURL }}">Reset your password</a></p>
 <p>If you didn't request this, you can safely ignore this email.</p>
-<p>Best regards,<br>The OnboardKit Team</p>
+<p>Best regards,<br>The Onboard Hero Team</p>
 ```
 
 ### Step 5: Enable Storage
@@ -194,4 +194,4 @@ After database setup:
 4. ✅ Configure integrations (Stripe, etc.)
 5. ✅ Set up custom domain
 
-Your OnboardKit database is now fully configured and ready for production use!
+Your Onboard Hero database is now fully configured and ready for production use!

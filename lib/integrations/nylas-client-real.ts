@@ -1,4 +1,4 @@
-// Real Nylas Integration Implementation for OnboardKit
+// Real Nylas Integration Implementation for Onboard Hero
 // Uses the actual Nylas SDK v7 for production functionality
 
 import Nylas from 'nylas';

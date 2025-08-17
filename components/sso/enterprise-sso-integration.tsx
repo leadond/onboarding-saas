@@ -153,8 +153,8 @@ const mockSSOProviders: SSOProvider[] = [
         'last_name': 'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname'
       },
       group_mapping: {
-        'admin': 'CN=OnboardKit Admins,OU=Groups,DC=acmecorp,DC=com',
-        'manager': 'CN=OnboardKit Managers,OU=Groups,DC=acmecorp,DC=com'
+        'admin': 'CN=Onboard Hero Admins,OU=Groups,DC=acmecorp,DC=com',
+        'manager': 'CN=Onboard Hero Managers,OU=Groups,DC=acmecorp,DC=com'
       },
       session_timeout: 480,
       force_authn: false
@@ -187,8 +187,8 @@ const mockSSOProviders: SSOProvider[] = [
         'last_name': 'family_name'
       },
       group_mapping: {
-        'admin': 'OnboardKit_Admins',
-        'user': 'OnboardKit_Users'
+        'admin': 'Onboard Hero_Admins',
+        'user': 'Onboard Hero_Users'
       },
       session_timeout: 360,
       force_authn: false

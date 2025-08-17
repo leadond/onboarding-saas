@@ -1,125 +1,79 @@
 {
-  "name": "OnboardKit - Professional Client Onboarding",
-  "short_name": "OnboardKit",
+  "name": "Onboard Hero - Professional Client Onboarding",
+  "short_name": "Onboard Hero",
   "description": "Create professional client onboarding experiences with ease",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0066cc",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "en-US",
-  "categories": ["business", "productivity", "utilities"],
+  "theme_color": "#3B82F6",
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
+      "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
+      "type": "image/png"
     }
   ],
   "shortcuts": [
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
-      "description": "Access your OnboardKit dashboard",
+      "description": "Access your Onboard Hero dashboard",
       "url": "/dashboard",
       "icons": [
         {
-          "src": "/icons/shortcut-dashboard.png",
-          "sizes": "96x96"
+          "src": "/icons/dashboard-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     },
     {
       "name": "Create Kit",
-      "short_name": "New Kit",
+      "short_name": "Create Kit",
       "description": "Create a new onboarding kit",
       "url": "/dashboard/kits/new",
       "icons": [
         {
-          "src": "/icons/shortcut-new-kit.png",
-          "sizes": "96x96"
+          "src": "/icons/create-kit-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     },
     {
-      "name": "Analytics",
-      "short_name": "Analytics",
-      "description": "View your analytics dashboard",
-      "url": "/dashboard/analytics",
+      "name": "View Clients",
+      "short_name": "Clients",
+      "description": "View your clients",
+      "url": "/dashboard/clients",
       "icons": [
         {
-          "src": "/icons/shortcut-analytics.png",
-          "sizes": "96x96"
+          "src": "/icons/clients-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
         }
       ]
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshots/desktop-dashboard.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "OnboardKit Dashboard"
+      "src": "/screenshots/narrow.jpg",
+      "sizes": "750x1334",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Onboard Hero Dashboard"
     },
     {
-      "src": "/screenshots/mobile-kit-portal.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Client Kit Portal"
+      "src": "/screenshots/wide.jpg",
+      "sizes": "1280x800",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Onboard Hero Dashboard"
     }
-  ],
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  }
+  ]
 }

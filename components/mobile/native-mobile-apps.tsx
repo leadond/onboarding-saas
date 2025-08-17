@@ -164,7 +164,7 @@ const mockMobileApps: MobileApp[] = [
   {
     id: '1',
     platform: 'ios',
-    name: 'OnboardKit',
+    name: 'Onboard Hero',
     version: '2.1.0',
     build_number: '210',
     status: 'published',
@@ -183,7 +183,7 @@ const mockMobileApps: MobileApp[] = [
   {
     id: '2',
     platform: 'android',
-    name: 'OnboardKit',
+    name: 'Onboard Hero',
     version: '2.0.8',
     build_number: '208',
     status: 'published',
@@ -270,7 +270,7 @@ const mockNotifications: PushNotification[] = [
   {
     id: '3',
     title: 'New Features Available',
-    message: 'Check out the latest features in your OnboardKit app!',
+    message: 'Check out the latest features in your Onboard Hero app!',
     type: 'feature_announcement',
     target_audience: 'all',
     sent_at: '2024-08-12T09:00:00Z',

@@ -183,7 +183,7 @@ const mockCalendarProviders: CalendarProvider[] = [
     name: 'Google Calendar',
     type: 'google',
     status: 'connected',
-    account_email: 'admin@onboardkit.com',
+    account_email: 'admin@onboardhero.com',
     last_sync: '2024-08-14T15:30:00Z',
     sync_frequency: 'real_time',
     calendars_count: 5,
@@ -197,7 +197,7 @@ const mockCalendarProviders: CalendarProvider[] = [
     name: 'Microsoft Outlook',
     type: 'outlook',
     status: 'connected',
-    account_email: 'team@onboardkit.com',
+    account_email: 'team@onboardhero.com',
     last_sync: '2024-08-14T15:25:00Z',
     sync_frequency: 'hourly',
     calendars_count: 3,
@@ -211,7 +211,7 @@ const mockCalendarProviders: CalendarProvider[] = [
     name: 'Apple Calendar',
     type: 'apple',
     status: 'disconnected',
-    account_email: 'mobile@onboardkit.com',
+    account_email: 'mobile@onboardhero.com',
     last_sync: '2024-08-12T10:00:00Z',
     sync_frequency: 'daily',
     calendars_count: 2,
@@ -234,7 +234,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     meeting_url: 'https://meet.google.com/abc-defg-hij',
     attendees: [
       { email: 'john@acmecorp.com', name: 'John Smith', status: 'accepted', type: 'required' },
-      { email: 'sarah@onboardkit.com', name: 'Sarah Johnson', status: 'accepted', type: 'required' },
+      { email: 'sarah@onboardhero.com', name: 'Sarah Johnson', status: 'accepted', type: 'required' },
       { email: 'mike@acmecorp.com', name: 'Mike Davis', status: 'tentative', type: 'optional' }
     ],
     onboarding_context: {
@@ -246,7 +246,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     },
     event_type: 'onboarding_kickoff',
     status: 'scheduled',
-    created_by: 'sarah@onboardkit.com',
+    created_by: 'sarah@onboardhero.com',
     calendar_provider: 'google',
     recurring: false,
     reminder_settings: {
@@ -264,7 +264,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     meeting_url: 'https://teams.microsoft.com/l/meetup-join/xyz',
     attendees: [
       { email: 'alex@techstart.com', name: 'Alex Chen', status: 'accepted', type: 'required' },
-      { email: 'legal@onboardkit.com', name: 'Legal Team', status: 'accepted', type: 'required' }
+      { email: 'legal@onboardhero.com', name: 'Legal Team', status: 'accepted', type: 'required' }
     ],
     onboarding_context: {
       client_id: 'client_789',
@@ -275,7 +275,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     },
     event_type: 'document_review',
     status: 'scheduled',
-    created_by: 'legal@onboardkit.com',
+    created_by: 'legal@onboardhero.com',
     calendar_provider: 'outlook',
     recurring: false,
     reminder_settings: {
@@ -292,7 +292,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     timezone: 'UTC',
     meeting_url: 'https://zoom.us/j/123456789',
     attendees: [
-      { email: 'team@onboardkit.com', name: 'OnboardKit Team', status: 'accepted', type: 'required' }
+      { email: 'team@onboardhero.com', name: 'Onboard Hero Team', status: 'accepted', type: 'required' }
     ],
     onboarding_context: {
       client_id: 'training',
@@ -303,7 +303,7 @@ const mockCalendarEvents: CalendarEvent[] = [
     },
     event_type: 'training_session',
     status: 'scheduled',
-    created_by: 'admin@onboardkit.com',
+    created_by: 'admin@onboardhero.com',
     calendar_provider: 'google',
     recurring: true,
     reminder_settings: {
@@ -352,14 +352,14 @@ const mockTemplates: CalendarTemplate[] = [
     duration: 60,
     template_content: {
       title_template: 'Onboarding Kickoff - {CLIENT_NAME}',
-      description_template: 'Welcome to OnboardKit! This meeting will cover:\n\n• Overview of the onboarding process\n• Timeline and milestones\n• Required documents and information\n• Next steps\n\nPlease come prepared with any questions about the process.',
+      description_template: 'Welcome to Onboard Hero! This meeting will cover:\n\n• Overview of the onboarding process\n• Timeline and milestones\n• Required documents and information\n• Next steps\n\nPlease come prepared with any questions about the process.',
       location_template: 'Video Conference',
       attendee_instructions: 'Please join the meeting 5 minutes early to test your audio/video setup.'
     },
     variables: ['CLIENT_NAME', 'TIMELINE', 'CONTACT_PERSON'],
     usage_count: 156,
     rating: 4.8,
-    created_by: 'OnboardKit Team',
+    created_by: 'Onboard Hero Team',
     is_public: true
   },
   {

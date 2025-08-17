@@ -1,45 +1,19 @@
 {
-  "version": 2,
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
-    }
+  "github": {
+    "silent": true
   },
-  "env": {
-    "NODE_ENV": "production",
-    "NEXT_PUBLIC_APP_URL": "https://onboard.devapphero.com",
-    "NEXT_PUBLIC_APP_NAME": "OnboardKit",
-    "NEXT_PUBLIC_APP_VERSION": "1.0.0"
-  },
-  "functions": {
-    "app/api/**/*.js": {
-      "maxDuration": 30
-    },
-    "app/api/webhooks/**/*.js": {
-      "maxDuration": 60
-    },
-    "app/api/integrations/**/*.js": {
-      "maxDuration": 45
-    }
-  },
-  "headers": [
+  "buildCommand": "next build",
+  "outputDirectory": ".next",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "rewrites": [
     {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, PUT, DELETE, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
-        },
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "https://onboard.devapphero.com"
-        }
-      ]
-    },
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
+  ],
+  "headers": [
     {
       "source": "/(.*)",
       "headers": [
@@ -54,33 +28,13 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        },
-        {
-          "key": "CF-Cache-Status",
-          "value": "DYNAMIC"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
         }
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/dashboard",
-      "destination": "/test-dashboard",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/webhooks/:path*",
-      "destination": "/api/webhooks/:path*"
-    }
-  ]
+  "env": {
+    "NEXT_PUBLIC_APP_URL": "https://onboard.devapphero.com",
+    "NEXT_PUBLIC_APP_NAME": "Onboard Hero",
+    "NEXT_PUBLIC_APP_VERSION": "1.0.0"
+  }
 }

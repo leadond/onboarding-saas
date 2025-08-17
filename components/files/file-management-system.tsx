@@ -184,13 +184,13 @@ const mockFiles: FileItem[] = [
     size: 0,
     created_at: '2024-08-01T00:00:00Z',
     updated_at: '2024-08-14T15:30:00Z',
-    created_by: 'admin@onboardkit.com',
+    created_by: 'admin@onboardhero.com',
     path: '/client-onboarding',
     permissions: {
-      owner: 'admin@onboardkit.com',
+      owner: 'admin@onboardhero.com',
       shared_with: [
-        { user: 'team@onboardkit.com', permission: 'edit' },
-        { user: 'legal@onboardkit.com', permission: 'view' }
+        { user: 'team@onboardhero.com', permission: 'edit' },
+        { user: 'legal@onboardhero.com', permission: 'view' }
       ],
       public: false
     },
@@ -214,14 +214,14 @@ const mockFiles: FileItem[] = [
     size: 2457600, // 2.4 MB
     created_at: '2024-08-10T10:30:00Z',
     updated_at: '2024-08-12T14:20:00Z',
-    created_by: 'legal@onboardkit.com',
+    created_by: 'legal@onboardhero.com',
     parent_folder: '1',
     path: '/client-onboarding/acme-corp-service-agreement.pdf',
     permissions: {
-      owner: 'legal@onboardkit.com',
+      owner: 'legal@onboardhero.com',
       shared_with: [
         { user: 'john@acmecorp.com', permission: 'view' },
-        { user: 'sarah@onboardkit.com', permission: 'edit' }
+        { user: 'sarah@onboardhero.com', permission: 'edit' }
       ],
       public: false
     },
@@ -254,10 +254,10 @@ const mockFiles: FileItem[] = [
     size: 1048576, // 1 MB
     created_at: '2024-08-05T09:15:00Z',
     updated_at: '2024-08-05T09:15:00Z',
-    created_by: 'design@onboardkit.com',
+    created_by: 'design@onboardhero.com',
     path: '/templates/brand-guidelines-template.docx',
     permissions: {
-      owner: 'design@onboardkit.com',
+      owner: 'design@onboardhero.com',
       shared_with: [],
       public: true
     },
@@ -282,12 +282,12 @@ const mockFiles: FileItem[] = [
     size: 52428800, // 50 MB
     created_at: '2024-08-08T16:45:00Z',
     updated_at: '2024-08-08T16:45:00Z',
-    created_by: 'marketing@onboardkit.com',
+    created_by: 'marketing@onboardhero.com',
     path: '/media/client-onboarding-video.mp4',
     permissions: {
-      owner: 'marketing@onboardkit.com',
+      owner: 'marketing@onboardhero.com',
       shared_with: [
-        { user: 'team@onboardkit.com', permission: 'view' }
+        { user: 'team@onboardhero.com', permission: 'view' }
       ],
       public: true
     },
@@ -312,12 +312,12 @@ const mockFiles: FileItem[] = [
     size: 524288, // 512 KB
     created_at: '2024-08-12T11:20:00Z',
     updated_at: '2024-08-14T13:45:00Z',
-    created_by: 'data@onboardkit.com',
+    created_by: 'data@onboardhero.com',
     path: '/data/client-data-spreadsheet.xlsx',
     permissions: {
-      owner: 'data@onboardkit.com',
+      owner: 'data@onboardhero.com',
       shared_with: [
-        { user: 'admin@onboardkit.com', permission: 'edit' }
+        { user: 'admin@onboardhero.com', permission: 'edit' }
       ],
       public: false
     },
@@ -350,7 +350,7 @@ const mockVersions: FileVersion[] = [
     version: 3,
     size: 2457600,
     created_at: '2024-08-12T14:20:00Z',
-    created_by: 'legal@onboardkit.com',
+    created_by: 'legal@onboardhero.com',
     changes: 'Updated payment terms and added termination clause',
     download_url: '/api/files/2/versions/3/download'
   },
@@ -360,7 +360,7 @@ const mockVersions: FileVersion[] = [
     version: 2,
     size: 2398720,
     created_at: '2024-08-11T09:30:00Z',
-    created_by: 'legal@onboardkit.com',
+    created_by: 'legal@onboardhero.com',
     changes: 'Fixed typos and updated contact information',
     download_url: '/api/files/2/versions/2/download'
   },
@@ -370,7 +370,7 @@ const mockVersions: FileVersion[] = [
     version: 1,
     size: 2301952,
     created_at: '2024-08-10T10:30:00Z',
-    created_by: 'legal@onboardkit.com',
+    created_by: 'legal@onboardhero.com',
     changes: 'Initial version of service agreement',
     download_url: '/api/files/2/versions/1/download'
   }

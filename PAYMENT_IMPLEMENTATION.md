@@ -1,6 +1,6 @@
 # Payment Implementation Guide
 
-This document outlines the complete payment functionality implementation for the OnboardKit SaaS platform.
+This document outlines the complete payment functionality implementation for the Onboard Hero SaaS platform.
 
 ## Overview
 

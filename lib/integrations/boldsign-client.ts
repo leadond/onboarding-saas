@@ -1,4 +1,4 @@
-// BoldSign Integration Client for OnboardKit
+// BoldSign Integration Client for Onboard Hero
 // Provides document signing capabilities with mock implementation for development
 
 export interface BoldSignConfig {

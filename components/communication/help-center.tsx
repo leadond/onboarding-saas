@@ -38,7 +38,7 @@ interface HelpCenterProps {
 export function HelpCenter({
   kitId,
   clientIdentifier,
-  companyName = 'OnboardKit',
+  companyName = 'Onboard Hero',
   brandColor = '#3B82F6',
   className,
   onContactSupport,

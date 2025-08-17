@@ -467,7 +467,7 @@ export function AdvancedCRMIntegrations() {
               <DialogHeader>
                 <DialogTitle>Connect CRM Platform</DialogTitle>
                 <DialogDescription>
-                  Choose a CRM platform to integrate with OnboardKit.
+                  Choose a CRM platform to integrate with Onboard Hero.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
@@ -756,7 +756,7 @@ export function AdvancedCRMIntegrations() {
             <CardHeader>
               <CardTitle>Field Mapping Configuration</CardTitle>
               <CardDescription>
-                Configure how data fields are mapped between OnboardKit and your CRM systems.
+                Configure how data fields are mapped between Onboard Hero and your CRM systems.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -780,7 +780,7 @@ export function AdvancedCRMIntegrations() {
                             <ArrowUpDown className="h-4 w-4 text-gray-400" />
                             <div className="text-sm">
                               <div className="font-medium">{mapping.onboardkit_field}</div>
-                              <div className="text-gray-600">OnboardKit</div>
+                              <div className="text-gray-600">Onboard Hero</div>
                             </div>
                           </div>
                           <div className="flex items-center space-x-3">

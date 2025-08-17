@@ -256,22 +256,22 @@ const mockTranslationKeys: TranslationKey[] = [
     id: '1',
     key: 'welcome.title',
     namespace: 'onboarding',
-    source_text: 'Welcome to OnboardKit',
+    source_text: 'Welcome to Onboard Hero',
     translations: {
       'es': {
-        text: 'Bienvenido a OnboardKit',
+        text: 'Bienvenido a Onboard Hero',
         status: 'approved',
         translator: 'Maria Rodriguez',
         updated_at: '2024-08-13T10:20:00Z'
       },
       'fr': {
-        text: 'Bienvenue sur OnboardKit',
+        text: 'Bienvenue sur Onboard Hero',
         status: 'approved',
         translator: 'Sophie Dubois',
         updated_at: '2024-08-12T14:45:00Z'
       },
       'de': {
-        text: 'Willkommen bei OnboardKit',
+        text: 'Willkommen bei Onboard Hero',
         status: 'pending',
         translator: 'Hans Mueller',
         updated_at: '2024-08-11T09:15:00Z'

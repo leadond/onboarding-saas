@@ -31,7 +31,7 @@ function verifyWebhookSignature(payload: string, signature: string, secret: stri
  * Process BoldSign webhook events
  */
 async function processBoldSignWebhook(event: any) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     const { eventType, eventData } = event

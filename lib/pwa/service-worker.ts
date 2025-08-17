@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-// Service Worker for OnboardKit PWA
+// Service Worker for Onboard Hero PWA
 declare const self: ServiceWorkerGlobalScope
 
 const CACHE_NAME = 'onboardkit-v1'
@@ -95,7 +95,7 @@ self.addEventListener('push', (event) => {
   console.log('Push message received')
   
   let notificationData = {
-    title: 'OnboardKit',
+    title: 'Onboard Hero',
     body: 'You have a new notification',
     icon: '/icon-192x192.png',
     badge: '/icon-192x192.png',

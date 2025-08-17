@@ -137,7 +137,7 @@ export function NotificationPreferences({
           clientIdentifier,
           clientName: 'Test Client',
           clientEmail: 'test@example.com', // In production, get from client data
-          customSubject: 'Test Email - OnboardKit Notifications',
+          customSubject: 'Test Email - Onboard Hero Notifications',
           customMessage:
             'This is a test email to verify your notification preferences are working correctly. If you received this, your notifications are set up properly!',
           fromAdmin: false,

@@ -217,8 +217,8 @@ const mockChannels: NotificationChannel[] = [
     provider: 'SendGrid',
     configuration: {
       api_key: 'sg_***',
-      from_email: 'notifications@onboardkit.com',
-      from_name: 'OnboardKit'
+      from_email: 'notifications@onboardhero.com',
+      from_name: 'Onboard Hero'
     },
     delivery_stats: {
       sent: 15678,
@@ -435,7 +435,7 @@ const mockCampaigns: NotificationCampaign[] = [
       message: 'We\'re thrilled to announce several new features that will enhance your onboarding experience...',
       call_to_action: {
         text: 'Explore New Features',
-        url: 'https://onboardkit.com/features'
+        url: 'https://onboardhero.com/features'
       },
       personalization_data: {}
     },
@@ -447,7 +447,7 @@ const mockCampaigns: NotificationCampaign[] = [
       bounced: 58,
       unsubscribed: 12
     },
-    created_by: 'marketing@onboardkit.com',
+    created_by: 'marketing@onboardhero.com',
     created_at: '2024-07-28T00:00:00Z',
     sent_at: '2024-08-01T10:00:00Z'
   },
@@ -478,7 +478,7 @@ const mockCampaigns: NotificationCampaign[] = [
       message: 'It looks like you haven\'t been active lately. We\'re here to help you complete your onboarding...',
       call_to_action: {
         text: 'Continue Onboarding',
-        url: 'https://app.onboardkit.com/continue'
+        url: 'https://app.onboardhero.com/continue'
       },
       personalization_data: {}
     },
@@ -490,7 +490,7 @@ const mockCampaigns: NotificationCampaign[] = [
       bounced: 0,
       unsubscribed: 0
     },
-    created_by: 'growth@onboardkit.com',
+    created_by: 'growth@onboardhero.com',
     created_at: '2024-08-14T00:00:00Z'
   }
 ]
@@ -517,7 +517,7 @@ const mockRules: NotificationRule[] = [
     ],
     is_active: true,
     priority: 'medium',
-    created_by: 'admin@onboardkit.com',
+    created_by: 'admin@onboardhero.com',
     created_at: '2024-07-15T00:00:00Z',
     last_triggered: '2024-08-14T15:30:00Z',
     trigger_count: 234
@@ -552,7 +552,7 @@ const mockRules: NotificationRule[] = [
     ],
     is_active: true,
     priority: 'high',
-    created_by: 'operations@onboardkit.com',
+    created_by: 'operations@onboardhero.com',
     created_at: '2024-07-20T00:00:00Z',
     last_triggered: '2024-08-14T10:15:00Z',
     trigger_count: 89
@@ -578,7 +578,7 @@ const mockRules: NotificationRule[] = [
     ],
     is_active: true,
     priority: 'medium',
-    created_by: 'success@onboardkit.com',
+    created_by: 'success@onboardhero.com',
     created_at: '2024-07-25T00:00:00Z',
     last_triggered: '2024-08-14T14:45:00Z',
     trigger_count: 156

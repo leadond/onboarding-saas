@@ -10,7 +10,7 @@ export async function GET(
   { params }: { params: { kitId: string; stepId: string } }
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const {
@@ -85,7 +85,7 @@ export async function PATCH(
   { params }: { params: { kitId: string; stepId: string } }
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const {
@@ -253,7 +253,7 @@ export async function DELETE(
   { params }: { params: { kitId: string; stepId: string } }
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const {

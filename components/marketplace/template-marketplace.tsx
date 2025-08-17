@@ -203,7 +203,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       templates_count: 23
     },
     preview_images: ['/previews/prof-services-1.jpg', '/previews/prof-services-2.jpg'],
-    demo_url: 'https://demo.onboardkit.com/prof-services',
+    demo_url: 'https://demo.onboardhero.com/prof-services',
     features: [
       'Multi-step client intake process',
       'Automated document collection',
@@ -212,7 +212,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       'Customizable branding',
       'Integration with DocuSign'
     ],
-    compatibility: ['OnboardKit Pro', 'OnboardKit Enterprise'],
+    compatibility: ['Onboard Hero Pro', 'Onboard Hero Enterprise'],
     industries: ['Legal', 'Consulting', 'Accounting', 'Architecture'],
     tags: ['professional', 'intake', 'documents', 'tracking', 'automation'],
     stats: {
@@ -226,7 +226,7 @@ const mockTemplates: MarketplaceTemplate[] = [
     updated_at: '2024-08-10T00:00:00Z',
     version: '2.1.0',
     changelog: 'Added new document templates and improved mobile responsiveness',
-    requirements: ['OnboardKit Pro or higher', 'DocuSign integration'],
+    requirements: ['Onboard Hero Pro or higher', 'DocuSign integration'],
     support_level: 'premium',
     license: 'commercial',
     is_featured: true,
@@ -252,7 +252,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       templates_count: 15
     },
     preview_images: ['/previews/saas-onboarding-1.jpg', '/previews/saas-onboarding-2.jpg'],
-    demo_url: 'https://demo.onboardkit.com/saas-flow',
+    demo_url: 'https://demo.onboardhero.com/saas-flow',
     features: [
       'User activation checklist',
       'Interactive feature tours',
@@ -261,7 +261,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       'A/B testing support',
       'Mobile-first design'
     ],
-    compatibility: ['OnboardKit Starter', 'OnboardKit Pro', 'OnboardKit Enterprise'],
+    compatibility: ['Onboard Hero Starter', 'Onboard Hero Pro', 'Onboard Hero Enterprise'],
     industries: ['SaaS', 'Technology', 'Software'],
     tags: ['saas', 'activation', 'gamification', 'mobile', 'metrics'],
     stats: {
@@ -275,7 +275,7 @@ const mockTemplates: MarketplaceTemplate[] = [
     updated_at: '2024-08-05T00:00:00Z',
     version: '1.3.2',
     changelog: 'Fixed mobile layout issues and added new gamification elements',
-    requirements: ['OnboardKit Starter or higher'],
+    requirements: ['Onboard Hero Starter or higher'],
     support_level: 'community',
     license: 'mit',
     is_featured: false,
@@ -309,7 +309,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       'Appointment scheduling',
       'Medical history collection'
     ],
-    compatibility: ['OnboardKit Enterprise'],
+    compatibility: ['Onboard Hero Enterprise'],
     industries: ['Healthcare', 'Medical', 'Dental', 'Mental Health'],
     tags: ['healthcare', 'hipaa', 'secure', 'patient', 'medical'],
     stats: {
@@ -323,7 +323,7 @@ const mockTemplates: MarketplaceTemplate[] = [
     updated_at: '2024-07-30T00:00:00Z',
     version: '1.2.0',
     changelog: 'Enhanced security features and added telehealth integration',
-    requirements: ['OnboardKit Enterprise', 'HIPAA compliance package'],
+    requirements: ['Onboard Hero Enterprise', 'HIPAA compliance package'],
     support_level: 'premium',
     license: 'commercial',
     is_featured: true,
@@ -357,7 +357,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       'Tax documentation',
       'Performance tracking'
     ],
-    compatibility: ['OnboardKit Pro', 'OnboardKit Enterprise'],
+    compatibility: ['Onboard Hero Pro', 'Onboard Hero Enterprise'],
     industries: ['E-commerce', 'Retail', 'Marketplace'],
     tags: ['ecommerce', 'vendor', 'marketplace', 'catalog', 'payments'],
     stats: {
@@ -371,7 +371,7 @@ const mockTemplates: MarketplaceTemplate[] = [
     updated_at: '2024-08-12T00:00:00Z',
     version: '1.1.0',
     changelog: 'Added multi-currency support and improved vendor dashboard',
-    requirements: ['OnboardKit Pro or higher', 'Payment gateway integration'],
+    requirements: ['Onboard Hero Pro or higher', 'Payment gateway integration'],
     support_level: 'standard',
     license: 'commercial',
     is_featured: false,
@@ -405,7 +405,7 @@ const mockTemplates: MarketplaceTemplate[] = [
       'Custom branding options',
       'HTML and plain text versions'
     ],
-    compatibility: ['All OnboardKit plans'],
+    compatibility: ['All Onboard Hero plans'],
     industries: ['All'],
     tags: ['email', 'templates', 'responsive', 'design', 'branding'],
     stats: {
@@ -419,7 +419,7 @@ const mockTemplates: MarketplaceTemplate[] = [
     updated_at: '2024-08-01T00:00:00Z',
     version: '3.0.0',
     changelog: 'Added 5 new templates and improved accessibility',
-    requirements: ['Any OnboardKit plan'],
+    requirements: ['Any Onboard Hero plan'],
     support_level: 'community',
     license: 'mit',
     is_featured: false,
@@ -472,8 +472,8 @@ const mockCollections: TemplateCollection[] = [
     description: 'Everything you need to onboard professional services clients, from intake to project kickoff.',
     templates: ['1', '6', '7', '8'],
     author: {
-      name: 'OnboardKit Team',
-      company: 'OnboardKit'
+      name: 'Onboard Hero Team',
+      company: 'Onboard Hero'
     },
     is_public: true,
     downloads: 456,
@@ -607,7 +607,7 @@ export function TemplateMarketplace() {
               <DialogHeader>
                 <DialogTitle>Submit Your Template</DialogTitle>
                 <DialogDescription>
-                  Share your template with the OnboardKit community
+                  Share your template with the Onboard Hero community
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4">

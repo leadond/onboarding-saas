@@ -9,7 +9,7 @@ export default function NylasDemoPage() {
             Nylas Integration Demo
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Experience the power of Nylas integration with OnboardKit. 
+            Experience the power of Nylas integration with Onboard Hero. 
             Advanced email, calendar, and contact management for enhanced client onboarding.
           </p>
         </div>

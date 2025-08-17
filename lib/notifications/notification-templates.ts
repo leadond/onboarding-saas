@@ -26,7 +26,7 @@ function getCommonVariables(context: NotificationContext): Record<string, any> {
   const clientName = context.client.name || 'there'
   const kitName = context.kit.name
   const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://app.onboardkit.com'
+    process.env.NEXT_PUBLIC_BASE_URL || 'https://app.onboardhero.com'
   const kitUrl = `${baseUrl}/kit/${context.kit.id}?client=${context.client.identifier}`
 
   return {
@@ -37,7 +37,7 @@ function getCommonVariables(context: NotificationContext): Record<string, any> {
     baseUrl,
     brandColor: context.kit.brand_color || '#3B82F6',
     logoUrl: context.kit.logo_url || '',
-    supportEmail: context.kit.user?.email || 'support@onboardkit.com',
+    supportEmail: context.kit.user?.email || 'support@onboardhero.com',
     completionPercentage: context.completionPercentage || 0,
     totalSteps: context.totalSteps || 0,
     completedSteps: context.completedSteps || 0,

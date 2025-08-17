@@ -46,7 +46,7 @@ export function ChatWidget({
   position = 'bottom-right',
   theme = 'light',
   brandColor = '#3B82F6',
-  companyName = 'OnboardKit',
+  companyName = 'Onboard Hero',
   initialMinimized = true,
   className,
   onNewMessage,

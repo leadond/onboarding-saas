@@ -1,4 +1,4 @@
-# Supabase Setup Guide for OnboardKit
+# Supabase Setup Guide for Onboard Hero
 
 ## Quick Setup (5 minutes)
 

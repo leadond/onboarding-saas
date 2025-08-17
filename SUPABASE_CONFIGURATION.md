@@ -1,4 +1,4 @@
-# Supabase Configuration for OnboardKit
+# Supabase Configuration for Onboard Hero
 
 ## 🎯 Your Supabase Project Details
 
@@ -44,11 +44,11 @@ https://onboard.devapphero.com/verify-email
 **Go to Authentication → Email Templates:**
 
 #### Confirm Signup Template:
-- **Subject**: Welcome to OnboardKit - Confirm Your Email
+- **Subject**: Welcome to Onboard Hero - Confirm Your Email
 - **Body**: Customize with your branding
 
 #### Reset Password Template:
-- **Subject**: Reset Your OnboardKit Password
+- **Subject**: Reset Your Onboard Hero Password
 - **Body**: Customize with your branding
 
 ### 5. Enable Email Provider

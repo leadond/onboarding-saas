@@ -1,4 +1,4 @@
-// Comprehensive Nylas Integration for OnboardKit
+// Comprehensive Nylas Integration for Onboard Hero
 // Provides advanced email, calendar, and contact management capabilities
 
 export interface NylasConfig {
@@ -235,14 +235,14 @@ export class MockNylasClient {
         id: 'msg-1',
         account_id: accountId,
         thread_id: 'thread-1',
-        subject: 'Welcome to OnboardKit',
-        from: [{ name: 'OnboardKit', email: 'noreply@onboardkit.com' }],
+        subject: 'Welcome to Onboard Hero',
+        from: [{ name: 'Onboard Hero', email: 'noreply@onboardhero.com' }],
         to: [{ name: 'Client', email: 'client@example.com' }],
         date: Date.now() / 1000,
         unread: false,
         starred: false,
         snippet: 'Welcome to your onboarding journey...',
-        body: '<p>Welcome to your onboarding journey with OnboardKit!</p>',
+        body: '<p>Welcome to your onboarding journey with Onboard Hero!</p>',
         files: [],
         labels: [{ id: 'label-1', name: 'Onboarding' }],
         folder: { id: 'folder-1', name: 'INBOX' },
@@ -255,14 +255,14 @@ export class MockNylasClient {
       id: messageId,
       account_id: accountId,
       thread_id: 'thread-1',
-      subject: 'Welcome to OnboardKit',
-      from: [{ name: 'OnboardKit', email: 'noreply@onboardkit.com' }],
+      subject: 'Welcome to Onboard Hero',
+      from: [{ name: 'Onboard Hero', email: 'noreply@onboardhero.com' }],
       to: [{ name: 'Client', email: 'client@example.com' }],
       date: Date.now() / 1000,
       unread: false,
       starred: false,
       snippet: 'Welcome to your onboarding journey...',
-      body: '<p>Welcome to your onboarding journey with OnboardKit!</p>',
+      body: '<p>Welcome to your onboarding journey with Onboard Hero!</p>',
       files: [],
       labels: [{ id: 'label-1', name: 'Onboarding' }],
       folder: { id: 'folder-1', name: 'INBOX' },
@@ -275,7 +275,7 @@ export class MockNylasClient {
       account_id: accountId,
       thread_id: `thread-${Date.now()}`,
       subject: draft.subject,
-      from: draft.from || [{ name: 'OnboardKit', email: 'noreply@onboardkit.com' }],
+      from: draft.from || [{ name: 'Onboard Hero', email: 'noreply@onboardhero.com' }],
       to: draft.to,
       cc: draft.cc,
       bcc: draft.bcc,
@@ -354,7 +354,7 @@ export class MockNylasClient {
         },
         participants: [
           { name: 'Client', email: 'client@example.com', status: 'yes' },
-          { name: 'OnboardKit', email: 'team@onboardkit.com', status: 'yes' },
+          { name: 'Onboard Hero', email: 'team@onboardhero.com', status: 'yes' },
         ],
         busy: true,
         read_only: false,
@@ -483,7 +483,7 @@ export class MockNylasClient {
       {
         id: 'webhook-1',
         application_id: 'app-1',
-        callback_url: 'https://app.onboardkit.com/api/webhooks/nylas',
+        callback_url: 'https://app.onboardhero.com/api/webhooks/nylas',
         state: 'active',
         triggers: ['message.created', 'event.created'],
         version: '2.0',
@@ -658,7 +658,7 @@ export class NylasClient extends MockNylasClient {
             account_id: accountId,
             thread_id: sentMessage.data.thread_id || '',
             subject: draft.subject,
-            from: draft.from || [{ name: 'OnboardKit', email: 'noreply@onboardkit.com' }],
+            from: draft.from || [{ name: 'Onboard Hero', email: 'noreply@onboardhero.com' }],
             to: draft.to,
             cc: draft.cc,
             bcc: draft.bcc,
@@ -814,7 +814,7 @@ export class NylasCalendarService {
       },
       participants: [
         { name: details.clientName, email: details.clientEmail, status: 'noreply' },
-        { name: 'OnboardKit Team', email: 'team@onboardkit.com', status: 'yes' },
+        { name: 'Onboard Hero Team', email: 'team@onboardhero.com', status: 'yes' },
       ],
     })
   }

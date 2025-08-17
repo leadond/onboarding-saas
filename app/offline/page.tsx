@@ -29,7 +29,7 @@ export default function OfflinePage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">You're Offline</h1>
             <p className="text-lg text-gray-600">
-              Don't worry! OnboardKit works offline with limited functionality.
+              Don't worry! Onboard Hero works offline with limited functionality.
             </p>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function OfflinePage() {
               <span>Progressive Web App</span>
             </CardTitle>
             <CardDescription>
-              OnboardKit works like a native app on all devices
+              Onboard Hero works like a native app on all devices
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -191,7 +191,7 @@ export default function OfflinePage() {
             
             <div className="text-sm text-gray-600 space-y-2">
               <p>
-                • Install OnboardKit on your device for quick access
+                • Install Onboard Hero on your device for quick access
               </p>
               <p>
                 • Receive push notifications for important updates

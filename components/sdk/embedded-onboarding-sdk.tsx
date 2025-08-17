@@ -168,7 +168,7 @@ export class OnboardingComponent {
   }
 
   const iframeCode = `<iframe
-  src="https://embed.onboardkit.com/kit/welcome-flow?key=${apiKey}&theme=modern"
+  src="https://embed.onboardhero.com/kit/welcome-flow?key=${apiKey}&theme=modern"
   width="100%"
   height="600"
   frameborder="0"
@@ -184,7 +184,7 @@ export class OnboardingComponent {
             Embedded Onboarding SDK
           </h1>
           <p className="text-gray-600 mt-1">
-            Seamlessly integrate OnboardKit into any application with our comprehensive SDKs
+            Seamlessly integrate Onboard Hero into any application with our comprehensive SDKs
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export class OnboardingComponent {
                 iFrame Embedding
               </CardTitle>
               <p className="text-sm text-gray-600">
-                Embed OnboardKit directly into any webpage without any JavaScript frameworks
+                Embed Onboard Hero directly into any webpage without any JavaScript frameworks
               </p>
             </CardHeader>
             <CardContent className="space-y-4">

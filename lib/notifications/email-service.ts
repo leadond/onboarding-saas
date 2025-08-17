@@ -72,7 +72,7 @@ class ResendProvider implements EmailProvider {
           from:
             options.from ||
             process.env.DEFAULT_FROM_EMAIL ||
-            'noreply@onboardkit.com',
+            'noreply@onboardhero.com',
           to: [options.to],
           subject: options.subject,
           html: options.html,
@@ -132,7 +132,7 @@ class SendGridProvider implements EmailProvider {
             email:
               options.from ||
               process.env.DEFAULT_FROM_EMAIL ||
-              'noreply@onboardkit.com',
+              'noreply@onboardhero.com',
           },
           content: [
             {

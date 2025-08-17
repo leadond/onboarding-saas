@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const {
@@ -108,7 +108,7 @@ export async function PUT(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const {

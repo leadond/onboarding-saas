@@ -82,15 +82,15 @@ export class EnhancedEmailService {
   async sendTransactionalEmail(context: NotificationContext): Promise<{ id: string; provider: 'resend' }> {
     try {
       const result = await this.resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 'noreply@onboardkit.com',
+        from: process.env.RESEND_FROM_EMAIL || 'noreply@onboardhero.com',
         to: [context.client.email],
         subject: context.template.subject,
         html: context.template.html,
         text: context.template.text,
         replyTo: context.kit.user?.email,
         headers: {
-          'X-OnboardKit-Client-ID': context.client.id,
-          'X-OnboardKit-Kit-ID': context.kit.id,
+          'X-Onboard-Hero-Client-ID': context.client.id,
+          'X-Onboard-Hero-Kit-ID': context.kit.id,
         },
         tags: [
           { name: 'type', value: 'transactional' },
@@ -258,7 +258,7 @@ export class EnhancedEmailService {
       
       return {
         eventId: event.id,
-        schedulingUrl: `https://app.onboardkit.com/schedule/${event.id}`,
+        schedulingUrl: `https://app.onboardhero.com/schedule/${event.id}`,
       }
     } catch (error) {
       console.error('Failed to schedule call:', error)
@@ -306,7 +306,7 @@ export class EnhancedEmailService {
       
       return {
         pageId: page.id,
-        bookingUrl: `https://app.onboardkit.com/book/${page.slug}`,
+        bookingUrl: `https://app.onboardhero.com/book/${page.slug}`,
       }
     } catch (error) {
       console.error('Failed to create scheduling page:', error)

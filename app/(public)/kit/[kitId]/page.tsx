@@ -28,7 +28,7 @@ interface KitPageProps {
 }
 
 async function getKitData(kitId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   try {
     // Fetch kit details
@@ -57,7 +57,7 @@ async function getKitData(kitId: string) {
       .from('kit_steps')
       .select('*')
       .eq('kit_id', kitId)
-      .order('order_index')
+      .order('step_order')
 
     if (stepsError) {
       console.error('Error fetching kit steps:', stepsError)

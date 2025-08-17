@@ -100,7 +100,7 @@ export function SignupForm({ className }: SignupFormProps) {
           Create an account
         </h1>
         <p className="text-sm text-muted-foreground">
-          Get started with your free OnboardKit account
+          Get started with your free Onboard Hero account
         </p>
       </div>
 

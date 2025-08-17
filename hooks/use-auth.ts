@@ -300,7 +300,7 @@ export function useAuth(): AuthHook {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: supabaseProvider as any,
           options: {
-            redirectTo: `${window.location.origin}/api/auth/callback?next=/test-dashboard`,
+            redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
           },
         })
 

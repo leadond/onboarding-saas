@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server'
 
-// OpenAPI/Swagger specification for OnboardKit API
+// OpenAPI/Swagger specification for Onboard Hero API
 const apiSpec = {
   openapi: '3.0.0',
   info: {
-    title: 'OnboardKit API',
+    title: 'Onboard Hero API',
     version: '2.0.0',
-    description: 'API-First Architecture for OnboardKit - Professional Client Onboarding Platform with comprehensive REST and GraphQL APIs, rate limiting, webhook system, and API key management.',
+    description: 'API-First Architecture for Onboard Hero - Professional Client Onboarding Platform with comprehensive REST and GraphQL APIs, rate limiting, webhook system, and API key management.',
     contact: {
-      name: 'OnboardKit Support',
-      email: 'support@onboardkit.com',
-      url: 'https://onboardkit.com/support'
+      name: 'Onboard Hero Support',
+      email: 'support@onboardhero.com',
+      url: 'https://onboardhero.com/support'
     },
     license: {
       name: 'MIT',
@@ -20,7 +20,7 @@ const apiSpec = {
   servers: [
     {
       url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-      description: 'OnboardKit API Server'
+      description: 'Onboard Hero API Server'
     }
   ],
   security: [

@@ -44,16 +44,16 @@ const emailTemplates: EmailTemplate[] = [
   {
     id: 'welcome',
     name: 'Welcome Email',
-    subject: 'Welcome to OnboardKit!',
+    subject: 'Welcome to Onboard Hero!',
     body: `<p>Hi {{client_name}},</p>
-<p>Welcome to OnboardKit! We're excited to help you streamline your onboarding process.</p>
+<p>Welcome to Onboard Hero! We're excited to help you streamline your onboarding process.</p>
 <p>Here's what you can expect:</p>
 <ul>
 <li>Personalized onboarding journey</li>
 <li>Real-time progress tracking</li>
 <li>Automated follow-ups</li>
 </ul>
-<p>Best regards,<br>The OnboardKit Team</p>`,
+<p>Best regards,<br>The Onboard Hero Team</p>`,
     category: 'onboarding',
   },
   {
@@ -73,7 +73,7 @@ const emailTemplates: EmailTemplate[] = [
     body: `<p>Hi {{client_name}},</p>
 <p>This is a friendly reminder that you have pending onboarding steps to complete.</p>
 <p>Please log in to your dashboard to continue: <a href="{{dashboard_url}}">Continue Onboarding</a></p>
-<p>Best regards,<br>The OnboardKit Team</p>`,
+<p>Best regards,<br>The Onboard Hero Team</p>`,
     category: 'reminder',
   },
 ]

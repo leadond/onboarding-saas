@@ -158,7 +158,7 @@ export class WebhookManager {
           'Content-Type': 'application/json',
           'X-Webhook-Signature': signature,
           'X-Webhook-Delivery': deliveryId,
-          'User-Agent': 'OnboardKit-Webhooks/1.0'
+          'User-Agent': 'Onboard Hero-Webhooks/1.0'
         },
         body: JSON.stringify(delivery.payload),
         signal: controller.signal

@@ -1,9 +1,9 @@
 # Security and Functionality Audit Report
-## Login Page - OnboardKit SaaS Platform
+## Login Page - Onboard Hero SaaS Platform
 
 ### Executive Summary
 
-This report presents the findings from a comprehensive security and functionality audit of the OnboardKit login page. The audit was conducted to identify vulnerabilities, assess security controls, and provide recommendations for improving the overall security posture.
+This report presents the findings from a comprehensive security and functionality audit of the Onboard Hero login page. The audit was conducted to identify vulnerabilities, assess security controls, and provide recommendations for improving the overall security posture.
 
 ### Audit Scope
 
@@ -291,7 +291,7 @@ The audit was conducted using the following methodologies:
 
 ### Conclusion
 
-The OnboardKit login page has a solid foundation with several important security measures already implemented, including proper security headers, CORS protection, and basic input validation. However, there are critical gaps that need immediate attention, particularly the lack of multi-factor authentication and issues with rate limiting implementation.
+The Onboard Hero login page has a solid foundation with several important security measures already implemented, including proper security headers, CORS protection, and basic input validation. However, there are critical gaps that need immediate attention, particularly the lack of multi-factor authentication and issues with rate limiting implementation.
 
 The security posture can be significantly improved by addressing the critical and high-priority recommendations outlined in this report. The development team should prioritize fixing the rate limiting implementation and adding multi-factor authentication to protect against common attack vectors.
 

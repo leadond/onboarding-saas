@@ -56,14 +56,42 @@ export async function createSetupIntent(customerId: string) {
 
     return {
       success: true,
-      data: {
-        clientSecret: setupIntent.client_secret,
-        setupIntentId: setupIntent.id,
-      },
+      data: setupIntent,
     }
   } catch (error) {
     const paymentError = handleStripeError(error)
     logPaymentError(paymentError, { context: 'createSetupIntent', customerId })
+    return {
+      success: false,
+      error: paymentError.userMessage,
+    }
+  }
+}
+
+/**
+ * Updates payment method for a customer
+ */
+export async function updatePaymentMethod(customerId: string, paymentMethodId: string) {
+  try {
+    // Attach payment method to customer
+    await stripe.paymentMethods.attach(paymentMethodId, {
+      customer: customerId,
+    })
+
+    // Update the customer's default payment method
+    await stripe.customers.update(customerId, {
+      invoice_settings: {
+        default_payment_method: paymentMethodId,
+      },
+    })
+
+    return {
+      success: true,
+      data: { paymentMethodId },
+    }
+  } catch (error) {
+    const paymentError = handleStripeError(error)
+    logPaymentError(paymentError, { context: 'updatePaymentMethod', customerId, paymentMethodId })
     return {
       success: false,
       error: paymentError.userMessage,
@@ -203,7 +231,7 @@ export async function getOrCreateStripeCustomer(user: User) {
   }
 
   // Update user record with customer ID
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase
     .from('users')
     .update({ stripe_customer_id: customerResult.data.id })

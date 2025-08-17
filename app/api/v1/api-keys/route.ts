@@ -14,7 +14,7 @@ const apiKeySchema = z.object({
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = createClient()
+    const supabase = await createClient()
 
     try {
       // Mock API keys data since table might not exist

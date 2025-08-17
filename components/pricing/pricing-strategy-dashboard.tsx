@@ -578,7 +578,7 @@ export function PricingStrategyDashboard() {
             <CardHeader>
               <CardTitle>Competitive Feature Comparison</CardTitle>
               <p className="text-sm text-gray-600">
-                How OnboardKit compares to major competitors
+                How Onboard Hero compares to major competitors
               </p>
             </CardHeader>
             <CardContent>
@@ -587,7 +587,7 @@ export function PricingStrategyDashboard() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-2">Feature</th>
-                      <th className="text-center p-2">OnboardKit</th>
+                      <th className="text-center p-2">Onboard Hero</th>
                       <th className="text-center p-2">Competitor A</th>
                       <th className="text-center p-2">Competitor B</th>
                       <th className="text-center p-2">Competitor C</th>

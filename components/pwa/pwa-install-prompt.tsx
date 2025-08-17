@@ -131,7 +131,7 @@ export function PWAInstallPrompt({
                 <Download className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <CardTitle className="text-lg">Install OnboardKit App</CardTitle>
+                <CardTitle className="text-lg">Install Onboard Hero App</CardTitle>
                 <CardDescription>
                   Get the full app experience with offline access and notifications
                 </CardDescription>
@@ -188,7 +188,7 @@ export function PWAInstallPrompt({
               <Download className="h-6 w-6 text-white" />
             </div>
             <div>
-              <DialogTitle className="text-xl">Install OnboardKit</DialogTitle>
+              <DialogTitle className="text-xl">Install Onboard Hero</DialogTitle>
               <DialogDescription>
                 Get the best experience with our Progressive Web App
               </DialogDescription>

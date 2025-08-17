@@ -5,8 +5,8 @@ import { PasswordResetForm } from '@/components/auth/password-reset-form'
 import { AuthLoadingSpinner } from '@/components/auth/auth-provider'
 
 export const metadata: Metadata = {
-  title: 'Reset Password | OnboardKit',
-  description: 'Reset your OnboardKit account password.',
+  title: 'Reset Password | Onboard Hero',
+  description: 'Reset your Onboard Hero account password.',
 }
 
 function ForgotPasswordPageContent() {
@@ -19,7 +19,7 @@ function ForgotPasswordPageContent() {
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
               <span className="text-lg font-bold text-white">O</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">OnboardKit</span>
+            <span className="text-2xl font-bold text-gray-900">Onboard Hero</span>
           </Link>
         </div>
 

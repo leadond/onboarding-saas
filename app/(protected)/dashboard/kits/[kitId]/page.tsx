@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -63,12 +63,10 @@ type KitStep = {
   updated_at: string
 }
 
-export default function KitOverviewPage({
-  params,
-}: {
-  params: { kitId: string }
-}) {
+export default function KitOverviewPage() {
   const router = useRouter()
+  const pathname = usePathname()
+  const kitId = pathname.split('/')[3] // Extract kitId from path
   const [kit, setKit] = useState<Kit | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [showPublishedUrl, setShowPublishedUrl] = useState(false)
@@ -88,7 +86,7 @@ export default function KitOverviewPage({
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
 
         if (!response.ok) {
           throw new Error('Kit not found')
@@ -105,7 +103,7 @@ export default function KitOverviewPage({
     }
 
     fetchKit()
-  }, [params.kitId])
+  }, [kitId])
 
   useEffect(() => {
     if (kit?.status === 'published') {
@@ -121,7 +119,7 @@ export default function KitOverviewPage({
 
     try {
       const newStatus = kit.status === 'published' ? 'draft' : 'published'
-      const response = await fetch(`/api/kits/${params.kitId}/publish`, {
+      const response = await fetch(`/api/kits/${kitId}/publish`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,7 +175,7 @@ export default function KitOverviewPage({
     if (!kit) return
 
     try {
-      const response = await fetch(`/api/kits/${params.kitId}/duplicate`, {
+      const response = await fetch(`/api/kits/${kitId}/duplicate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -216,7 +214,7 @@ export default function KitOverviewPage({
     }
 
     try {
-      const response = await fetch(`/api/kits/${params.kitId}`, {
+      const response = await fetch(`/api/kits/${kitId}`, {
         method: 'DELETE',
       })
 
@@ -250,7 +248,7 @@ export default function KitOverviewPage({
     if (kit?.status !== 'published') return
     
     try {
-      const response = await fetch(`/api/kits/${params.kitId}/clients`)
+      const response = await fetch(`/api/kits/${kitId}/clients`)
       if (response.ok) {
         const result = await response.json()
         setClients(result.data.clients || [])
@@ -271,7 +269,7 @@ export default function KitOverviewPage({
       setIsInviting(true)
       setError(null)
 
-      const response = await fetch(`/api/kits/${params.kitId}/clients`, {
+      const response = await fetch(`/api/kits/${kitId}/clients`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

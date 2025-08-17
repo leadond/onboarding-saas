@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button'
 import { AuthLoadingSpinner } from '@/components/auth/auth-provider'
 
 export const metadata: Metadata = {
-  title: 'Verify Email | OnboardKit',
+  title: 'Verify Email | Onboard Hero',
   description:
-    'Verify your email address to complete your OnboardKit account setup.',
+    'Verify your email address to complete your Onboard Hero account setup.',
 }
 
 function VerifyEmailPageContent() {
@@ -21,7 +21,7 @@ function VerifyEmailPageContent() {
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-600">
               <span className="text-lg font-bold text-white">O</span>
             </div>
-            <span className="text-2xl font-bold text-gray-900">OnboardKit</span>
+            <span className="text-2xl font-bold text-gray-900">Onboard Hero</span>
           </Link>
         </div>
 

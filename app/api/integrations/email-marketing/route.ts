@@ -157,7 +157,7 @@ async function saveUserIntegration(supabase: any, integrationData: any): Promise
 // GET /api/integrations/email-marketing - List available and connected integrations
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -200,7 +200,7 @@ export async function GET(request: NextRequest) {
 // POST /api/integrations/email-marketing - Connect a new integration
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -293,7 +293,7 @@ export async function POST(request: NextRequest) {
 // DELETE /api/integrations/email-marketing - Disconnect an integration
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
