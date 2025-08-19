@@ -297,7 +297,7 @@ export function useAuth(): AuthHook {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: provider === 'azure' ? 'azure' : 'google',
           options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`,
           },
         })
 
@@ -328,7 +328,7 @@ export function useAuth(): AuthHook {
         setState(prev => ({ ...prev, loading: true, error: null }))
 
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/reset-password`,
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/reset-password`,
         })
 
         setState(prev => ({ ...prev, loading: false }))
