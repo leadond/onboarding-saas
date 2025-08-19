@@ -4,14 +4,14 @@ const fs = require('fs');
 const path = require('path');
 
 const COPYRIGHT_HEADER = `/*
- * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
  * 
  * PROPRIETARY AND CONFIDENTIAL
  * 
  * This software contains proprietary and confidential information.
  * Unauthorized copying, distribution, or use is strictly prohibited.
  * 
- * For licensing information, contact: [your-email@domain.com]
+ * For licensing information, contact: legal@devapphero.com
  */
 
 `;
