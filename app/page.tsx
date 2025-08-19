@@ -24,6 +24,8 @@ export default async function IndexPage() {
 
   if (user) {
     redirect('/dashboard')
+  } else {
+    redirect('/login')
   }
 
   return (
@@ -176,7 +178,7 @@ export default async function IndexPage() {
               client experiences.
             </p>
             <Link
-              href="/register"
+              href="/login"
               className={cn(
                 buttonVariants({ size: 'lg', variant: 'secondary' }),
                 'text-lg px-12 py-4 bg-white text-primary-600 hover:bg-primary-50 shadow-xl hover:shadow-2xl hover:scale-105'
