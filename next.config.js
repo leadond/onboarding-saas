@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable SWC minification for better performance and obfuscation
-  swcMinify: true,
-  
   // Compress output
   compress: true,
   
@@ -56,10 +53,8 @@ const nextConfig = {
   // Disable source maps in production
   productionBrowserSourceMaps: false,
   
-  // Enable experimental features for better security
-  experimental: {
-    serverComponentsExternalPackages: ['@supabase/supabase-js']
-  }
+  // External packages for server components (updated API)
+  serverExternalPackages: ['@supabase/supabase-js']
 }
 
 module.exports = nextConfig
