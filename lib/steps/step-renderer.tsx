@@ -299,10 +299,10 @@ export const stepUtils = {
 
       case 'intake_form':
         if (
-          !step.content.form_fields ||
-          step.content.form_fields.length === 0
+          !step.content.form_fields?.length &&
+          !step.content.html_form?.html_content
         ) {
-          errors.push('At least one form field is required')
+          errors.push('At least one form field or HTML form is required')
         }
         break
 
@@ -427,8 +427,15 @@ export const stepUtils = {
     let baseTime = baseTimes[step.step_type] || 60
 
     // Adjust based on step configuration
-    if (step.step_type === 'intake_form' && step.content.form_fields) {
-      baseTime += step.content.form_fields.length * 30 // 30 seconds per field
+    if (step.step_type === 'intake_form') {
+      if (step.content.form_fields) {
+        baseTime += step.content.form_fields.length * 30 // 30 seconds per field
+      } else if (step.content.html_form?.html_content) {
+        // Estimate based on HTML form complexity
+        const htmlContent = step.content.html_form.html_content
+        const inputCount = (htmlContent.match(/<(input|textarea|select)/g) || []).length
+        baseTime += inputCount * 30 // 30 seconds per input field
+      }
     }
 
     return baseTime

@@ -47,6 +47,14 @@ export const formFieldSchema = z.object({
   order: z.number().min(0),
 })
 
+// HTML Form Schema
+export const htmlFormSchema = z.object({
+  html_content: z.string().min(1, 'HTML content is required'),
+  css_content: z.string().optional(),
+  submit_button_text: z.string().default('Submit'),
+  field_mappings: z.record(z.string(), z.string()).optional(),
+})
+
 // Upload Configuration Schema
 export const uploadConfigSchema = z.object({
   max_files: z.number().min(1).max(20).default(5),
@@ -132,6 +140,7 @@ export const stepContentSchema = z.object({
   instructions: z.string().optional(),
   video_url: z.string().url().optional(),
   form_fields: z.array(formFieldSchema).optional(),
+  html_form: htmlFormSchema.optional(),
   upload_config: uploadConfigSchema.optional(),
   contract_template: contractTemplateSchema.optional(),
   calendar_config: calendarConfigSchema.optional(),
@@ -309,6 +318,7 @@ export type KitAnalyticsQuery = z.infer<typeof kitAnalyticsQuerySchema>
 export type KitFilterQuery = z.infer<typeof kitFilterSchema>
 export type KitTemplateData = z.infer<typeof kitTemplateSchema>
 export type FormFieldData = z.infer<typeof formFieldSchema>
+export type HtmlFormData = z.infer<typeof htmlFormSchema>
 export type UploadConfigData = z.infer<typeof uploadConfigSchema>
 export type StepContentData = z.infer<typeof stepContentSchema>
 export type StepSettingsData = z.infer<typeof stepSettingsSchema>

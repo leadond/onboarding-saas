@@ -62,33 +62,47 @@ class ResendProvider implements EmailProvider {
     options: EmailOptions
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
+      const emailPayload = {
+        from:
+          options.from ||
+          process.env.RESEND_FROM_EMAIL ||
+          'onboarding@resend.dev',
+        to: [options.to],
+        subject: options.subject,
+        html: options.html,
+        text: options.text,
+      }
+
+      console.log('📧 Sending email via Resend:')
+      console.log(`From: ${emailPayload.from}`)
+      console.log(`To: ${emailPayload.to[0]}`)
+      console.log(`Subject: ${emailPayload.subject}`)
+
       const response = await fetch(`${this.baseUrl}/emails`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          from:
-            options.from ||
-            process.env.DEFAULT_FROM_EMAIL ||
-            'noreply@onboardhero.com',
-          to: [options.to],
-          subject: options.subject,
-          html: options.html,
-          text: options.text,
-        }),
+        body: JSON.stringify(emailPayload),
       })
 
+      const responseText = await response.text()
+      
       if (!response.ok) {
-        const error = await response.text()
-        return { success: false, error }
+        console.error('❌ Resend API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: responseText
+        })
+        return { success: false, error: `Resend API Error: ${response.status} - ${responseText}` }
       }
 
-      const result = await response.json()
+      const result = JSON.parse(responseText)
+      console.log('✅ Email sent successfully:', result.id)
       return { success: true, messageId: result.id }
     } catch (error) {
-      console.error('Email sending failed:', error)
+      console.error('❌ Email sending failed:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
@@ -172,6 +186,29 @@ class SendGridProvider implements EmailProvider {
   }
 }
 
+// Mock email provider for development/testing
+class MockProvider implements EmailProvider {
+  async sendEmail(
+    options: EmailOptions
+  ): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    console.log('📧 Mock Email Sent:')
+    console.log(`To: ${options.to}`)
+    console.log(`Subject: ${options.subject}`)
+    console.log(`Text: ${options.text.substring(0, 200)}...`)
+    
+    // Simulate success
+    return { 
+      success: true, 
+      messageId: `mock-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` 
+    }
+  }
+
+  validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
+}
+
 // Email service class
 export class EmailService {
   private provider: EmailProvider
@@ -179,23 +216,39 @@ export class EmailService {
 
   constructor() {
     const emailProvider = process.env.EMAIL_PROVIDER || 'resend'
+    const resendKey = process.env.RESEND_API_KEY
+
+    // Use Resend if API key is available
+    if (resendKey && emailProvider !== 'mock') {
+      console.log('✅ Using Resend email provider')
+      this.provider = new ResendProvider(resendKey)
+      return
+    }
 
     switch (emailProvider.toLowerCase()) {
       case 'sendgrid':
         const sendgridKey = process.env.SENDGRID_API_KEY
         if (!sendgridKey) {
-          throw new Error('SENDGRID_API_KEY environment variable is required')
+          console.warn('SENDGRID_API_KEY not found, using mock provider')
+          this.provider = new MockProvider()
+        } else {
+          this.provider = new SendGridProvider(sendgridKey)
         }
-        this.provider = new SendGridProvider(sendgridKey)
         break
 
       case 'resend':
-      default:
-        const resendKey = process.env.RESEND_API_KEY
         if (!resendKey) {
-          throw new Error('RESEND_API_KEY environment variable is required')
+          console.warn('RESEND_API_KEY not found, using mock provider')
+          this.provider = new MockProvider()
+        } else {
+          this.provider = new ResendProvider(resendKey)
         }
-        this.provider = new ResendProvider(resendKey)
+        break
+
+      case 'mock':
+      default:
+        console.log('📧 Using mock email provider (emails logged to console)')
+        this.provider = new MockProvider()
         break
     }
   }

@@ -128,9 +128,12 @@ export async function POST(request: NextRequest) {
     const emailService = new EmailService()
     let success = false
 
+    console.log(`📧 Attempting to send ${type} email to ${clientEmail}`)
+
     switch (type) {
       case 'welcome':
         success = await emailService.sendWelcomeEmail(context)
+        console.log(`📧 Welcome email result: ${success ? 'SUCCESS' : 'FAILED'}`)
         break
 
       case 'step_completion':

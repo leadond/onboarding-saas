@@ -141,10 +141,9 @@ export default function DataAccessRequestsPage() {
             <CardContent>
               <DataAccessRequestSearch onFiltersChange={handleFiltersChange} />
               <div className="mt-6">
-                <EnhancedDataAccessRequestTable 
-                  userId={user.id} 
+                <EnhancedDataAccessRequestTable
+                  userId={user.id}
                   isAdmin={true}
-                  filters={filters}
                   key={refreshKey}
                 />
               </div>
@@ -185,10 +184,9 @@ export default function DataAccessRequestsPage() {
             <CardContent>
               <DataAccessRequestSearch onFiltersChange={handleFiltersChange} />
               <div className="mt-6">
-                <DataAccessRequestTable 
-                  userId={user.id} 
+                <DataAccessRequestTable
+                  userId={user.id}
                   isAdmin={true}
-                  filters={filters}
                   key={refreshKey}
                 />
               </div>

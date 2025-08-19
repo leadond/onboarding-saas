@@ -12,14 +12,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Switch } from '@/components/ui/switch'
 import { createClient } from '@/lib/supabase/client'
 import { FormData, StepContent } from '@/types/forms'
+import { HtmlFormInput } from '@/components/forms/html-form-input'
 
 const stepTypes = [
-  { value: 'welcome', label: 'Welcome Message' },
-  { value: 'form', label: 'Form Collection' },
-  { value: 'document', label: 'Document Upload' },
+  { value: 'welcome_message', label: 'Welcome Message' },
+  { value: 'intake_form', label: 'Form Collection' },
+  { value: 'file_upload', label: 'Document Upload' },
   { value: 'payment', label: 'Payment Collection' },
-  { value: 'video', label: 'Video Content' },
-  { value: 'completion', label: 'Completion Step' },
+  { value: 'welcome_video', label: 'Video Content' },
+  { value: 'confirmation', label: 'Completion Step' },
 ]
 
 export default function StepEditorPage() {
@@ -36,7 +37,7 @@ export default function StepEditorPage() {
   const [formData, setFormData] = useState<FormData>({
     title: '',
     description: '',
-    step_type: 'welcome',
+    step_type: 'welcome_message',
     content: {},
     is_required: true,
     step_order: 0,
@@ -124,7 +125,7 @@ export default function StepEditorPage() {
 
       router.push(`/dashboard/kits/${kitId}`)
     } catch (error) {
-      console.error('Error saving step:', error)
+      console.error('Error saving step:', JSON.stringify(error, null, 2))
     } finally {
       setSaving(false)
     }
@@ -235,7 +236,7 @@ export default function StepEditorPage() {
                 ))}
               </TabsList>
 
-              <TabsContent value="welcome" className="space-y-4">
+              <TabsContent value="welcome_message" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="welcome_instructions">Welcome Message</Label>
                   <Textarea
@@ -247,7 +248,7 @@ export default function StepEditorPage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="video" className="space-y-4">
+              <TabsContent value="welcome_video" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="video_url">Video URL</Label>
                   <Input
@@ -268,7 +269,7 @@ export default function StepEditorPage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="form" className="space-y-4">
+              <TabsContent value="intake_form" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="form_instructions">Form Instructions</Label>
                   <Textarea
@@ -278,9 +279,39 @@ export default function StepEditorPage() {
                     placeholder="Enter form instructions"
                   />
                 </div>
+                
+                <div className="space-y-4">
+                  <Label>Form Type</Label>
+                  <Tabs defaultValue="fields" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="fields">Form Fields</TabsTrigger>
+                      <TabsTrigger value="html">HTML Form</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="fields" className="space-y-4">
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <p className="text-sm text-blue-800">
+                          Configure form fields using the traditional form builder.
+                          This allows you to add individual fields with validation.
+                        </p>
+                      </div>
+                      <div className="text-center py-8 text-gray-500">
+                        <p>Form fields builder will be implemented here.</p>
+                        <p className="text-sm mt-2">For now, use the HTML Form option below.</p>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="html" className="space-y-4">
+                      <HtmlFormInput
+                        value={getContentValue('html_form')}
+                        onChange={(htmlForm) => updateContent('html_form', htmlForm)}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
               </TabsContent>
 
-              <TabsContent value="document" className="space-y-4">
+              <TabsContent value="file_upload" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="document_instructions">Upload Instructions</Label>
                   <Textarea
@@ -340,7 +371,7 @@ export default function StepEditorPage() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="completion" className="space-y-4">
+              <TabsContent value="confirmation" className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="completion_instructions">Completion Message</Label>
                   <Textarea
@@ -363,7 +394,7 @@ export default function StepEditorPage() {
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={saving}>
-            {saving ? 'Saving...' : 'Save Step'}
+            {saving ? 'Saving...' : 'Continue'}
           </Button>
         </div>
       </div>

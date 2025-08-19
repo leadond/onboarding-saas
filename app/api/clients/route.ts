@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    console.log('📋 GET /api/clients called')
     const supabase = await createClient()
 
     // Check authentication
@@ -25,12 +26,23 @@ export async function GET() {
       )
     }
     
-    // Fetch clients for authenticated user
-    const { data: clients, error: clientsError } = await supabase
+    // Get search parameter
+    const url = new URL(request.url)
+    const search = url.searchParams.get('search')
+    
+    // Build query
+    let query = supabase
       .from('clients')
       .select('*')
       .eq('owner_id', user.id)
-      .order('created_at', { ascending: false })
+    
+    // Add search filter if provided
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,email.ilike.%${search}%,company.ilike.%${search}%`)
+    }
+    
+    // Fetch clients for authenticated user
+    const { data: clients, error: clientsError } = await query.order('created_at', { ascending: false })
     
     if (clientsError) {
       console.error('Supabase clients error:', clientsError)
@@ -80,17 +92,25 @@ export async function POST(request: Request) {
     const supabase = await createClient()
 
     // Check authentication
+    console.log('🔐 Checking authentication...')
     const {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser()
 
+    console.log('👤 User:', user?.id, user?.email)
+    console.log('❌ Auth Error:', authError)
+
     if (authError || !user) {
+      console.log('🚫 Authentication failed')
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: 'Unauthorized', debug: { authError: authError?.message, hasUser: !!user } },
         { status: 401 }
       )
     }
+
+    console.log('✅ User authenticated:', user.email)
+    console.log('🔍 Search term:', search)
 
     const body = await request.json()
     
@@ -124,16 +144,41 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send welcome email using AWS SES
+    // Send welcome email using Resend
+    console.log('🔄 Attempting to send email to:', body.email)
+    console.log('🔑 API Key present:', !!process.env.RESEND_API_KEY)
+    console.log('📧 From email:', process.env.RESEND_FROM_EMAIL)
+    
     try {
-      const { sendWelcomeEmail } = await import('@/lib/aws/ses')
-      const kitUrl = `${process.env.NEXT_PUBLIC_APP_URL}/client/welcome?email=${encodeURIComponent(body.email)}`
+      const emailPayload = {
+        from: process.env.RESEND_FROM_EMAIL || 'onboard@devapphero.com',
+        to: [body.email],
+        subject: `Welcome ${body.name}! Your onboarding is ready`,
+        html: `<h1>Welcome, ${body.name}!</h1><p>You've been invited to complete your onboarding process.</p><p><a href="https://onboard.devapphero.com/client/welcome?email=${encodeURIComponent(body.email)}" style="background:#0066cc;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;">Start Onboarding</a></p>`
+      }
       
-      await sendWelcomeEmail(body.email, body.name, kitUrl)
-      console.log('Welcome email sent successfully')
+      console.log('📤 Sending email payload:', JSON.stringify(emailPayload, null, 2))
+      
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(emailPayload)
+      })
+      
+      const responseText = await response.text()
+      console.log('📨 Resend response status:', response.status)
+      console.log('📨 Resend response:', responseText)
+      
+      if (response.ok) {
+        console.log('✅ Welcome email sent successfully via Resend')
+      } else {
+        console.error('❌ Resend email failed:', responseText)
+      }
     } catch (emailError) {
-      console.error('Failed to send welcome email:', emailError)
-      // Don't fail the client creation if email fails
+      console.error('❌ Email error:', emailError)
     }
 
     // Trigger integrations

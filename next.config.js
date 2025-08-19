@@ -1,17 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    // Allow production builds to complete even with type errors
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    // Allow production builds to complete even with ESLint errors
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    domains: ['localhost'],
-  },
-  // PWA configuration would go here if needed
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: process.env.NODE_ENV === 'development' 
+              ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none';"
+              : "script-src 'self'; object-src 'none';"
+          }
+        ]
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

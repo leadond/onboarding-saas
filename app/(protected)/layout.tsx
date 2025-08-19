@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function ProtectedLayout({
   children,
@@ -9,11 +10,27 @@ export default function ProtectedLayout({
   children: React.ReactNode
 }) {
   const router = useRouter()
+  const [userRole, setUserRole] = useState<string>('')
 
   useEffect(() => {
-    // For now, we'll allow access to all dashboard routes
-    // In a production app, you would implement proper authentication checking
+    fetchUserRole()
   }, [])
+
+  const fetchUserRole = async () => {
+    try {
+      const response = await fetch('/api/user/profile')
+      const result = await response.json()
+      
+      if (result.success && result.data?.user) {
+        setUserRole(result.data.user.role)
+      }
+    } catch (error) {
+      console.error('Error fetching user role:', error)
+    }
+  }
+
+  const isAdmin = ['admin', 'super_admin', 'global_admin'].includes(userRole)
+  const canSeeBilling = ['super_admin', 'global_admin'].includes(userRole)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/20 to-background relative overflow-hidden">
@@ -41,17 +58,18 @@ export default function ProtectedLayout({
             <div className="space-y-3">
               {[
                 { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-                { href: '/dashboard/kits', label: 'Kits', icon: '📦' },
                 { href: '/dashboard/clients', label: 'Clients', icon: '👥' },
+                { href: '/dashboard/kits', label: 'Kits', icon: '📦' },
                 { href: '/dashboard/teams', label: 'Teams', icon: '🏢' },
                 { href: '/dashboard/analytics', label: 'Analytics', icon: '📈' },
                 { href: '/dashboard/integrations', label: 'Integrations', icon: '🔗' },
                 { href: '/dashboard/branding', label: 'Branding', icon: '🎨' },
-                { href: '/dashboard/billing', label: 'Billing', icon: '💳' },
+                ...(canSeeBilling ? [{ href: '/dashboard/billing', label: 'Billing', icon: '💳' }] : []),
+                ...(isAdmin ? [{ href: '/dashboard/users', label: 'Users', icon: '👤' }] : []),
                 { href: '/dashboard/settings', label: 'Settings', icon: '⚙️' },
               ].map((item, index) => (
                 <div key={item.href}>
-                  <a
+                  <Link
                     href={item.href}
                     className="group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-primary-50 hover:text-primary-700 transition-all duration-200 hover:shadow-sm"
                   >
@@ -59,7 +77,7 @@ export default function ProtectedLayout({
                       {item.icon}
                     </span>
                     {item.label}
-                  </a>
+                  </Link>
                   {index === 0 && (
                     <div className="my-3 w-full h-px bg-gradient-to-r from-transparent via-primary-200 to-transparent"></div>
                   )}

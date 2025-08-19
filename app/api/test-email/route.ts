@@ -1,44 +1,70 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { sendWelcomeEmail } from '@/lib/aws/ses'
+import { EmailService } from '@/lib/notifications/email-service'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    
-    if (!body.email || !body.name) {
+    const { to, subject = 'Test Email from Onboard Hero' } = body
+
+    if (!to) {
       return NextResponse.json(
-        { success: false, error: 'Email and name are required' },
+        { error: 'Email address is required' },
         { status: 400 }
       )
     }
 
-    console.log('Testing AWS SES email sending...')
+    console.log(`🧪 Testing email to: ${to}`)
+    console.log(`🔑 Resend API Key: ${process.env.RESEND_API_KEY ? 'Present' : 'Missing'}`)
+    console.log(`📧 From Email: ${process.env.RESEND_FROM_EMAIL || 'Not set'}`)
+
+    const emailService = new EmailService()
     
-    // Test AWS SES email
-    const kitUrl = `${process.env.NEXT_PUBLIC_APP_URL}/client/welcome?email=${encodeURIComponent(body.email)}`
-    
-    const result = await sendWelcomeEmail(body.email, body.name, kitUrl)
-    
-    if (result.success) {
-      console.log('✅ Email sent successfully:', result.messageId)
+    // Create a test context
+    const testContext = {
+      kit: {
+        id: 'test-kit-id',
+        title: 'Test Onboarding Kit',
+        user: {
+          full_name: 'Test User',
+          company_name: 'Onboard Hero',
+          email: 'admin@onboardhero.com'
+        }
+      },
+      client: {
+        name: 'Test Client',
+        email: to,
+        identifier: to
+      },
+      customMessage: 'This is a test email to verify the email system is working correctly.'
+    }
+
+    const success = await emailService.sendWelcomeEmail(testContext)
+
+    if (success) {
       return NextResponse.json({
         success: true,
-        message: 'Email sent successfully',
-        messageId: result.messageId,
-        sentTo: body.email
+        message: 'Test email sent successfully',
+        to,
+        provider: 'Resend'
       })
     } else {
-      console.error('❌ Email failed:', result.error)
-      return NextResponse.json({
-        success: false,
-        error: result.error
-      }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to send test email' },
+        { status: 500 }
+      )
     }
   } catch (error) {
     console.error('Test email error:', error)
     return NextResponse.json(
-      { success: false, error: 'Failed to send test email' },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }
+}
+
+export async function GET() {
+  return NextResponse.json({
+    message: 'Email test endpoint',
+    usage: 'POST with { "to": "email@example.com" } to send test email'
+  })
 }

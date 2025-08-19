@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { AuthProvider } from '@/components/auth/auth-provider'
 import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,34 +25,19 @@ export const metadata: Metadata = {
     title: 'Onboard Hero - Professional Client Onboarding',
     description:
       'Create professional client onboarding experiences with ease using Onboard Hero',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Onboard Hero - Professional Client Onboarding'
-      }
-    ]
+    images: []
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Onboard Hero - Professional Client Onboarding',
     description:
       'Create professional client onboarding experiences with ease using Onboard Hero',
-    images: ['/og-image.jpg'],
+    images: [],
     creator: '@onboardhero'
   },
-  manifest: '/manifest.json',
+
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-    other: [
-      {
-        rel: 'apple-touch-icon-precomposed',
-        url: '/apple-touch-icon-precomposed.png',
-      },
-    ],
+    icon: '/favicon.ico'
   },
   applicationName: 'Onboard Hero',
   appleWebApp: {
@@ -91,8 +77,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Toaster />
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

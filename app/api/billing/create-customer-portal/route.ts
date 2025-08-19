@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // Get user profile
     let { data: userProfile, error: profileError } = await supabase
-      .from('profiles')
+      .from('users')
       .select('*')
       .eq('id', user.id)
       .single()
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     if (profileError || !userProfile) {
       // Create profile if it doesn't exist
       const { data: newProfile, error: createError } = await supabase
-        .from('profiles')
+        .from('users')
         .insert([
           {
             id: user.id,
@@ -63,14 +63,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Get or create Stripe customer
-    const customerResult = await getOrCreateStripeCustomer(userProfile)
+    const customerResult: any = await getOrCreateStripeCustomer(userProfile as any)
     if (!customerResult.success) {
       return NextResponse.json(customerResult, { status: 400 })
     }
 
     // Create customer portal session
+    const customerId = (customerResult?.data?.customerId ?? (customerResult as any).customerId) as string;
     const portalResult = await createCustomerPortalSession(
-      customerResult.data.customerId,
+      customerId,
       returnUrl
     )
 

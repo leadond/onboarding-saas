@@ -72,6 +72,7 @@ export interface StepContent {
   instructions?: string
   video_url?: string
   form_fields?: FormField[]
+  html_form?: HtmlForm
   upload_config?: UploadConfig
   contract_template?: ContractTemplate
   calendar_config?: CalendarConfig
@@ -96,6 +97,13 @@ export interface FormField {
   options?: string[]
   validation?: FieldValidation
   order: number
+}
+
+export interface HtmlForm {
+  html_content: string
+  css_content?: string
+  submit_button_text?: string
+  field_mappings?: Record<string, string> // Maps HTML form field names to standardized field names
 }
 
 export interface FieldValidation {

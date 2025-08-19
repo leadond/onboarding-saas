@@ -47,11 +47,11 @@ export async function GET() {
       )
     }
 
-    // Fetch clients count  
+    // Fetch clients count from client_progress table
     const { count: activeClients, error: clientsError } = await supabase
-      .from('clients')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'active')
+      .from('client_progress')
+      .select('client_identifier', { count: 'exact', head: true })
+      .not('status', 'eq', 'completed')
     
     // Fetch recent activity (if you have an activity log table)
     // For now, we'll return empty array since this would be a more complex implementation

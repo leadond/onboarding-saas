@@ -129,3 +129,23 @@ export function createRateLimitResponse(): NextResponse {
     { status: 429 }
   );
 }
+
+export function createNotFoundErrorResponse(message: string = 'Resource not found'): NextResponse {
+  return NextResponse.json(
+    {
+      success: false,
+      error: message,
+    },
+    { status: 404 }
+  );
+}
+
+export function createConflictErrorResponse(message: string = 'Resource conflict'): NextResponse {
+  return NextResponse.json(
+    {
+      success: false,
+      error: message,
+    },
+    { status: 409 }
+  );
+}

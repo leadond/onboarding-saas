@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/select'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { ArrowLeft } from 'lucide-react'
+import { HtmlFormInput } from '@/components/forms/html-form-input'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type Kit = {
   id: string
@@ -57,7 +59,15 @@ export default function NewStepPage({
     title: '',
     description: '',
     step_type: 'intake_form' as const,
-    content: { instructions: '' },
+    content: {
+      instructions: '',
+      html_form: {
+        html_content: '',
+        css_content: '',
+        submit_button_text: 'Submit',
+        field_mappings: {},
+      }
+    },
     is_required: true,
     is_active: true,
     step_order: 0,
@@ -268,27 +278,88 @@ export default function NewStepPage({
             </div>
 
             {/* Content */}
-            <div>
-              <label
-                htmlFor="instructions"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Instructions
-              </label>
-              <Textarea
-                id="instructions"
-                placeholder="Enter step instructions or content (optional)"
-                rows={4}
-                value={formData.content?.instructions || ''}
-                onChange={e => handleInputChange('content', { 
-                  ...formData.content, 
-                  instructions: e.target.value 
-                })}
-              />
-              <p className="mt-1 text-sm text-gray-500">
-                Instructions or content that will be displayed to users in this step.
-              </p>
-            </div>
+            {formData.step_type === 'intake_form' ? (
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="instructions"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
+                    Instructions
+                  </label>
+                  <Textarea
+                    id="instructions"
+                    placeholder="Enter step instructions or content (optional)"
+                    rows={4}
+                    value={formData.content?.instructions || ''}
+                    onChange={e => handleInputChange('content', {
+                      ...formData.content,
+                      instructions: e.target.value
+                    })}
+                  />
+                  <p className="mt-1 text-sm text-gray-500">
+                    Instructions or content that will be displayed to users in this step.
+                  </p>
+                </div>
+                
+                <div className="space-y-4">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Form Configuration
+                  </label>
+                  <Tabs defaultValue="html" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="fields">Form Fields</TabsTrigger>
+                      <TabsTrigger value="html">HTML Form</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="fields" className="space-y-4">
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <p className="text-sm text-blue-800">
+                          Configure form fields using the traditional form builder.
+                          This allows you to add individual fields with validation.
+                        </p>
+                      </div>
+                      <div className="text-center py-8 text-gray-500">
+                        <p>Form fields builder will be implemented here.</p>
+                        <p className="text-sm mt-2">For now, use the HTML Form option below.</p>
+                      </div>
+                    </TabsContent>
+                    
+                    <TabsContent value="html" className="space-y-4">
+                      <HtmlFormInput
+                        value={formData.content?.html_form}
+                        onChange={(htmlForm) => handleInputChange('content', {
+                          ...formData.content,
+                          html_form: htmlForm
+                        })}
+                      />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <label
+                  htmlFor="instructions"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Instructions
+                </label>
+                <Textarea
+                  id="instructions"
+                  placeholder="Enter step instructions or content (optional)"
+                  rows={4}
+                  value={formData.content?.instructions || ''}
+                  onChange={e => handleInputChange('content', {
+                    ...formData.content,
+                    instructions: e.target.value
+                  })}
+                />
+                <p className="mt-1 text-sm text-gray-500">
+                  Instructions or content that will be displayed to users in this step.
+                </p>
+              </div>
+            )}
 
             {/* Step Order */}
             <div>

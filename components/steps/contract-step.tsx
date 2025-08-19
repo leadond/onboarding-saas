@@ -16,13 +16,14 @@ import {
 } from '@/lib/integrations/boldsign-client'
 
 interface ContractStepProps {
-  stepData: any
+  step: any
+  progress: any
   clientData: any
   onComplete: (data: any) => void
   onUpdate: (data: any) => void
 }
 
-export function ContractStep({ stepData, clientData, onComplete, onUpdate }: ContractStepProps) {
+export function ContractStep({ step, progress, clientData, onComplete, onUpdate }: ContractStepProps) {
   const [envelope, setEnvelope] = useState<BoldSignEnvelope | null>(null)
   const [signingUrl, setSigningUrl] = useState<string>('')
   const [signatureStatus, setSignatureStatus] = useState<string>('pending')
@@ -30,28 +31,29 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
-    if (stepData.envelope_id) {
-      checkSignatureStatus()
+    const envelopeId = progress?.response_data?.envelope_id || step?.content?.contract_template?.envelope_id;
+    if (envelopeId) {
+      checkSignatureStatus(envelopeId);
     }
-  }, [stepData.envelope_id])
+  }, [progress?.response_data?.envelope_id, step?.content?.contract_template?.envelope_id])
 
-  const checkSignatureStatus = async () => {
-    if (!stepData.envelope_id) return
+  const checkSignatureStatus = async (envelopeId: string) => {
+    if (!envelopeId) return
 
     try {
-      const status = await boldSignClient.getDocumentStatus(stepData.envelope_id)
+      const status = await boldSignClient.getDocumentStatus(envelopeId)
       setSignatureStatus(status)
       
       if (status === 'completed') {
         const mockEnvelope: BoldSignEnvelope = {
-          documentId: stepData.envelope_id,
+          documentId: envelopeId,
           status: 'completed',
           signers: [{
-            email: clientData.email,
+            email: clientData?.email || '',
             status: 'signed',
             signedAt: new Date().toISOString(),
           }],
-          createdAt: stepData.created_at || new Date().toISOString(),
+          createdAt: progress?.response_data?.created_at || step?.content?.contract_template?.created_at || new Date().toISOString(),
           completedAt: new Date().toISOString(),
         }
         setEnvelope(mockEnvelope)
@@ -68,7 +70,7 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
     const completionData = {
       envelope_id: completedEnvelope.documentId,
       signed_at: completedEnvelope.completedAt,
-      signer_email: clientData.email,
+      signer_email: clientData?.email || '',
       status: 'completed'
     }
 
@@ -81,26 +83,27 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
     setError('')
 
     try {
+      const contractTemplate = step?.content?.contract_template || {}
       const signingData: ContractSigningData = {
-        templateId: stepData.template_id || 'template-1',
-        title: stepData.contract_title || 'Client Agreement',
-        recipientName: clientData.name || 'Client',
-        recipientEmail: clientData.email,
+        templateId: contractTemplate.template_id || 'template-1',
+        title: contractTemplate.contract_title || 'Client Agreement',
+        recipientName: clientData?.name || 'Client',
+        recipientEmail: clientData?.email || '',
         returnUrl: window.location.href,
         signers: [{
-          name: clientData.name || 'Client',
-          email: clientData.email,
+          name: clientData?.name || 'Client',
+          email: clientData?.email || '',
           role: 'Client',
         }],
         customFields: {
-          client_name: clientData.name,
-          company_name: clientData.company || '',
+          client_name: clientData?.name || '',
+          company_name: clientData?.company || '',
           date: new Date().toLocaleDateString(),
         },
         metadata: {
-          kit_id: stepData.kit_id,
-          step_id: stepData.id,
-          client_id: clientData.id,
+          kit_id: step?.kit_id,
+          step_id: step?.id,
+          client_id: clientData?.id,
         }
       }
 
@@ -196,7 +199,7 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
             <Label htmlFor="contract-title">Contract Title</Label>
             <Input
               id="contract-title"
-              value={stepData.contract_title || 'Client Agreement'}
+              value={step?.content?.contract_template?.contract_title || 'Client Agreement'}
               readOnly
             />
           </div>
@@ -205,7 +208,7 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
             <Label htmlFor="client-info">Client Information</Label>
             <Textarea
               id="client-info"
-              value={`Name: ${clientData.name || 'N/A'}\nEmail: ${clientData.email || 'N/A'}\nCompany: ${clientData.company || 'N/A'}`}
+              value={`Name: ${clientData?.name || 'N/A'}\nEmail: ${clientData?.email || 'N/A'}\nCompany: ${clientData?.company || 'N/A'}`}
               readOnly
               rows={3}
             />
@@ -266,7 +269,12 @@ export function ContractStep({ stepData, clientData, onComplete, onUpdate }: Con
             </Button>
           ) : (
             <Button
-              onClick={checkSignatureStatus}
+              onClick={() => {
+                const envelopeId = progress?.response_data?.envelope_id || step?.content?.contract_template?.envelope_id;
+                if (envelopeId) {
+                  checkSignatureStatus(envelopeId);
+                }
+              }}
               variant="outline"
               disabled={loading}
               className="flex-1"

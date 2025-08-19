@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { FormRenderer } from '@/lib/forms/form-renderer'
+import { HtmlFormRenderer } from '@/lib/forms/html-form-renderer'
 import {
   Card,
   CardContent,
@@ -36,6 +37,7 @@ export function IntakeFormStep({
 }: IntakeFormStepProps) {
   const { content, title, description } = step
   const formFields = content.form_fields || []
+  const htmlForm = content.html_form
 
   // Get existing response data if available
   const defaultValues = React.useMemo(() => {
@@ -63,7 +65,7 @@ export function IntakeFormStep({
     }
   }
 
-  if (!formFields || formFields.length === 0) {
+  if (!formFields?.length && !htmlForm) {
     return (
       <Card className={cn('mx-auto w-full max-w-2xl', className)}>
         <CardHeader className="text-center">
@@ -76,7 +78,7 @@ export function IntakeFormStep({
         </CardHeader>
         <CardContent className="py-8 text-center">
           <p className="text-muted-foreground">
-            No form fields have been configured for this step.
+            No form fields or HTML form have been configured for this step.
           </p>
         </CardContent>
       </Card>
@@ -101,14 +103,25 @@ export function IntakeFormStep({
       </CardHeader>
 
       <CardContent>
-        <FormRenderer
-          fields={formFields}
-          onSubmit={handleSubmit}
-          defaultValues={defaultValues}
-          isLoading={isLoading}
-          submitText={step.settings?.auto_advance ? 'Continue' : 'Submit'}
-          className="space-y-6"
-        />
+        {htmlForm ? (
+          <HtmlFormRenderer
+            htmlForm={htmlForm}
+            onSubmit={handleSubmit}
+            defaultValues={defaultValues}
+            isLoading={isLoading}
+            submitText={step.settings?.auto_advance ? 'Continue' : 'Submit'}
+            className="space-y-6"
+          />
+        ) : (
+          <FormRenderer
+            fields={formFields}
+            onSubmit={handleSubmit}
+            defaultValues={defaultValues}
+            isLoading={isLoading}
+            submitText={step.settings?.auto_advance ? 'Continue' : 'Submit'}
+            className="space-y-6"
+          />
+        )}
 
         {/* Navigation buttons */}
         {(onPrevious || (!step.settings?.auto_advance && onNext)) && (

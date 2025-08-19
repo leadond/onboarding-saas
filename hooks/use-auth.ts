@@ -294,13 +294,10 @@ export function useAuth(): AuthHook {
       try {
         setState(prev => ({ ...prev, loading: true, error: null }))
 
-        // Map azure to microsoft for Supabase
-        const supabaseProvider = provider === 'azure' ? 'azure' : 'google'
-
         const { error } = await supabase.auth.signInWithOAuth({
-          provider: supabaseProvider as any,
+          provider: provider === 'azure' ? 'azure' : 'google',
           options: {
-            redirectTo: `${window.location.origin}/api/auth/callback?next=/dashboard`,
+            redirectTo: `${window.location.origin}/auth/callback`,
           },
         })
 

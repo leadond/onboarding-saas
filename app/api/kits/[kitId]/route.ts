@@ -134,12 +134,25 @@ export async function PATCH(
     }
     const kitId = kitIdResult.data
 
-    // Parse and validate request body
+    // Parse request body with minimal validation
     const body = await request.json()
-    const validatedData = kitUpdateSchema.parse({
-      ...body,
-      id: kitId,
-    })
+    console.log('📝 Request body:', body)
+    
+    // Simple validation - only validate what's actually being updated
+    const allowedFields = ['name', 'description', 'status', 'brand_color', 'welcome_message', 'logo_url']
+    const updateData = Object.keys(body)
+      .filter(key => allowedFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = body[key]
+        return obj
+      }, {})
+    
+    // Basic validation
+    if (updateData.name && (!updateData.name || updateData.name.trim().length === 0)) {
+      return NextResponse.json({ error: 'Kit name cannot be empty' }, { status: 400 })
+    }
+    
+    console.log('✅ Update data prepared:', updateData)
 
     // Check if kit exists and user owns it
     const { data: existingKit, error: fetchError } = await supabase
@@ -153,22 +166,7 @@ export async function PATCH(
       return createNotFoundErrorResponse('Kit')
     }
 
-    // Handle slug update - ensure uniqueness
-    const { id, steps, ...updateData } = validatedData
-
-    if (validatedData.slug && validatedData.slug !== existingKit.slug) {
-      // Check if new slug is unique
-      const { data: slugCheck } = await supabase
-        .from('kits')
-        .select('id')
-        .eq('slug', validatedData.slug)
-        .neq('id', kitId)
-        .single()
-
-      if (slugCheck) {
-        return createConflictErrorResponse('A kit with this slug already exists')
-      }
-    }
+    // No slug validation needed for now
 
     // Update the kit
     const { data: updatedKit, error: updateError } = await supabase

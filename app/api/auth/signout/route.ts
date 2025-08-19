@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
 
-    // Sign out from Supabase
+    // Sign out the user
     const { error } = await supabase.auth.signOut()
 
     if (error) {
@@ -16,14 +16,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create response
+    // Create response with cleared cookies
     const response = NextResponse.json({
-      message: 'Successfully signed out',
+      message: 'Signed out successfully'
     })
 
-    // Clear any auth cookies
-    response.cookies.delete('access_token')
-    response.cookies.delete('refresh_token')
+    // Clear auth cookies
+    response.cookies.delete('sb-access-token')
+    response.cookies.delete('sb-refresh-token')
 
     return response
   } catch (error) {
@@ -35,7 +35,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle OPTIONS for CORS
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,

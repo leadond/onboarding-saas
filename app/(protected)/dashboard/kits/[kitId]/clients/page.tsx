@@ -31,6 +31,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { ClientSelector } from '@/components/client-selector'
 import { 
   ArrowLeft, 
   Users, 
@@ -308,6 +309,21 @@ export default function KitClientsPage({
             </DialogHeader>
             <form onSubmit={handleAssignClient}>
               <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <label htmlFor="client_select" className="text-sm font-medium">
+                    Select Existing Client
+                  </label>
+                  <ClientSelector 
+                    onClientSelect={(client) => {
+                      setAssignForm(prev => ({
+                        ...prev,
+                        client_email: client.email,
+                        client_name: client.name
+                      }))
+                    }}
+                  />
+                </div>
+                <div className="text-center text-sm text-gray-500 my-2">or</div>
                 <div className="space-y-2">
                   <label htmlFor="client_email" className="text-sm font-medium">
                     Client Email *

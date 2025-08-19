@@ -77,12 +77,14 @@ interface EnhancedDataAccessRequestTableProps {
   userId: string;
   isAdmin: boolean;
   showAnalytics?: boolean;
+  filters?: any;
 }
 
-export function EnhancedDataAccessRequestTable({ 
-  userId, 
-  isAdmin, 
-  showAnalytics = true 
+export function EnhancedDataAccessRequestTable({
+  userId,
+  isAdmin,
+  showAnalytics = true,
+  filters
 }: EnhancedDataAccessRequestTableProps) {
   const [requests, setRequests] = useState<DataAccessRequest[] | DataAccessRequestWithUser[]>([]);
   const [summary, setSummary] = useState<DataAccessRequestSummary | null>(null);

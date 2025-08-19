@@ -1,59 +1,73 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { enterpriseSecurity } from '@/lib/auth/enterprise-security'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { email, password, remember } = body
-
-    // Basic input validation
+    
     if (!email || !password) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: 'Email and password required' },
         { status: 400 }
       )
     }
+    
+    // Get client info for security logging
+    const ip = request.headers.get('x-forwarded-for') || 
+               request.headers.get('x-real-ip') || 
+               'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
 
-    // Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
+    // Enterprise security validation
+    try {
+      const securityCheck = await enterpriseSecurity.validateLoginAttempt(email, ip)
+      if (!securityCheck.allowed) {
+        await enterpriseSecurity.logSecurityEvent('BLOCKED_LOGIN_ATTEMPT', {
+          email,
+          ip,
+          userAgent,
+          reason: securityCheck.reason
+        })
+        
+        return NextResponse.json(
+          { 
+            error: securityCheck.reason,
+            lockoutUntil: securityCheck.lockoutUntil 
+          },
+          { status: 403 }
+        )
+      }
+    } catch (securityError) {
+      console.warn('Security check failed, proceeding with login:', securityError)
     }
 
     const supabase = await createClient()
-
-    // Attempt to sign in
+    
+    // Attempt login
+    console.log('Attempting login for:', email)
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password,
+      password
     })
 
     if (error) {
-      console.error('Login error:', error)
+      console.log('Login failed:', error.message)
+      // Log failed attempt
+      try {
+        await enterpriseSecurity.logSecurityEvent('FAILED_LOGIN', {
+          email,
+          ip,
+          userAgent,
+          error: error.message
+        })
+      } catch (logError) {
+        console.warn('Failed to log security event:', logError)
+      }
       
-      // Handle specific auth errors
-      if (error.message === 'Invalid login credentials') {
-        return NextResponse.json(
-          { error: 'Invalid email or password' },
-          { status: 401 }
-        )
-      }
-
-      if (error.message === 'Email not confirmed') {
-        return NextResponse.json(
-          {
-            error: 'Email not confirmed',
-            message: 'Please check your email and click the confirmation link before signing in.',
-          },
-          { status: 401 }
-        )
-      }
-
       return NextResponse.json(
-        { error: 'Authentication failed' },
+        { error: error.message },
         { status: 401 }
       )
     }
@@ -65,59 +79,74 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Try to get user profile data (optional, won't fail if table doesn't exist)
-    let userProfile = null
+    // Check for anomalous activity
+    let isAnomalous = false
     try {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', data.user.id)
-        .single()
-      userProfile = profile
-    } catch (profileError) {
-      console.log('User profile not found, using auth data only')
+      isAnomalous = await enterpriseSecurity.detectAnomalousActivity(
+        data.user.id,
+        ip,
+        userAgent
+      )
+    } catch (anomalyError) {
+      console.warn('Anomaly detection failed:', anomalyError)
     }
 
-    // Create response
+    // Log successful login
+    try {
+      await enterpriseSecurity.logSecurityEvent('SUCCESSFUL_LOGIN', {
+        userId: data.user.id,
+        email,
+        ip,
+        userAgent,
+        anomalous: isAnomalous
+      })
+    } catch (logError) {
+      console.warn('Failed to log successful login:', logError)
+    }
+
+    // Check if user needs to change password
+    let forcePasswordChange = false
+    try {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('force_password_change')
+        .eq('id', data.user.id)
+        .single()
+      
+      forcePasswordChange = profile?.force_password_change || false
+    } catch (profileError) {
+      console.warn('Failed to check password change requirement:', profileError)
+    }
+
+    // Set session cookies
     const response = NextResponse.json({
+      success: true,
       user: {
         id: data.user.id,
         email: data.user.email,
-        fullName: userProfile?.full_name || data.user.user_metadata?.full_name,
-        companyName: userProfile?.company_name,
-        avatarUrl: userProfile?.avatar_url || data.user.user_metadata?.avatar_url,
-        subscriptionStatus: userProfile?.subscription_status || 'free',
-        subscriptionTier: userProfile?.subscription_tier || 'free',
-        trialEndsAt: userProfile?.trial_ends_at,
-        onboardingCompletedAt: userProfile?.onboarding_completed_at,
-        createdAt: userProfile?.created_at || data.user.created_at,
-        updatedAt: userProfile?.updated_at,
+        emailVerified: data.user.email_confirmed_at !== null
       },
-      session: data.session,
+      requiresMFA: false,
+      anomalousLogin: isAnomalous,
+      forcePasswordChange
+    })
+
+    // Set activity tracking cookie
+    response.cookies.set('last_activity', Date.now().toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: remember ? 30 * 24 * 60 * 60 : 24 * 60 * 60
     })
 
     return response
+
   } catch (error) {
-    console.error('Login API error:', error)
+    console.error('Login error:', error)
+    
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     )
   }
-}
-
-// Handle OPTIONS for CORS with security headers
-export async function OPTIONS() {
-  const response = new NextResponse(null, { status: 200 })
-  
-  // Apply security headers
-  response.headers.set('Access-Control-Allow-Origin', process.env.NEXT_PUBLIC_APP_URL || '*')
-  response.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS')
-  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
-  response.headers.set('Access-Control-Max-Age', '86400')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('X-Frame-Options', 'DENY')
-  response.headers.set('X-XSS-Protection', '1; mode=block')
-  
-  return response
 }

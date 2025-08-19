@@ -1,51 +1,67 @@
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-// Public routes that don't require authentication
-const publicRoutes = [
-  '/',
-  '/login',
-  '/register',
-  '/signup',
-  '/forgot-password',
-  '/reset-password',
-  '/auth',
-]
-
-// API routes that don't require authentication
-const publicApiRoutes = [
-  '/api/auth/login',
-  '/api/auth/signup', 
-  '/api/auth/signout',
-  '/api/auth/callback',
-  '/api/health',
-]
+const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/verify-email', '/auth', '/debug']
+const publicApiRoutes = ['/api/auth', '/api/health', '/api/test-email', '/api/webhooks']
+const adminRoutes = ['/admin', '/dashboard/admin']
 
 export async function middleware(request: NextRequest) {
-  try {
-    const pathname = request.nextUrl.pathname
+  let response = NextResponse.next({
+    request: { headers: request.headers }
+  })
 
-    // Allow public routes and API routes
-    if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
-      return NextResponse.next()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return request.cookies.get(name)?.value
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({ request: { headers: request.headers } })
+          response.cookies.set({ name, value, ...options })
+        },
+        remove(name: string, options: CookieOptions) {
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({ request: { headers: request.headers } })
+          response.cookies.set({ name, value: '', ...options })
+        }
+      }
     }
+  )
 
-    if (publicApiRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
-      return NextResponse.next()
-    }
+  const pathname = request.nextUrl.pathname
 
-    // For now, allow all dashboard routes to pass through
-    // In production, you would implement proper authentication checking
-    if (pathname.startsWith('/dashboard')) {
-      return NextResponse.next()
-    }
-
-    return NextResponse.next()
-
-  } catch (error) {
-    console.error('Middleware error:', error)
-    return NextResponse.next()
+  // Allow public routes
+  if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
+    return response
   }
+
+  // Allow public API routes
+  if (publicApiRoutes.some(route => pathname.startsWith(route))) {
+    return response
+  }
+
+  // Check authentication for protected routes
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Update activity timestamp for authenticated users
+  if (user) {
+    response.cookies.set('last_activity', Date.now().toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    })
+  }
+
+  return response
 }
 
 export const config = {
