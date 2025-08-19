@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils/cn'
 import { LogoIcon as Logo, WorkflowIcon as Workflow, ChartIcon as Chart, DocumentIcon as Document, BellIcon as Bell, UserIcon as User, UsersIcon as Users } from '@/components/icons'

@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

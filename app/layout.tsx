@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'

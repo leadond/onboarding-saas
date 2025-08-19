@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import { ApolloServer } from '@apollo/server'
 import { NextRequest } from 'next/server'
 import { typeDefs, resolvers, createGraphQLContext } from '@/lib/graphql/resolvers'

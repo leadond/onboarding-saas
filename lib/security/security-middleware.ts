@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import { NextRequest, NextResponse } from 'next/server'
 import { applyRateLimit, authRateLimiter, generalRateLimiter, passwordResetRateLimiter, signupRateLimiter } from './rate-limiter'
 import { createClient } from '@/lib/supabase/server'

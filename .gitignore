@@ -2,6 +2,7 @@
 node_modules/
 .pnp
 .pnp.js
+.pnpm-store/
 
 # Testing
 coverage/
@@ -12,52 +13,54 @@ out/
 
 # Production
 build/
+dist/
 
-# Misc
-.DS_Store
+# Environment files (CRITICAL - NEVER COMMIT THESE)
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+*.env
+
+# Secrets and keys (NEVER COMMIT)
+*.key
 *.pem
+*.p12
+*.pfx
+secrets/
+keys/
+credentials/
 
-# Debug
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database.json
+
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Local env files
-.env*.local
-.env.development
-.env.production
-
-# Vercel
-.vercel
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-logs
-*.log
 server.log
 
 # Runtime data
-pids
+pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Coverage
 coverage/
 *.lcov
+.nyc_output
 
 # Temporary folders
 tmp/
 temp/
+.cache/
 
 # OS generated files
 .DS_Store
@@ -67,4 +70,41 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
-.pnpm-store/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Source maps (security)
+*.map
+*.map.js
+
+# Backup files
+*.backup
+*.bak
+*.orig
+
+# Security sensitive files
+config/production.json
+config/secrets.json
+.npmrc
+.yarnrc
+
+# Build artifacts that might contain sensitive info
+build-info.json
+stats.json
+
+# Package manager locks (optional - some prefer to commit these)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

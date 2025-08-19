@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2024 [Your Company Name]. All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * 
+ * This software contains proprietary and confidential information.
+ * Unauthorized copying, distribution, or use is strictly prohibited.
+ * 
+ * For licensing information, contact: [your-email@domain.com]
+ */
+
 import { AdvancedAnalyticsDashboard } from '@/components/analytics/advanced-analytics-dashboard'
 import { EmailMarketingDashboard } from '@/components/integrations/email-marketing-dashboard'
 import { AdvancedBrandingCustomizer } from '@/components/branding/advanced-branding-customizer'
