@@ -40,6 +40,26 @@ interface NotificationCenterProps {
   className?: string
 }
 
+const getNotificationIcon = (type: Notification['type']) => {
+  switch (type) {
+    case 'success': return '✅'
+    case 'error': return '❌'
+    case 'warning': return '⚠️'
+    case 'info': return 'ℹ️'
+    default: return '📢'
+  }
+}
+
+const getNotificationColor = (type: Notification['type']) => {
+  switch (type) {
+    case 'success': return 'border-l-success-500 bg-success-50/50'
+    case 'error': return 'border-l-error-500 bg-error-50/50'
+    case 'warning': return 'border-l-warning-500 bg-warning-50/50'
+    case 'info': return 'border-l-primary-500 bg-primary-50/50'
+    default: return 'border-l-secondary-500 bg-secondary-50/50'
+  }
+}
+
 export function NotificationCenter({
   notifications,
   onMarkAsRead,
@@ -58,26 +78,6 @@ export function NotificationCenter({
     if (filter === 'unread') return !notification.read
     return notification.type === filter
   })
-
-  const getNotificationIcon = (type: Notification['type']) => {
-    switch (type) {
-      case 'success': return '✅'
-      case 'error': return '❌'
-      case 'warning': return '⚠️'
-      case 'info': return 'ℹ️'
-      default: return '📢'
-    }
-  }
-
-  const getNotificationColor = (type: Notification['type']) => {
-    switch (type) {
-      case 'success': return 'border-l-success-500 bg-success-50/50'
-      case 'error': return 'border-l-error-500 bg-error-50/50'
-      case 'warning': return 'border-l-warning-500 bg-warning-50/50'
-      case 'info': return 'border-l-primary-500 bg-primary-50/50'
-      default: return 'border-l-secondary-500 bg-secondary-50/50'
-    }
-  }
 
   const formatTimestamp = (timestamp: Date) => {
     const now = new Date()
