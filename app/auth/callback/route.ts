@@ -31,11 +31,12 @@ export async function GET(request: NextRequest) {
       const isNewUser = !existingProfile
       const needsSetup = !existingProfile?.full_name || !existingProfile?.company_name
 
-      // Only allow OAuth if user already exists in system
-      if (!existingProfile && data.user.app_metadata?.provider === 'google') {
-        // Google OAuth user without existing profile - reject
+      // Allow new Google OAuth users if public signup is enabled
+      const allowPublicSignup = process.env.ENABLE_PUBLIC_SIGNUP === 'true'
+      if (!existingProfile && data.user.app_metadata?.provider === 'google' && !allowPublicSignup) {
+        // Google OAuth user without existing profile - reject only if signup disabled
         await supabase.auth.signOut()
-        return NextResponse.redirect(`${origin}/login?error=account_not_found`)
+        return NextResponse.redirect(`${origin}/login?error=signup_disabled`)
       }
 
       // Check if user profile exists by email (for linking existing accounts)
@@ -58,29 +59,36 @@ export async function GET(request: NextRequest) {
             updated_at: new Date().toISOString()
           })
           .eq('id', profileByEmail.id)
-      } else {
-        // Create or update user profile with default role
+      } else if (!existingProfile) {
+        // Create new user profile for Google OAuth users
         await supabase
           .from('user_profiles')
-          .upsert({
-            id: existingProfile?.id || crypto.randomUUID(),
+          .insert({
+            id: crypto.randomUUID(),
             auth_user_id: data.user.id,
             email: data.user.email,
-            full_name: existingProfile?.full_name || data.user.user_metadata?.full_name || data.user.user_metadata?.name,
+            full_name: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
             avatar_url: data.user.user_metadata?.avatar_url,
-            provider: data.user.app_metadata?.provider,
-            company_name: existingProfile?.company_name,
-            role: existingProfile?.role || (data.user.email === 'leadond@gmail.com' ? 'global_admin' : 'user'),
-            status: existingProfile?.status || 'active',
+            provider: data.user.app_metadata?.provider || 'google',
+            role: data.user.email === 'leadond@gmail.com' ? 'global_admin' : 'user',
+            status: 'active',
+            last_sign_in: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+      } else {
+        // Update existing user profile
+        await supabase
+          .from('user_profiles')
+          .update({
             last_sign_in: new Date().toISOString(),
             updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'auth_user_id'
           })
+          .eq('id', existingProfile.id)
       }
 
-      // Redirect new Google users to settings for profile completion
-      const redirectUrl = (isNewUser || needsSetup) && data.user.app_metadata?.provider === 'google' 
+      // Redirect based on profile completeness
+      const redirectUrl = needsSetup || !existingProfile?.company_name
         ? '/dashboard/settings' 
         : '/dashboard'
 
