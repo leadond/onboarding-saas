@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/card'
 import { AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
-import type { KitStep, StepType } from '@/types'
+import type { KitStep, StepType, ClientProgress } from '@/types'
 import type { Tables } from '@/types/supabase'
 
 
