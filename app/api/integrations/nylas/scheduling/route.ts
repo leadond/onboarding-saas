@@ -63,13 +63,13 @@ export async function POST(request: NextRequest) {
             confirmation_method: 'automatic',
           },
         },
-        appearance: {
+        ...({ appearance: {
           color: appearance?.color || '#1a73e8',
           show_nylas_branding: false,
           submit_text: appearance?.submit_text || 'Book Meeting',
           thank_you_text: appearance?.thank_you_text || 'Your meeting has been booked!',
-        },
-      })
+        }} as any),
+      } as any)
 
       return NextResponse.json({
         success: true,

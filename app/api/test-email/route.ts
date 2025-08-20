@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       customMessage: 'This is a test email to verify the email system is working correctly.'
     }
 
-    const success = await emailService.sendWelcomeEmail(testContext)
+    const success = await emailService.sendWelcomeEmail(testContext as any)
 
     if (success) {
       return NextResponse.json({

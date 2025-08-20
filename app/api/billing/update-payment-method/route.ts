@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Create setup intent for payment method update
-    const customerId = customerResult.data.customerId || customerResult.data.id
+    const customerId = (customerResult.data as any).customerId || (customerResult.data as any).id
     const setupIntentResult = await createSetupIntent(customerId)
     if (!setupIntentResult.success) {
       return NextResponse.json(setupIntentResult, { status: 400 })

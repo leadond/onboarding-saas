@@ -90,14 +90,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check for anomalous activity
+    // Check for suspicious activity
     let isAnomalous = false
     try {
-      isAnomalous = await enterpriseSecurity.detectAnomalousActivity(
+      const suspiciousCheck = await enterpriseSecurity.checkSuspiciousActivity(
         data.user.id,
-        ip,
-        userAgent
+        ip
       )
+      isAnomalous = suspiciousCheck.suspicious
     } catch (anomalyError) {
       console.warn('Anomaly detection failed:', anomalyError)
     }
