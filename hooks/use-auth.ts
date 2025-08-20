@@ -81,6 +81,7 @@ export function useAuth(): AuthHook {
   useEffect(() => {
     let mounted = true
     let timeoutId: NodeJS.Timeout
+    let subscription: any
 
     const initializeAuth = async () => {
       try {
@@ -130,6 +131,60 @@ export function useAuth(): AuthHook {
             })
           }
         }
+
+        // Set up auth state change listener after client is initialized
+        try {
+          const {
+            data: { subscription: authSubscription },
+          } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (!mounted) return
+
+            try {
+              console.log('Auth state changed:', event, session?.user?.id)
+
+              if (session?.user) {
+                const userProfile = await fetchUserProfile(session.user.id)
+                setState({
+                  user: userProfile,
+                  session,
+                  loading: false,
+                  error: null,
+                })
+              } else {
+                setState({
+                  user: null,
+                  session: null,
+                  loading: false,
+                  error: null,
+                })
+              }
+
+              // Handle specific auth events
+              if (event === 'SIGNED_OUT') {
+                router.push('/login')
+              }
+            } catch (error) {
+              console.error('Error handling auth state change:', error)
+              if (mounted) {
+                setState(prev => ({
+                  ...prev,
+                  loading: false,
+                  error: 'Authentication state error',
+                }))
+              }
+            }
+          })
+          subscription = authSubscription
+        } catch (error) {
+          console.error('Error setting up auth listener:', error)
+          if (mounted) {
+            setState(prev => ({
+              ...prev,
+              loading: false,
+              error: 'Failed to setup authentication listener',
+            }))
+          }
+        }
       } catch (error) {
         console.error('Auth initialization error:', error)
         if (mounted) {
@@ -167,61 +222,6 @@ export function useAuth(): AuthHook {
           ...prev,
           loading: false,
           error: 'Failed to initialize authentication',
-        }))
-      }
-    }
-
-    // Listen for auth changes with error handling
-    let subscription: any
-    try {
-      const {
-        data: { subscription: authSubscription },
-      } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
-        if (!mounted) return
-
-        try {
-          console.log('Auth state changed:', event, session?.user?.id)
-
-          if (session?.user) {
-            const userProfile = await fetchUserProfile(session.user.id)
-            setState({
-              user: userProfile,
-              session,
-              loading: false,
-              error: null,
-            })
-          } else {
-            setState({
-              user: null,
-              session: null,
-              loading: false,
-              error: null,
-            })
-          }
-
-          // Handle specific auth events
-          if (event === 'SIGNED_OUT') {
-            router.push('/login')
-          }
-        } catch (error) {
-          console.error('Error handling auth state change:', error)
-          if (mounted) {
-            setState(prev => ({
-              ...prev,
-              loading: false,
-              error: 'Authentication state error',
-            }))
-          }
-        }
-      })
-      subscription = authSubscription
-    } catch (error) {
-      console.error('Error setting up auth listener:', error)
-      if (mounted) {
-        setState(prev => ({
-          ...prev,
-          loading: false,
-          error: 'Failed to setup authentication listener',
         }))
       }
     }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth Test</title>
+</head>
+<body>
+    <h1>OAuth Test</h1>
+    <button onclick="testOAuth()">Test Google OAuth</button>
+    <div id="result"></div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const supabase = window.supabase.createClient(
+            'https://tfuhfrjokvmectwfrazm.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmdWhmcmpva3ZtZWN0d2ZyYXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwNTE3NjUsImV4cCI6MjA3MDYyNzc2NX0.tYKnTxnKqEVm3mMqo-s6vx06dKPEJBziADgkXJuQ8Ng'
+        )
+
+        async function testOAuth() {
+            const result = document.getElementById('result')
+            result.innerHTML = 'Testing OAuth...'
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin + '/auth/callback'
+                    }
+                })
+                
+                if (error) {
+                    result.innerHTML = `❌ Error: ${error.message}`
+                } else {
+                    result.innerHTML = `✅ OAuth URL generated: ${data.url}`
+                    // Redirect to OAuth
+                    window.location.href = data.url
+                }
+            } catch (err) {
+                result.innerHTML = `❌ Exception: ${err.message}`
+            }
+        }
+    </script>
+</body>
+</html>

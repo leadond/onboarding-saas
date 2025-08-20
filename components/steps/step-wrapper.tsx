@@ -20,8 +20,8 @@ import { cn } from '@/lib/utils/cn'
 import type { KitStep } from '@/types'
 import type { Tables } from '@/types/supabase'
 
-
-// Type imported from @/types/supabase
+// Use Tables type for ClientProgress
+type ClientProgress = Tables<'client_progress'>
 
 interface StepWrapperProps {
   step: KitStep
