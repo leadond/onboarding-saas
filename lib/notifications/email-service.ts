@@ -12,7 +12,7 @@
 import { getSupabaseClient } from '@/lib/supabase'
 import type { Tables } from '@/types/supabase'
 
-import type { Kit, KitStep } from '@/types'
+import type { Kit, KitStep, ClientProgress } from '@/types'
 
 // Type imported from @/types/supabase
 

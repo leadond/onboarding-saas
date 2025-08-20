@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import type { KitStep } from '@/types'
 import type { Tables, ClientProgress } from '@/types/supabase'
 
