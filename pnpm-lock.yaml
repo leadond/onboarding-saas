@@ -271,7 +271,7 @@ importers:
         specifier: ^0.6.9
         version: 0.6.14(prettier@3.6.2)
       supabase:
-        specifier: ^1.177.4
+        specifier: ^1.226.4
         version: 1.226.4
       typescript:
         specifier: ^5.7.3
@@ -4087,6 +4087,7 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
+    deprecated: Use your platform's native DOMException instead
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}

@@ -69,13 +69,23 @@ export function NotificationPreferences({
     text: string
   } | null>(null)
   const [testEmailSending, setTestEmailSending] = useState(false)
+  const [supabase, setSupabase] = useState<any>(null)
 
-  const supabase = await getSupabaseClient()
+  // Initialize supabase client
+  useEffect(() => {
+    const initializeSupabase = async () => {
+      const client = await getSupabaseClient()
+      setSupabase(client)
+    }
+    initializeSupabase()
+  }, [])
 
   // Load existing preferences on mount
   useEffect(() => {
-    loadPreferences()
-  }, [clientIdentifier])
+    if (supabase) {
+      loadPreferences()
+    }
+  }, [supabase, clientIdentifier])
 
   async function loadPreferences() {
     if (!clientIdentifier) return
