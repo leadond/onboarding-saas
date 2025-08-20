@@ -34,7 +34,7 @@ interface WelcomeMessageStepProps {
   onNext?: () => void
   onPrevious?: () => void
   isLoading?: boolean
-  progress?: ClientProgress
+  progress?: any
   className?: string
 }
 
