@@ -36,12 +36,12 @@ export async function GET(request: NextRequest) {
                    'unknown'
         const userAgent = request.headers.get('user-agent') || 'unknown'
 
-        // Check for anomalous activity
-        const isAnomalous = await enterpriseSecurity.detectAnomalousActivity(
+        // Check for suspicious activity
+        const suspiciousCheck = await enterpriseSecurity.checkSuspiciousActivity(
           data.user.id,
-          ip,
-          userAgent
+          ip
         )
+        const isAnomalous = suspiciousCheck.suspicious
 
         // Log OAuth login
         await enterpriseSecurity.logSecurityEvent('OAUTH_LOGIN', {

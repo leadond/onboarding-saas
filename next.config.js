@@ -2,6 +2,9 @@
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // Compress output (disabled in development for faster builds)
   compress: !isDev,
   

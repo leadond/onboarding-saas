@@ -20,6 +20,12 @@ export function createClient() {
   return createBrowserClient<Database>(supabaseUrl, supabaseAnonKey)
 }
 
+// Server client placeholder (for compatibility)
+export async function createServerSupabaseClient() {
+  // In client context, return browser client
+  return createClient()
+}
+
 // Unified function that works in client context
 export async function getSupabaseClient() {
   // Always return browser client for client components
