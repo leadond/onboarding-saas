@@ -65,7 +65,16 @@ export function useRealtimeProgress({
     error: null,
   })
 
-  // Supabase client will be created in useEffect
+  const [supabase, setSupabase] = useState<any>(null)
+
+  // Initialize supabase client
+  useEffect(() => {
+    const initSupabase = async () => {
+      const client = await getSupabaseClient()
+      setSupabase(client)
+    }
+    initSupabase()
+  }, [])
 
   // Calculate client summaries from progress updates
   const calculateClientSummaries = useCallback(
@@ -202,6 +211,8 @@ export function useRealtimeProgress({
 
   // Load initial data
   const loadInitialData = useCallback(async () => {
+    if (!supabase) return
+    
     try {
       let query = supabase
         .from('client_progress')
@@ -259,7 +270,7 @@ export function useRealtimeProgress({
 
   // Set up real-time subscription
   useEffect(() => {
-    if (!enabled) return
+    if (!enabled || !supabase) return
 
     let channel: RealtimeChannel
 
