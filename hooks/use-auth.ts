@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 import type {
   LoginFormData,
@@ -53,7 +53,7 @@ export function useAuth(): AuthHook {
   const router = useRouter()
   
   // Create supabase client only once per hook instance
-  const [supabase] = useState(() => createClient())
+  const [supabase] = useState(() => await getSupabaseClient())
 
   // Fetch user profile data
   const fetchUserProfile = useCallback(

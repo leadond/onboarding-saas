@@ -10,14 +10,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     // Check authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()

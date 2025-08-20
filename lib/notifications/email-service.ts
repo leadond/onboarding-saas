@@ -9,13 +9,12 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { createClient } from '@/lib/supabase/server'
-import type { Database } from '@/lib/supabase/database.types'
+import { getSupabaseClient } from '@/lib/supabase'
+import type { Tables } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { Kit, KitStep } from '@/types'
 
-type ClientProgress = Tables<'client_progress'>
+// Type imported from @/types/supabase
 
 export interface EmailTemplate {
   subject: string
@@ -226,7 +225,7 @@ class MockProvider implements EmailProvider {
 export class EmailService {
   private provider: EmailProvider
   private async getSupabase() {
-    return await createClient()
+    return await getSupabaseClient()
   }
 
   constructor() {

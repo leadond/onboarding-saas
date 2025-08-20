@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { createProtectedRoute } from '@/lib/api/gateway'
 
 // Validation schemas
@@ -32,7 +32,7 @@ const behaviorEventSchema = z.object({
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     try {
       const searchParams = request.nextUrl.searchParams
@@ -92,7 +92,7 @@ export const GET = createProtectedRoute(
 export const POST = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     try {
       const body = await request.json()

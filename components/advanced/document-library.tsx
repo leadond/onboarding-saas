@@ -15,7 +15,7 @@ import React, { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { cn } from '@/lib/utils/cn'
 
 interface Document {
@@ -57,7 +57,7 @@ export function DocumentLibrary({
     new Set()
   )
 
-  const supabase = createClient()
+  const supabase = await getSupabaseClient()
 
   // Sample documents data
   const sampleDocuments: Document[] = [

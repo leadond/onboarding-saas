@@ -146,7 +146,7 @@ export default function ClientManagement() {
     const variants = {
       invited: 'secondary',
       active: 'default',
-      completed: 'success',
+      completed: 'default',
       cancelled: 'destructive'
     } as const
 

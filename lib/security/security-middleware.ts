@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { applyRateLimit, authRateLimiter, generalRateLimiter, passwordResetRateLimiter, signupRateLimiter } from './rate-limiter'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 // Security headers configuration
 export const securityHeaders = {
@@ -340,7 +340,7 @@ export async function logSecurityEvent(
   userId?: string
 ): Promise<void> {
   try {
-    const supabase = createClient()
+    const supabase = await getSupabaseClient()
     
     const supabaseClient = await supabase
     await supabaseClient.from('security_logs').insert({

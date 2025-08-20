@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { cn } from '@/lib/utils/cn'
 
 interface ChatMessage {
@@ -77,7 +77,7 @@ export function ChatWidget({
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageInputRef = useRef<HTMLInputElement>(null)
-  const supabase = createClient()
+  const supabase = await getSupabaseClient()
 
   // Scroll to bottom of messages
   const scrollToBottom = useCallback(() => {

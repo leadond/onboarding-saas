@@ -13,12 +13,12 @@
 
 import { useState, useEffect } from 'react';
 import type { User } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
+  const supabase = await getSupabaseClient();
 
   useEffect(() => {
     const fetchUser = async () => {

@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { handleStripeWebhook } from '@/lib/stripe/billing'
 import type { StripeWebhookEvent, WebhookProcessingResult } from '@/types'
 
@@ -19,7 +19,7 @@ import type { StripeWebhookEvent, WebhookProcessingResult } from '@/types'
  * Process different Stripe webhook events
  */
 async function processWebhookEvent(event: StripeWebhookEvent): Promise<WebhookProcessingResult> {
-  const supabase = await createClient()
+  const supabase = await getSupabaseClient()
 
   try {
     switch (event.type) {
@@ -166,7 +166,7 @@ async function processWebhookEvent(event: StripeWebhookEvent): Promise<WebhookPr
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text()
-    const headersList = headers()
+    const headersList = await headers()
     const signature = headersList.get('stripe-signature')
 
     if (!signature) {

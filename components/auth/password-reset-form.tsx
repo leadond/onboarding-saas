@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validations/auth'
 import { cn } from '@/lib/utils/cn'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 interface PasswordResetFormProps {
   className?: string
@@ -42,7 +42,7 @@ export function PasswordResetForm({ className }: PasswordResetFormProps) {
       setLoading(true)
       setError(null)
 
-      const supabase = createClient()
+      const supabase = await getSupabaseClient()
       
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(
         data.email,

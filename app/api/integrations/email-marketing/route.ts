@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { handleApiError, createUnauthorizedErrorResponse } from '@/lib/utils/api-error-handler'
 
 interface EmailIntegration {
@@ -168,7 +168,7 @@ async function saveUserIntegration(supabase: any, integrationData: any): Promise
 // GET /api/integrations/email-marketing - List available and connected integrations
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -211,7 +211,7 @@ export async function GET(request: NextRequest) {
 // POST /api/integrations/email-marketing - Connect a new integration
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -304,7 +304,7 @@ export async function POST(request: NextRequest) {
 // DELETE /api/integrations/email-marketing - Disconnect an integration
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const { data: { user }, error: authError } = await supabase.auth.getUser()

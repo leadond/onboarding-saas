@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 // Create Supabase client with service role key for admin access
-const supabase = createClient(
+const supabase = await getSupabaseClient()(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );

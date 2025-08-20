@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { createProtectedRoute } from '@/lib/api/gateway'
 
 // Validation schemas
@@ -25,7 +25,7 @@ const apiKeySchema = z.object({
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     try {
       // Mock API keys data since table might not exist

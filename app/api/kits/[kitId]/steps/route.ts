@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { kitStepSchema } from '@/lib/validations/kit'
 import {
   handleApiError,
@@ -28,7 +28,7 @@ export async function GET(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {
@@ -80,7 +80,7 @@ export async function POST(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {

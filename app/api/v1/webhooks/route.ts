@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { createProtectedRoute } from '@/lib/api/gateway'
 
 // Validation schemas
@@ -25,7 +25,7 @@ const webhookSchema = z.object({
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
 
     try {
       const { data: webhooks, error } = await supabase
@@ -56,7 +56,7 @@ export const GET = createProtectedRoute(
 export const POST = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     const { user } = context
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
 
     try {
       const body = await request.json()

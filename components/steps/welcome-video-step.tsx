@@ -23,9 +23,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils/cn'
 import type { KitStep } from '@/types'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Tables } from '@/types/supabase'
 
-type ClientProgress = Tables<'client_progress'>
+
+// Type imported from @/types/supabase
 
 interface WelcomeVideoStepProps {
   step: KitStep

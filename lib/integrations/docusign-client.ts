@@ -11,7 +11,7 @@
 
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export interface DocuSignTemplate {
   templateId: string
@@ -60,7 +60,7 @@ export interface ContractSigningData {
 }
 
 class DocuSignClient {
-  private supabase = createClient()
+  private supabase: any = null
   private baseUrl: string
   private apiVersion = 'v2.1'
 

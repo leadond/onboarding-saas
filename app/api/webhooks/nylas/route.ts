@@ -12,13 +12,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { createHash, createHmac } from 'crypto'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 // POST /api/webhooks/nylas - Handle Nylas webhooks
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const headersList = headers()
+    const headersList = await headers()
     const signature = headersList.get('x-nylas-signature')
 
     // Verify webhook signature in production
@@ -114,7 +114,7 @@ async function handleAccountConnected(data: any) {
   console.log('Account connected:', data)
   
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     // Store account connection event in webhook_events
     await supabase
@@ -147,7 +147,7 @@ async function handleAccountRunning(data: any) {
   console.log('Account running:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store sync running event
     await supabase
@@ -177,7 +177,7 @@ async function handleAccountStopped(data: any) {
   console.log('Account stopped:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store sync stopped event
     await supabase
@@ -209,7 +209,7 @@ async function handleMessageCreated(data: any) {
   console.log('Message created:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store message creation event
     await supabase
@@ -246,7 +246,7 @@ async function handleMessageUpdated(data: any) {
   console.log('Message updated:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store message update event
     await supabase
@@ -279,7 +279,7 @@ async function handleThreadReplied(data: any) {
   console.log('Thread replied:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store thread reply event
     await supabase
@@ -316,7 +316,7 @@ async function handleEventCreated(data: any) {
   console.log('Event created:', data)
   
   try {
-    const supabase = await createClient()
+    // Supabase client will be created in useEffect
     
     // Store calendar event creation
     await supabase

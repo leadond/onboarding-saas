@@ -12,14 +12,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export default function DebugPage() {
   const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   
   useEffect(() => {
-    const supabase = createClient()
+    const supabase = await getSupabaseClient()
     
     const getSession = async () => {
       const { data: { session }, error } = await supabase.auth.getSession()
@@ -33,7 +33,7 @@ export default function DebugPage() {
   }, [])
 
   const testGoogleAuth = async () => {
-    const supabase = createClient()
+    const supabase = await getSupabaseClient()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

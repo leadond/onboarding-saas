@@ -9,5 +9,12 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-// Re-export the Database type from the main types file
-export type { Database } from '@/types/supabase'
+// Re-export everything from unified client
+export { 
+  createClient, 
+  createServerSupabaseClient as createServerClient,
+  getSupabaseClient 
+} from './unified'
+
+// Re-export types
+export type { Database, Tables, TablesInsert, TablesUpdate } from '@/types/supabase'

@@ -13,7 +13,7 @@
 // Provides comprehensive email, calendar, and contact synchronization
 
 import { nylasClient, createNylasEmailService, createNylasCalendarService } from './nylas-client';
-import { createClient } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase';
 import type { NylasMessage, NylasEvent, NylasContact } from './nylas-client';
 
 export interface SyncResult {
@@ -39,7 +39,7 @@ export interface OnboardingEmailSequence {
 
 // Enhanced Email Sync Service
 export class NylasEmailSyncService {
-  private supabase = createClient();
+  private supabase: any = null;
   private emailService: ReturnType<typeof createNylasEmailService>;
 
   constructor(private accountId: string) {
@@ -234,7 +234,7 @@ export class NylasEmailSyncService {
 // Enhanced Calendar Sync Service  
 export class NylasCalendarSyncService {
   private calendarService: ReturnType<typeof createNylasCalendarService>;
-  private supabase = createClient();
+  private supabase: any = null;
 
   constructor(private accountId: string) {
     this.calendarService = createNylasCalendarService(accountId);
@@ -375,7 +375,7 @@ export class NylasCalendarSyncService {
 
 // Contact Sync Service
 export class NylasContactSyncService {
-  private supabase = createClient();
+  private supabase: any = null;
 
   constructor(private accountId: string) {}
 
@@ -538,6 +538,6 @@ export class NylasSyncCoordinator {
 }
 
 // Factory function to create sync coordinator
-export function createNylasSyncCoordinator(accountId: string): NylasSyncCoordinator {
+export async function createNylasSyncCoordinator(accountId: string): NylasSyncCoordinator {
   return new NylasSyncCoordinator(accountId);
 }

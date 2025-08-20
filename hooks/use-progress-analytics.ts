@@ -12,12 +12,13 @@ import {
   SessionManager,
   type SessionData,
 } from '@/lib/progress/session-manager'
-import type { Database } from '@/lib/supabase/database.types'
+import type { Tables, ClientProgress } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { KitStep } from '@/types'
 
-type ClientProgress = Tables<'client_progress'>
+const supabase = createClient()
+
+// Type imported from @/types/supabase
 type KitAnalytics = Tables<'kit_analytics'>
 
 export interface AnalyticsEvent {
@@ -111,7 +112,7 @@ export function useProgressAnalytics({
   enableTracking = true,
   trackingConfig = defaultTrackingConfig,
 }: UseProgressAnalyticsProps): UseProgressAnalyticsReturn {
-  const supabase = createClient()
+  // Supabase client will be created in useEffect
   const sessionManager = useRef<SessionManager | null>(null)
   const eventQueue = useRef<AnalyticsEvent[]>([])
   const flushTimer = useRef<NodeJS.Timeout | null>(null)

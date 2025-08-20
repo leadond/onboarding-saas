@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { enterpriseSecurity } from '@/lib/auth/enterprise-security'
 
 export async function POST(request: NextRequest) {
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       console.warn('Security check failed, proceeding with login:', securityError)
     }
 
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     // Attempt login
     console.log('Attempting login for:', email)

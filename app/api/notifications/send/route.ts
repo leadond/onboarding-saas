@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { EmailService } from '@/lib/notifications/email-service'
 import type { NotificationContext } from '@/lib/notifications/email-service'
 
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create Supabase client
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Get kit details with user info
     const { data: kit, error: kitError } = await supabase

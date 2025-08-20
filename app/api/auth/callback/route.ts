@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { enterpriseSecurity } from '@/lib/auth/enterprise-security'
 
 export async function GET(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get('next') ?? '/dashboard'
 
   if (code) {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       const { data, error } = await supabase.auth.exchangeCodeForSession(code)

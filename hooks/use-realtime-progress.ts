@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import type { RealtimeChannel } from '@supabase/supabase-js'
 
 interface ProgressUpdate {
@@ -65,7 +65,7 @@ export function useRealtimeProgress({
     error: null,
   })
 
-  const supabase = createClient()
+  // Supabase client will be created in useEffect
 
   // Calculate client summaries from progress updates
   const calculateClientSummaries = useCallback(

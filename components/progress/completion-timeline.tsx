@@ -24,13 +24,11 @@ import {
 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import type { KitStep } from '@/types'
-import type { Database } from '@/lib/supabase/database.types'
-
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
+import type { Tables, ClientProgress } from '@/types/database'
 import type { ProgressTrends } from '@/lib/progress/progress-calculator'
 import { cn } from '@/lib/utils/cn'
 
-type ClientProgress = Tables<'client_progress'>
+// ClientProgress is now imported from types/database
 
 interface CompletionTimelineProps {
   steps: KitStep[]

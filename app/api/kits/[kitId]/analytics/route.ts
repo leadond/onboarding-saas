@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { kitAnalyticsQuerySchema } from '@/lib/validations/kit'
 
 // GET /api/kits/[kitId]/analytics - Get kit analytics and metrics
@@ -21,7 +21,7 @@ export async function GET(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {

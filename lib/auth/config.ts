@@ -9,7 +9,7 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { Database } from '@/lib/supabase/database.types'
+import { Database } from '@/types/supabase'
 
 // Authentication configuration
 export const AUTH_CONFIG = {

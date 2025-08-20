@@ -10,14 +10,14 @@
  */
 
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export async function GET() {
   console.log('=== ADMIN USERS API CALLED ===')
   console.log('Timestamp:', new Date().toISOString())
   
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     console.log('Supabase client created')
     
     const { data: { user }, error: authError } = await supabase.auth.getUser()

@@ -9,7 +9,7 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { rbacManager, UserContext } from '@/lib/auth/rbac'
 
 // GraphQL context type
@@ -471,7 +471,7 @@ export const resolvers = {
 
 // Create GraphQL context
 export const createGraphQLContext = async (request: Request): Promise<GraphQLContext> => {
-  const supabase = createClient()
+  const supabase = await getSupabaseClient()
   
   try {
     const { data: { user }, error } = await supabase.auth.getUser()

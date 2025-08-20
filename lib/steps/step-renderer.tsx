@@ -31,11 +31,10 @@ import {
 import { AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import type { KitStep, StepType } from '@/types'
-import type { Database } from '@/lib/supabase/database.types'
+import type { Tables } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 
-type ClientProgress = Tables<'client_progress'>
+// Type imported from @/types/supabase
 
 interface StepRendererProps {
   step: KitStep

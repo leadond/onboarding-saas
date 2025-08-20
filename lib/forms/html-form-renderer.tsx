@@ -27,6 +27,7 @@ interface HtmlFormRendererProps {
   isLoading?: boolean
   className?: string
   disabled?: boolean
+  submitText?: string
 }
 
 // Create a dynamic validation schema based on HTML form fields
@@ -70,6 +71,7 @@ export function HtmlFormRenderer({
   isLoading = false,
   className,
   disabled = false,
+  submitText = 'Submit',
 }: HtmlFormRendererProps) {
   const formRef = React.useRef<HTMLFormElement>(null)
   const [extractedFields, setExtractedFields] = React.useState<string[]>([])
@@ -191,7 +193,7 @@ export function HtmlFormRenderer({
               Submitting...
             </>
           ) : (
-            htmlForm.submit_button_text || 'Submit'
+            htmlForm.submit_button_text || submitText
           )}
         </Button>
       </div>

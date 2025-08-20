@@ -11,7 +11,7 @@
 
 'use client';
 
-import { createClient } from '@/lib/supabase/client';
+import { getSupabaseClient } from '@/lib/supabase';
 import { 
   DataAccessRequest, 
   DataAccessRequestInsert, 
@@ -20,7 +20,7 @@ import {
   DataAccessRequestStatistics
 } from '@/lib/types/data-access-request';
 
-const supabase = createClient();
+const supabase = await getSupabaseClient();
 
 // Get all data access requests for a user
 export async function getDataAccessRequests(userId: string): Promise<DataAccessRequest[]> {

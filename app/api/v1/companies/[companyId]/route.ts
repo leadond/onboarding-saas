@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { createProtectedRoute } from '@/lib/api/enhanced-gateway'
 
 const updateCompanySchema = z.object({
@@ -45,7 +45,7 @@ export const GET = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
     const { companyId } = context.params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       // Get company that the user has access to
@@ -90,7 +90,7 @@ export const PUT = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
     const { companyId } = context.params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       const body = await request.json()
@@ -157,7 +157,7 @@ export const DELETE = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
     const { companyId } = context.params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       // Delete company

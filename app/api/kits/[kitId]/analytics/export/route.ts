@@ -13,7 +13,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { format } from 'date-fns'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 // GET /api/kits/[kitId]/analytics/export - Export kit analytics data as CSV
 export async function GET(
@@ -21,7 +21,7 @@ export async function GET(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {

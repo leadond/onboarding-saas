@@ -25,12 +25,10 @@ import {
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import type { KitStep } from '@/types'
-import type { Database } from '@/lib/supabase/database.types'
-
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
+import type { ClientProgress } from '@/types/database'
 import { cn } from '@/lib/utils/cn'
 
-type ClientProgress = Tables<'client_progress'>
+// ClientProgress is now imported from types/database
 
 export type StepStatus = 'not_started' | 'in_progress' | 'completed' | 'skipped'
 

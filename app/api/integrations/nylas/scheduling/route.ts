@@ -17,7 +17,9 @@ import { protectedRoute } from '@/lib/auth/protected-route'
 export async function GET(request: NextRequest) {
   return protectedRoute(request, async (user) => {
     try {
-      const pages = await nylasClient.getSchedulingPages()
+      const { searchParams } = new URL(request.url)
+      const accountId = searchParams.get('account_id') || 'acc-1'
+      const pages = await nylasClient.getSchedulingPages(accountId)
 
       return NextResponse.json({
         success: true,

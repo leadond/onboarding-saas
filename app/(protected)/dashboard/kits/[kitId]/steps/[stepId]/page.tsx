@@ -21,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Switch } from '@/components/ui/switch'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { FormData, StepContent } from '@/types/forms'
 import { HtmlFormInput } from '@/components/forms/html-form-input'
 
@@ -37,7 +37,16 @@ const stepTypes = [
 export default function StepEditorPage() {
   const params = useParams()
   const router = useRouter()
-  const supabase = createClient()
+  const [supabase, setSupabase] = useState<any>(null)
+  
+  useEffect(() => {
+    const initSupabase = async () => {
+      const { getSupabaseClient } = await import('@/lib/supabase')
+      const client = await getSupabaseClient()
+      setSupabase(client)
+    }
+    initSupabase()
+  }, [])
   
   const kitId = params.kitId as string
   const stepId = params.stepId as string
@@ -55,12 +64,13 @@ export default function StepEditorPage() {
   })
 
   useEffect(() => {
+    if (!supabase) return
     if (!isNew) {
       loadStep()
     } else {
       loadNextOrderIndex()
     }
-  }, [stepId, kitId])
+  }, [stepId, kitId, supabase])
 
   const loadStep = async () => {
     setLoading(true)

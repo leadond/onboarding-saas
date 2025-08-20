@@ -9,7 +9,7 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { 
   IntegrationProvider, 
   UserIntegration, 
@@ -26,7 +26,7 @@ export class IntegrationManager {
   }
 
   static async create() {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     return new IntegrationManager(supabase)
   }
 

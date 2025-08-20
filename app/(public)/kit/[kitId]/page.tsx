@@ -11,7 +11,7 @@
 
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { KitPortal } from '@/components/kit-portal/kit-portal'
 import { KitPortalSkeleton } from '@/components/kit-portal/kit-portal-skeleton'
 import type { Kit, KitStep } from '@/types'
@@ -39,7 +39,7 @@ interface KitPageProps {
 }
 
 async function getKitData(kitId: string) {
-  const supabase = await createClient()
+  const supabase = await getSupabaseClient()
 
   try {
     // Fetch kit details

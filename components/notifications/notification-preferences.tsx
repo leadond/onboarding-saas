@@ -15,7 +15,7 @@ import React, { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 interface NotificationPreferences {
   id?: string
@@ -70,7 +70,7 @@ export function NotificationPreferences({
   } | null>(null)
   const [testEmailSending, setTestEmailSending] = useState(false)
 
-  const supabase = createClient()
+  const supabase = await getSupabaseClient()
 
   // Load existing preferences on mount
   useEffect(() => {

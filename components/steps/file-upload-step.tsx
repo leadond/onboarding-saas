@@ -29,11 +29,7 @@ import {
 } from '@/lib/storage/upload-manager'
 import { cn } from '@/lib/utils/cn'
 import type { KitStep } from '@/types'
-import type { Database } from '@/lib/supabase/database.types'
-
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
-
-type ClientProgress = Tables<'client_progress'>
+import type { ClientProgress } from '@/types/database'
 
 interface FileUploadStepProps {
   step: KitStep

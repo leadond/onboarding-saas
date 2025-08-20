@@ -9,7 +9,7 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { Database } from '@/types/supabase'
 
 type Company = Database['public']['Tables']['companies']['Row']
@@ -21,7 +21,7 @@ type RepresentativeInsert = Database['public']['Tables']['company_representative
 type RepresentativeUpdate = Database['public']['Tables']['company_representatives']['Update']
 
 export class CompanyService {
-  private supabase = createClient()
+  private supabase: any = null
 
   // Get all companies for a user
   async getCompanies(userId: string, limit: number = 100, offset: number = 0): Promise<Company[]> {

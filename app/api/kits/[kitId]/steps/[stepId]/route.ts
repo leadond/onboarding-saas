@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { stepUpdateSchema } from '@/lib/validations/kit'
 
 // GET /api/kits/[kitId]/steps/[stepId] - Get a specific step
@@ -22,7 +22,7 @@ export async function GET(
 ) {
   try {
     const { kitId, stepId } = await params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {
@@ -98,7 +98,7 @@ export async function PATCH(
 ) {
   try {
     const { kitId, stepId } = await params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {
@@ -267,7 +267,7 @@ export async function DELETE(
 ) {
   try {
     const { kitId, stepId } = await params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {
@@ -367,7 +367,7 @@ export async function DELETE(
         step_title: step.title,
         step_order: step.step_order,
         kit_id: kitId,
-        kit_name: step.kits.name,
+        kit_name: step.kits?.[0]?.name || 'Unknown Kit',
       },
     })
 

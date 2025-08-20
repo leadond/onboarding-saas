@@ -9,7 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
+import { Redis } from '../redis-stub';
 
 // Initialize rate limiter (only if Redis is configured)
 const redis = process.env.UPSTASH_REDIS_REST_URL 

@@ -10,7 +10,7 @@
  */
 
 import type { User } from '@supabase/supabase-js'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 // User context for RBAC
 export interface UserContext {
@@ -40,7 +40,7 @@ export interface Role {
 
 // RBAC Manager class
 export class RBACManager {
-  private supabase = createClient()
+  private supabase: any = null
 
   // Create user context from Supabase user
   async createUserContext(user: User): Promise<UserContext> {

@@ -10,12 +10,12 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getSupabaseClient } from '@/lib/supabase';
 import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
   try {
-    const supabase = await createClient();
+    const supabase = await getSupabaseClient();
     
     // Get the user session
     const { data: { session } } = await supabase.auth.getSession();
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
+    const supabase = await getSupabaseClient();
     
     // Get the user session
     const { data: { session } } = await supabase.auth.getSession();

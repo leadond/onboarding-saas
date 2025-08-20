@@ -10,7 +10,7 @@
  */
 
 import { stripe } from './client'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { handleStripeError, logPaymentError } from '@/lib/utils/payment-error-handler'
 import type { User } from '@/types'
 
@@ -242,7 +242,7 @@ export async function getOrCreateStripeCustomer(user: User) {
   }
 
   // Update user record with customer ID
-  const supabase = await createClient()
+  const supabase = await getSupabaseClient()
   const { error } = await supabase
     .from('users')
     .update({ stripe_customer_id: customerResult.data.id })

@@ -10,11 +10,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Get the current user
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     const body = await request.json()
 
     // Get the current user

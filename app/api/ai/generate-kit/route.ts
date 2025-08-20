@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 // import { generateIndustryKit, AVAILABLE_INDUSTRIES } from '@/lib/ai/kit-generator'
 const AVAILABLE_INDUSTRIES = ['healthcare', 'finance', 'retail']
 const generateIndustryKit = async (industry: string, companyType: string) => ({ name: 'Generated Kit', description: 'AI generated', industry, category: 'general', steps: [] })
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
     if (authError || !user) {

@@ -14,7 +14,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 async function directMigration() {
-  const supabase = createClient(supabaseUrl!, supabaseKey!)
+  const supabase = await getSupabaseClient()(supabaseUrl!, supabaseKey!)
 
   try {
     console.log('🚀 Starting direct company migration with table creation...')

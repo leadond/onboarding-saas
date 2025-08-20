@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { rateLimits, RateLimitTier } from '@/lib/rate-limit'
 import { z } from 'zod'
 
@@ -31,7 +31,7 @@ interface GatewayConfig {
 
 // Enhanced API Gateway
 export class APIGateway {
-  private supabase = createClient()
+  private supabase: any = null
 
   async handle(
     request: NextRequest,
@@ -101,7 +101,7 @@ export class APIGateway {
   private getIdentifier(request: NextRequest): string {
     // Try to get user ID from auth, fallback to IP
     const forwarded = request.headers.get('x-forwarded-for')
-    const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
+    const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown'
     return ip
   }
 }

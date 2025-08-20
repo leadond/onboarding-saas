@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 interface RateLimitData {
   count: number
@@ -224,7 +224,7 @@ export class DatabaseRateLimiter {
     limit: number
     response?: NextResponse
   }> {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     const key = this.config.keyGenerator?.(req) || this.defaultKeyGenerator(req)
     const now = Date.now()
     const windowStart = now - this.config.windowMs

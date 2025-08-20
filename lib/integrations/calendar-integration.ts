@@ -11,7 +11,7 @@
 
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 export interface CalendarEvent {
   id: string
@@ -65,7 +65,7 @@ export interface SchedulingData {
 }
 
 class CalendarIntegration {
-  private supabase = createClient()
+  private supabase: any = null
 
   /**
    * Initialize calendar integration

@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 import { kitDuplicateSchema } from '@/lib/validations/kit'
 
 // POST /api/kits/[kitId]/duplicate - Duplicate a kit
@@ -21,7 +21,7 @@ export async function POST(
   { params }: { params: { kitId: string } }
 ) {
   try {
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
 
     // Verify authentication
     const {

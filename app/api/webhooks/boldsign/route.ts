@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { boldSignClient } from '@/lib/integrations/boldsign-client'
 import crypto from 'crypto'
 
@@ -42,7 +42,7 @@ function verifyWebhookSignature(payload: string, signature: string, secret: stri
  * Process BoldSign webhook events
  */
 async function processBoldSignWebhook(event: any) {
-  const supabase = await createClient()
+  const supabase = await getSupabaseClient()
 
   try {
     const { eventType, eventData } = event
@@ -107,7 +107,7 @@ async function processBoldSignWebhook(event: any) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.text()
-    const headersList = headers()
+    const headersList = await headers()
     const signature = headersList.get('x-boldsign-signature')
 
     if (!signature) {

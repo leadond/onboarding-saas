@@ -11,7 +11,7 @@
 
 // Redis fallback utility for development/build environments
 
-import { Redis } from '@upstash/redis'
+import { Redis } from './redis-stub'
 
 let redis: Redis | null = null
 

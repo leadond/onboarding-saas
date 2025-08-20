@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { rbacManager, UserContext } from '@/lib/auth/rbac'
 import { rateLimits, RateLimitTier } from '@/lib/rate-limit'
 import { z } from 'zod'
@@ -27,7 +27,7 @@ interface EnhancedGatewayConfig {
 
 // Enhanced API Gateway with RBAC
 export class EnhancedAPIGateway {
-  private supabase = createClient()
+  private supabase: any = null
 
   async handle(
     request: NextRequest,
@@ -120,7 +120,7 @@ export class EnhancedAPIGateway {
 
   private getIdentifier(request: NextRequest): string {
     const forwarded = request.headers.get('x-forwarded-for')
-    const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown'
+    const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown'
     return ip
   }
 }

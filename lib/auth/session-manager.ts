@@ -11,13 +11,13 @@
 
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 const SESSION_TIMEOUT = 10 * 60 * 1000 // 10 minutes
 const ACTIVITY_KEY = 'last_activity'
 
 export class SessionManager {
-  private supabase = createClient()
+  private supabase: any = null
   private activityTimer: NodeJS.Timeout | null = null
   private visibilityTimer: NodeJS.Timeout | null = null
 

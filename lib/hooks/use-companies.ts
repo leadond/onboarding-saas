@@ -12,7 +12,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { Database } from '@/types/supabase'
 import { useUser } from '@/lib/auth/hooks'
 
@@ -29,7 +29,7 @@ export function useCompanies() {
   const [companies, setCompanies] = useState<Company[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  // Supabase client will be created in useEffect
 
   // Fetch companies for the current user
   useEffect(() => {
@@ -167,7 +167,7 @@ export function useCompanyRepresentatives(companyId: string) {
   const [representatives, setRepresentatives] = useState<Representative[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  // Supabase client will be created in useEffect
 
   // Fetch representatives for a company
   useEffect(() => {

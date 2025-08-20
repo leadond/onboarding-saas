@@ -23,9 +23,10 @@ import { Button } from '@/components/ui/button'
 import { CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils/cn'
 import type { KitStep } from '@/types'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Tables } from '@/types/supabase'
 
-type ClientProgress = Tables<'client_progress'>
+
+// Type imported from @/types/supabase
 
 interface WelcomeMessageStepProps {
   step: KitStep

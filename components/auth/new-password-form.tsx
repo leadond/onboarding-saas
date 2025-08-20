@@ -20,7 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations/auth'
 import { cn } from '@/lib/utils/cn'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 interface NewPasswordFormProps {
   className?: string
@@ -49,7 +49,7 @@ export function NewPasswordForm({ className }: NewPasswordFormProps) {
       setLoading(true)
       setError(null)
 
-      const supabase = createClient()
+      const supabase = await getSupabaseClient()
       
       const { error: updateError } = await supabase.auth.updateUser({
         password: data.password

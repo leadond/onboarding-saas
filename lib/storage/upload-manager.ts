@@ -11,7 +11,7 @@
 
 'use client'
 
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import type { UploadConfigData } from '@/lib/validations/kit'
 
 export interface UploadProgress {
@@ -37,7 +37,7 @@ export interface UploadError {
 
 class UploadManager {
   private readonly bucketName = 'kit-files'
-  private supabase = createClient()
+  private supabase: any = null
 
   /**
    * Upload a file to Supabase Storage

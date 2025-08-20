@@ -7,9 +7,8 @@ import type {
   StepUpdateData,
   StepReorderData,
 } from '@/lib/validations/kit'
-import type { Database } from '@/lib/supabase/database.types'
+import type { Tables } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 
 type Step = Tables<'kit_steps'>
 

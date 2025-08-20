@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
         const startTime = parseInt(searchParams.get('start_time') || '0')
         const endTime = parseInt(searchParams.get('end_time') || '0')
 
-        const freeBusy = await nylasClient.getFreeBusy(emails, startTime, endTime)
+        const freeBusy = await nylasClient.getFreeBusy(accountId, emails, startTime, endTime)
 
         return NextResponse.json({
           success: true,

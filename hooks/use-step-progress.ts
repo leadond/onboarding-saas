@@ -3,11 +3,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { KitStep } from '@/types'
-import type { Database } from '@/lib/supabase/database.types'
+import type { Tables, ClientProgress } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
-
-type ClientProgress = Tables<'client_progress'>
+const supabase = createClient()
 
 interface StepProgressData {
   step_id: string
@@ -35,11 +33,11 @@ export function useStepProgress({
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const supabase = createClient()
-
   // Load existing progress data
   const loadProgress = useCallback(async () => {
     if (!kitId || !clientIdentifier) return
+    
+    const supabase = await getSupabaseClient()
 
     setIsLoading(true)
     setError(null)

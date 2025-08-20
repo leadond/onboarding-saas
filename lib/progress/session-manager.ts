@@ -9,13 +9,12 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
-import { createClient } from '@/lib/supabase/client'
-import type { Database } from '@/lib/supabase/database.types'
+import { getSupabaseClient } from '@/lib/supabase'
+import type { Tables } from '@/types/supabase'
 
-type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { KitStep } from '@/types'
 
-type ClientProgress = Tables<'client_progress'>
+// Type imported from @/types/supabase
 
 export interface SessionData {
   sessionId: string
@@ -55,7 +54,7 @@ export interface SessionRecoveryData {
 }
 
 export class SessionManager {
-  private supabase = createClient()
+  private supabase: any = null
   private sessionId: string
   private sessionData: SessionData | null = null
   private autoSaveInterval: NodeJS.Timeout | null = null

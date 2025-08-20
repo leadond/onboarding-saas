@@ -16,7 +16,7 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 async function migrateCompanies() {
-  const supabase = createClient(supabaseUrl!, supabaseKey!)
+  const supabase = await getSupabaseClient()(supabaseUrl!, supabaseKey!)
 
   try {
     console.log('🔄 Starting company migration...')

@@ -11,14 +11,14 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createProtectedRoute } from '@/lib/api/gateway'
-import { createClient } from '@/lib/supabase/server'
+import { getSupabaseClient } from '@/lib/supabase'
 
 // GET /api/v1/organizations/[organizationId]/teams/[teamId]/members - List team members
 export const GET = createProtectedRoute(
   async (request: NextRequest, context: any) => {
     try {
       const { organizationId, teamId } = context.params
-      const supabase = await createClient()
+      const supabase = await getSupabaseClient()
 
       // Get current user
       const {
@@ -91,7 +91,7 @@ export const POST = createProtectedRoute(
         )
       }
 
-      const supabase = await createClient()
+      const supabase = await getSupabaseClient()
 
       // Get current user
       const {

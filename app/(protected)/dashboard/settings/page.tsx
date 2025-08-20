@@ -21,7 +21,7 @@ import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from '@/components/ui/use-toast'
 import { Badge } from '@/components/ui/badge'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 
 interface UserProfile {
   id: string
@@ -405,7 +405,7 @@ export default function SettingsPage() {
                 variant="destructive" 
                 onClick={async () => {
                   try {
-                    const supabase = createClient()
+                    const supabase = await getSupabaseClient()
                     await supabase.auth.signOut()
                     window.location.href = '/login'
                   } catch (error) {

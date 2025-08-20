@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/client'
+import { getSupabaseClient } from '@/lib/supabase'
 import { createProtectedRoute } from '@/lib/api/enhanced-gateway'
 
 const createRepresentativeSchema = z.object({
@@ -42,7 +42,7 @@ export const GET = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
     const { companyId } = context.params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       // Get query parameters
@@ -101,7 +101,7 @@ export const POST = createProtectedRoute(
   async (request: NextRequest, context) => {
     const { user } = context
     const { companyId } = context.params
-    const supabase = await createClient()
+    const supabase = await getSupabaseClient()
     
     try {
       // Verify user has access to the company

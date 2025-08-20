@@ -8,7 +8,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 async function migrateFromUsers() {
-  const supabase = createClient(supabaseUrl, supabaseKey)
+  const supabase = await getSupabaseClient()(supabaseUrl, supabaseKey)
 
   try {
     console.log('🔍 Extracting companies from users table...')
