@@ -25,7 +25,9 @@ import {
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import type { KitStep } from '@/types'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import { cn } from '@/lib/utils/cn'
 
 type ClientProgress = Tables<'client_progress'>

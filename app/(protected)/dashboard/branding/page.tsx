@@ -35,15 +35,15 @@ export default function BrandingPage() {
             <div className="space-y-2">
               <label className="text-sm font-medium">Primary Color</label>
               <div className="flex space-x-2">
-                <Input type="color" value="#3b82f6" className="w-16 h-10" />
-                <Input value="#3b82f6" placeholder="#3b82f6" />
+                <Input type="color" defaultValue="#3b82f6" className="w-16 h-10" />
+                <Input defaultValue="#3b82f6" placeholder="#3b82f6" />
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Secondary Color</label>
               <div className="flex space-x-2">
-                <Input type="color" value="#10b981" className="w-16 h-10" />
-                <Input value="#10b981" placeholder="#10b981" />
+                <Input type="color" defaultValue="#10b981" className="w-16 h-10" />
+                <Input defaultValue="#10b981" placeholder="#10b981" />
               </div>
             </div>
             <Button>Save Colors</Button>

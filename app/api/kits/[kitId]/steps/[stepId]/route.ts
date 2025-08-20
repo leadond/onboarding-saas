@@ -18,9 +18,10 @@ import { stepUpdateSchema } from '@/lib/validations/kit'
 // GET /api/kits/[kitId]/steps/[stepId] - Get a specific step
 export async function GET(
   request: NextRequest,
-  { params }: { params: { kitId: string; stepId: string } }
+  { params }: { params: Promise<{ kitId: string; stepId: string }> }
 ) {
   try {
+    const { kitId, stepId } = await params
     const supabase = await createClient()
 
     // Verify authentication
@@ -33,8 +34,8 @@ export async function GET(
     }
 
     // Validate parameters
-    const kitId = z.string().uuid().parse(params.kitId)
-    const stepId = z.string().uuid().parse(params.stepId)
+    const validatedKitId = z.string().uuid().parse(kitId)
+    const validatedStepId = z.string().uuid().parse(stepId)
 
     // Verify kit ownership and fetch step
     const { data: step, error } = await supabase
@@ -48,8 +49,8 @@ export async function GET(
         )
       `
       )
-      .eq('id', stepId)
-      .eq('kit_id', kitId)
+      .eq('id', validatedStepId)
+      .eq('kit_id', validatedKitId)
       .eq('kits.user_id', user.id)
       .single()
 
@@ -93,9 +94,10 @@ export async function GET(
 // PATCH /api/kits/[kitId]/steps/[stepId] - Update a step
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { kitId: string; stepId: string } }
+  { params }: { params: Promise<{ kitId: string; stepId: string }> }
 ) {
   try {
+    const { kitId, stepId } = await params
     const supabase = await createClient()
 
     // Verify authentication
@@ -108,14 +110,14 @@ export async function PATCH(
     }
 
     // Validate parameters
-    const kitId = z.string().uuid().parse(params.kitId)
-    const stepId = z.string().uuid().parse(params.stepId)
+    const validatedKitId = z.string().uuid().parse(kitId)
+    const validatedStepId = z.string().uuid().parse(stepId)
 
     // Parse and validate request body
     const body = await request.json()
     const validatedData = stepUpdateSchema.parse({
       ...body,
-      id: stepId,
+      id: validatedStepId,
     })
 
     // Verify step exists and user owns the kit
@@ -133,8 +135,8 @@ export async function PATCH(
         )
       `
       )
-      .eq('id', stepId)
-      .eq('kit_id', kitId)
+      .eq('id', validatedStepId)
+      .eq('kit_id', validatedKitId)
       .eq('kits.user_id', user.id)
       .single()
 
@@ -154,7 +156,7 @@ export async function PATCH(
       const { data: conflictingStep } = await supabase
         .from('kit_steps')
         .select('id')
-        .eq('kit_id', kitId)
+        .eq('kit_id', validatedKitId)
         .eq('step_order', updateData.step_order)
         .neq('id', stepId)
         .single()
@@ -165,7 +167,7 @@ export async function PATCH(
         const { data: allSteps } = await supabase
           .from('kit_steps')
           .select('id, step_order')
-          .eq('kit_id', kitId)
+          .eq('kit_id', validatedKitId)
           .order('step_order')
 
         if (allSteps) {
@@ -209,7 +211,7 @@ export async function PATCH(
     const { data: updatedStep, error: updateError } = await supabase
       .from('kit_steps')
       .update(updateData)
-      .eq('id', stepId)
+      .eq('id', validatedStepId)
       .select()
       .single()
 
@@ -226,12 +228,12 @@ export async function PATCH(
       user_id: user.id,
       action: 'update',
       resource_type: 'step',
-      resource_id: stepId,
+      resource_id: validatedStepId,
       details: {
         updated_fields: Object.keys(updateData),
         step_title: updatedStep.title,
         kit_id: kitId,
-        kit_name: existingStep.kits.name,
+        kit_name: existingStep.kits?.[0]?.name || 'Unknown Kit',
       },
     })
 
@@ -261,9 +263,10 @@ export async function PATCH(
 // DELETE /api/kits/[kitId]/steps/[stepId] - Delete a step
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { kitId: string; stepId: string } }
+  { params }: { params: Promise<{ kitId: string; stepId: string }> }
 ) {
   try {
+    const { kitId, stepId } = await params
     const supabase = await createClient()
 
     // Verify authentication
@@ -276,8 +279,8 @@ export async function DELETE(
     }
 
     // Validate parameters
-    const kitId = z.string().uuid().parse(params.kitId)
-    const stepId = z.string().uuid().parse(params.stepId)
+    const validatedKitId = z.string().uuid().parse(kitId)
+    const validatedStepId = z.string().uuid().parse(stepId)
 
     // Verify step exists and user owns the kit
     const { data: step, error: fetchError } = await supabase
@@ -295,8 +298,8 @@ export async function DELETE(
         )
       `
       )
-      .eq('id', stepId)
-      .eq('kit_id', kitId)
+      .eq('id', validatedStepId)
+      .eq('kit_id', validatedKitId)
       .eq('kits.user_id', user.id)
       .single()
 
@@ -305,7 +308,7 @@ export async function DELETE(
     }
 
     // Check if kit is published - warn about deleting steps from published kits
-    if (step.kits.status === 'published') {
+    if (step.kits?.[0]?.status === 'published') {
       // Allow deletion but warn that it might affect active clients
       const { count: activeClients } = await supabase
         .from('client_progress')
@@ -328,7 +331,7 @@ export async function DELETE(
     const { error: deleteError } = await supabase
       .from('kit_steps')
       .delete()
-      .eq('id', stepId)
+      .eq('id', validatedStepId)
 
     if (deleteError) {
       console.error('Error deleting step:', deleteError)
@@ -342,7 +345,7 @@ export async function DELETE(
     const { data: stepsToReorder } = await supabase
       .from('kit_steps')
       .select('id, step_order')
-      .eq('kit_id', kitId)
+      .eq('kit_id', validatedKitId)
       .gt('step_order', step.step_order)
 
     if (stepsToReorder) {
@@ -359,7 +362,7 @@ export async function DELETE(
       user_id: user.id,
       action: 'delete',
       resource_type: 'step',
-      resource_id: stepId,
+      resource_id: validatedStepId,
       details: {
         step_title: step.title,
         step_order: step.step_order,

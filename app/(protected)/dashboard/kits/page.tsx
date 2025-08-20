@@ -184,7 +184,7 @@ export default function KitsPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex space-x-3">
+                  <div className="flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -193,6 +193,16 @@ export default function KitsPage() {
                     >
                       <Link href={`/dashboard/kits/${kit.id}`}>
                         <span className="text-sm font-medium">Configure</span>
+                      </Link>
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      asChild 
+                      className="flex-1 border-green-200 hover:border-green-300 hover:bg-green-50 transition-all"
+                    >
+                      <Link href={`/dashboard/kits/${kit.id}/assign`}>
+                        <span className="text-sm font-medium">Assign</span>
                       </Link>
                     </Button>
                     {kit.is_published && (

@@ -24,7 +24,9 @@ import {
 } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import type { KitStep } from '@/types'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { ProgressTrends } from '@/lib/progress/progress-calculator'
 import { cn } from '@/lib/utils/cn'
 

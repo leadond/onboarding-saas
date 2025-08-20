@@ -10,7 +10,9 @@
  */
 
 import { createClient } from '@/lib/supabase/server'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { Kit, KitStep } from '@/types'
 
 type ClientProgress = Tables<'client_progress'>
@@ -223,7 +225,9 @@ class MockProvider implements EmailProvider {
 // Email service class
 export class EmailService {
   private provider: EmailProvider
-  private supabase = createClient()
+  private async getSupabase() {
+    return await createClient()
+  }
 
   constructor() {
     const emailProvider = process.env.EMAIL_PROVIDER || 'resend'
@@ -535,7 +539,8 @@ export class EmailService {
     error?: string
   }): Promise<void> {
     try {
-      await this.supabase.from('audit_logs').insert({
+      const supabase = await this.getSupabase()
+      await supabase.from('audit_logs').insert({
         action: 'create',
         resource_type: 'notification',
         resource_id: log.context.client.identifier,
@@ -567,7 +572,8 @@ export class EmailService {
    */
   async getNotificationHistory(clientIdentifier: string): Promise<any[]> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = await this.getSupabase()
+      const { data, error } = await supabase
         .from('audit_logs')
         .select('*')
         .eq('resource_type', 'notification')

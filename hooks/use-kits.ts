@@ -9,7 +9,9 @@ import type {
   KitPublishData,
   KitFilterQuery,
 } from '@/lib/validations/kit'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 
 type Kit = Tables<'kits'> & {
   step_count?: number

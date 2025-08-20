@@ -51,7 +51,9 @@ export function useAuth(): AuthHook {
   })
 
   const router = useRouter()
-  const supabase = createClient()
+  
+  // Create supabase client only once per hook instance
+  const [supabase] = useState(() => createClient())
 
   // Fetch user profile data
   const fetchUserProfile = useCallback(
@@ -78,9 +80,15 @@ export function useAuth(): AuthHook {
   // Initialize auth state
   useEffect(() => {
     let mounted = true
+    let timeoutId: NodeJS.Timeout
 
     const initializeAuth = async () => {
       try {
+        // Add safety check for supabase client
+        if (!supabase?.auth) {
+          throw new Error('Supabase client not initialized')
+        }
+
         const {
           data: { session },
           error,
@@ -131,42 +139,101 @@ export function useAuth(): AuthHook {
       }
     }
 
-    initializeAuth()
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted) return
-
-      console.log('Auth state changed:', event, session?.user?.id)
-
-      if (session?.user) {
-        const userProfile = await fetchUserProfile(session.user.id)
-        setState({
-          user: userProfile,
-          session,
+    // Set a timeout to ensure loading state is cleared even if initialization fails
+    timeoutId = setTimeout(() => {
+      if (mounted) {
+        setState(prev => ({
+          ...prev,
           loading: false,
-          error: null,
-        })
-      } else {
-        setState({
-          user: null,
-          session: null,
-          loading: false,
-          error: null,
-        })
+        }))
       }
+    }, 5000) // 5 second timeout
 
-      // Handle specific auth events
-      if (event === 'SIGNED_OUT') {
-        router.push('/login')
+    // Wrap initialization in try-catch to prevent unhandled promise rejections
+    try {
+      initializeAuth().finally(() => {
+        if (timeoutId) {
+          clearTimeout(timeoutId)
+        }
+      })
+    } catch (error) {
+      console.error('Failed to initialize auth:', error)
+      if (mounted) {
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          error: 'Failed to initialize authentication',
+        }))
       }
-    })
+    }
+
+    // Listen for auth changes with error handling
+    let subscription: any
+    try {
+      const {
+        data: { subscription: authSubscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (!mounted) return
+
+        try {
+          console.log('Auth state changed:', event, session?.user?.id)
+
+          if (session?.user) {
+            const userProfile = await fetchUserProfile(session.user.id)
+            setState({
+              user: userProfile,
+              session,
+              loading: false,
+              error: null,
+            })
+          } else {
+            setState({
+              user: null,
+              session: null,
+              loading: false,
+              error: null,
+            })
+          }
+
+          // Handle specific auth events
+          if (event === 'SIGNED_OUT') {
+            router.push('/login')
+          }
+        } catch (error) {
+          console.error('Error handling auth state change:', error)
+          if (mounted) {
+            setState(prev => ({
+              ...prev,
+              loading: false,
+              error: 'Authentication state error',
+            }))
+          }
+        }
+      })
+      subscription = authSubscription
+    } catch (error) {
+      console.error('Error setting up auth listener:', error)
+      if (mounted) {
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          error: 'Failed to setup authentication listener',
+        }))
+      }
+    }
 
     return () => {
       mounted = false
-      subscription.unsubscribe()
+      if (subscription?.unsubscribe) {
+        try {
+          subscription.unsubscribe()
+        } catch (error) {
+          console.error('Error unsubscribing from auth changes:', error)
+        }
+      }
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
     }
   }, [supabase.auth, fetchUserProfile, router])
 
@@ -187,8 +254,15 @@ export function useAuth(): AuthHook {
 
         if (response.ok) {
           setState(prev => ({ ...prev, loading: false }))
-          router.push('/dashboard')
-          return { success: true }
+          
+          // Check if user needs to change password
+          if (result.forcePasswordChange) {
+            router.push('/change-password?required=true')
+            return { success: true, requiresPasswordChange: true }
+          } else {
+            router.push('/dashboard')
+            return { success: true }
+          }
         } else {
           setState(prev => ({
             ...prev,
@@ -294,10 +368,13 @@ export function useAuth(): AuthHook {
       try {
         setState(prev => ({ ...prev, loading: true, error: null }))
 
+        // Always use the current domain the user is on
+        const baseUrl = window.location.origin
+
         const { error } = await supabase.auth.signInWithOAuth({
           provider: provider === 'azure' ? 'azure' : 'google',
           options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/auth/callback`,
+            redirectTo: `${baseUrl}/auth/callback`,
           },
         })
 
@@ -327,8 +404,11 @@ export function useAuth(): AuthHook {
       try {
         setState(prev => ({ ...prev, loading: true, error: null }))
 
+        // Always use the current domain the user is on
+        const baseUrl = window.location.origin
+
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || window.location.origin}/reset-password`,
+          redirectTo: `${baseUrl}/reset-password`,
         })
 
         setState(prev => ({ ...prev, loading: false }))

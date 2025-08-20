@@ -60,6 +60,7 @@ export default function NewStepPage({
 }: {
   params: { kitId: string }
 }) {
+  const { kitId } = params
   const router = useRouter()
   const [kit, setKit] = useState<Kit | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -88,7 +89,7 @@ export default function NewStepPage({
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
         if (!response.ok) {
           throw new Error('Failed to fetch kit')
         }
@@ -109,7 +110,7 @@ export default function NewStepPage({
     }
 
     fetchKit()
-  }, [params.kitId])
+  }, [kitId])
 
   const handleInputChange = (field: string, value: string | number | boolean | object) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -127,7 +128,7 @@ export default function NewStepPage({
     setError(null)
 
     try {
-      const response = await fetch(`/api/kits/${params.kitId}/steps`, {
+      const response = await fetch(`/api/kits/${kitId}/steps`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +142,7 @@ export default function NewStepPage({
       }
 
       const result = await response.json()
-      router.push(`/dashboard/kits/${params.kitId}`)
+      router.push(`/dashboard/kits/${kitId}`)
     } catch (error) {
       console.error('Error creating step:', error)
       setError(error instanceof Error ? error.message : 'Failed to create step')

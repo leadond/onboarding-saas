@@ -63,6 +63,7 @@ export default function KitPreviewPage({
 }: {
   params: { kitId: string }
 }) {
+  const { kitId } = params
   const [kit, setKit] = useState<Kit | null>(null)
   const [steps, setSteps] = useState<KitStep[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -77,7 +78,7 @@ export default function KitPreviewPage({
         setIsLoading(true)
         
         // Fetch kit details
-        const kitResponse = await fetch(`/api/kits/${params.kitId}`)
+        const kitResponse = await fetch(`/api/kits/${kitId}`)
         if (!kitResponse.ok) {
           throw new Error('Failed to fetch kit')
         }
@@ -88,7 +89,7 @@ export default function KitPreviewPage({
         setKit(kitResult.data)
 
         // Fetch kit steps
-        const stepsResponse = await fetch(`/api/kits/${params.kitId}/steps`)
+        const stepsResponse = await fetch(`/api/kits/${kitId}/steps`)
         if (!stepsResponse.ok) {
           throw new Error('Failed to fetch steps')
         }
@@ -106,7 +107,7 @@ export default function KitPreviewPage({
     }
 
     fetchKitData()
-  }, [params.kitId])
+  }, [kitId])
 
   const getViewportClass = () => {
     switch (viewMode) {
@@ -183,7 +184,7 @@ export default function KitPreviewPage({
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-4">
-          <Link href={`/dashboard/kits/${params.kitId}`}>
+          <Link href={`/dashboard/kits/${kitId}`}>
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Kit

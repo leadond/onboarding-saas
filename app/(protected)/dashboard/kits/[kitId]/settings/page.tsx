@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -108,8 +108,9 @@ type KitSettings = {
 export default function KitSettingsPage({
   params,
 }: {
-  params: { kitId: string }
+  params: Promise<{ kitId: string }>
 }) {
+  const { kitId } = React.use(params)
   const [kit, setKit] = useState<Kit | null>(null)
   const [settings, setSettings] = useState<KitSettings | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -123,7 +124,7 @@ export default function KitSettingsPage({
   const fetchSettings = async () => {
     try {
       setIsLoading(true)
-      const response = await fetch(`/api/kits/${params.kitId}/settings`)
+      const response = await fetch(`/api/kits/${kitId}/settings`)
       
       if (!response.ok) {
         const errorData = await response.json()
@@ -146,7 +147,7 @@ export default function KitSettingsPage({
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
         if (!response.ok) {
           throw new Error('Failed to fetch kit')
         }
@@ -162,7 +163,7 @@ export default function KitSettingsPage({
 
     fetchKit()
     fetchSettings()
-  }, [params.kitId])
+  }, [kitId])
 
   const handleSaveSettings = async (section: keyof KitSettings) => {
     if (!settings) return
@@ -183,7 +184,7 @@ export default function KitSettingsPage({
         }
       }
 
-      const response = await fetch(`/api/kits/${params.kitId}/settings`, {
+      const response = await fetch(`/api/kits/${kitId}/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -251,7 +252,7 @@ export default function KitSettingsPage({
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-4">
-          <Link href={`/dashboard/kits/${params.kitId}`}>
+          <Link href={`/dashboard/kits/${kitId}`}>
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Kit

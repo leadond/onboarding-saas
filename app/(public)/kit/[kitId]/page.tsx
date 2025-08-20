@@ -128,7 +128,8 @@ export async function generateMetadata({
 }: {
   params: { kitId: string }
 }) {
-  const kitData = await getKitData(params.kitId)
+  const { kitId } = params
+  const kitData = await getKitData(kitId)
 
   if (!kitData) {
     return {

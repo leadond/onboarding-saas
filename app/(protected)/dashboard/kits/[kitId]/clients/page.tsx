@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 
@@ -96,8 +96,9 @@ type ClientsData = {
 export default function KitClientsPage({
   params,
 }: {
-  params: { kitId: string }
+  params: Promise<{ kitId: string }>
 }) {
+  const { kitId } = React.use(params)
   const [kit, setKit] = useState<Kit | null>(null)
   const [clientsData, setClientsData] = useState<ClientsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -122,7 +123,7 @@ export default function KitClientsPage({
       if (statusFilter !== 'all') searchParams.append('status', statusFilter)
       if (searchTerm) searchParams.append('search', searchTerm)
       
-      const response = await fetch(`/api/kits/${params.kitId}/clients?${searchParams}`)
+      const response = await fetch(`/api/kits/${kitId}/clients?${searchParams}`)
       
       if (!response.ok) {
         const errorData = await response.json()
@@ -145,7 +146,7 @@ export default function KitClientsPage({
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
         if (!response.ok) {
           throw new Error('Failed to fetch kit')
         }
@@ -160,7 +161,7 @@ export default function KitClientsPage({
     }
 
     fetchKit()
-  }, [params.kitId])
+  }, [kitId])
 
   useEffect(() => {
     if (kit) {
@@ -180,7 +181,7 @@ export default function KitClientsPage({
       setIsAssigning(true)
       setError(null)
 
-      const response = await fetch(`/api/kits/${params.kitId}/clients`, {
+      const response = await fetch(`/api/kits/${kitId}/clients`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -266,7 +267,7 @@ export default function KitClientsPage({
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-4">
-          <Link href={`/dashboard/kits/${params.kitId}`}>
+          <Link href={`/dashboard/kits/${kitId}`}>
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Kit

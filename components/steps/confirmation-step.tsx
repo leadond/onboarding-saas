@@ -31,7 +31,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils/cn'
 import type { KitStep } from '@/types'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 
 type ClientProgress = Tables<'client_progress'>
 

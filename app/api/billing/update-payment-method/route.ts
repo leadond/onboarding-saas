@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get user profile
-    const { data: userProfile, error: profileError } = await supabase
+    let { data: userProfile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
@@ -70,7 +70,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Create setup intent for payment method update
-    const setupIntentResult = await createSetupIntent(customerResult.data.customerId)
+    const customerId = customerResult.data.customerId || customerResult.data.id
+    const setupIntentResult = await createSetupIntent(customerId)
     if (!setupIntentResult.success) {
       return NextResponse.json(setupIntentResult, { status: 400 })
     }

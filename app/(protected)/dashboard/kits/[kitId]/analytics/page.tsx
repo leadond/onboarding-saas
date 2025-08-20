@@ -112,6 +112,7 @@ export default function KitAnalyticsPage({
 }: {
   params: { kitId: string }
 }) {
+  const { kitId } = params
   const [kit, setKit] = useState<Kit | null>(null)
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -129,7 +130,7 @@ export default function KitAnalyticsPage({
       const startDate = subDays(new Date(), parseInt(days)).toISOString()
       
       const response = await fetch(
-        `/api/kits/${params.kitId}/analytics?start_date=${startDate}&end_date=${endDate}`
+        `/api/kits/${kitId}/analytics?start_date=${startDate}&end_date=${endDate}`
       )
       
       if (!response.ok) {
@@ -158,7 +159,7 @@ export default function KitAnalyticsPage({
   useEffect(() => {
     const fetchKit = async () => {
       try {
-        const response = await fetch(`/api/kits/${params.kitId}`)
+        const response = await fetch(`/api/kits/${kitId}`)
         if (!response.ok) {
           throw new Error('Failed to fetch kit')
         }
@@ -173,7 +174,7 @@ export default function KitAnalyticsPage({
     }
 
     fetchKit()
-  }, [params.kitId])
+  }, [kitId])
 
   useEffect(() => {
     if (kit?.analytics_enabled) {
@@ -186,7 +187,7 @@ export default function KitAnalyticsPage({
   const handleExportAnalytics = async () => {
     try {
       setIsExporting(true)
-      const response = await fetch(`/api/kits/${params.kitId}/analytics/export`)
+      const response = await fetch(`/api/kits/${kitId}/analytics/export`)
       if (!response.ok) {
         throw new Error('Failed to export analytics')
       }
@@ -246,7 +247,7 @@ export default function KitAnalyticsPage({
     return (
       <div className="space-y-6">
         <div className="flex items-center space-x-4">
-          <Link href={`/dashboard/kits/${params.kitId}`}>
+          <Link href={`/dashboard/kits/${kitId}`}>
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Kit

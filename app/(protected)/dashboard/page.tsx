@@ -266,6 +266,12 @@ export default function DashboardPage() {
                   </Link>
                 </Button>
                 <Button variant="outline" asChild className="w-full justify-start h-14 hover:shadow-soft transition-all duration-200" size="lg">
+                  <Link href="/dashboard/companies/new">
+                    <span className="mr-3 text-xl">🏢</span>
+                    Add Company
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild className="w-full justify-start h-14 hover:shadow-soft transition-all duration-200" size="lg">
                   <Link href="/dashboard/clients">
                     <span className="mr-3 text-xl">👥</span>
                     Manage Clients

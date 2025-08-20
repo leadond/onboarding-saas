@@ -75,11 +75,15 @@ export class RateLimiter {
 
   private cleanup(): void {
     const now = Date.now()
-    for (const [key, data] of this.store.entries()) {
+    const keysToDelete: string[] = []
+    
+    this.store.forEach((data, key) => {
       if (now > data.resetTime) {
-        this.store.delete(key)
+        keysToDelete.push(key)
       }
-    }
+    })
+    
+    keysToDelete.forEach(key => this.store.delete(key))
   }
 
   async check(req: NextRequest): Promise<{
@@ -220,7 +224,7 @@ export class DatabaseRateLimiter {
     limit: number
     response?: NextResponse
   }> {
-    const supabase = createClient()
+    const supabase = await createClient()
     const key = this.config.keyGenerator?.(req) || this.defaultKeyGenerator(req)
     const now = Date.now()
     const windowStart = now - this.config.windowMs

@@ -121,7 +121,6 @@ export async function POST(request: Request) {
     }
 
     console.log('✅ User authenticated:', user.email)
-    console.log('🔍 Search term:', search)
 
     const body = await request.json()
     

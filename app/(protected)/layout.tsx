@@ -70,6 +70,7 @@ export default function ProtectedLayout({
               {[
                 { href: '/dashboard', label: 'Dashboard', icon: '📊' },
                 { href: '/dashboard/clients', label: 'Clients', icon: '👥' },
+                { href: '/dashboard/companies', label: 'Companies', icon: '🏢' },
                 { href: '/dashboard/kits', label: 'Kits', icon: '📦' },
                 { href: '/dashboard/teams', label: 'Teams', icon: '🏢' },
                 { href: '/dashboard/analytics', label: 'Analytics', icon: '📈' },

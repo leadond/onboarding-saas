@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "pnpm run build"
   publish = ".next"
 
 [build.environment]
@@ -10,17 +10,17 @@
   package = "@netlify/plugin-nextjs"
 
 [context.production]
-  command = "npm run build"
+  command = "pnpm run build"
   
 [context.production.environment]
   NODE_ENV = "production"
   NEXT_PUBLIC_APP_URL = "https://app.onboardkit.com"
 
 [context.deploy-preview]
-  command = "npm run build"
+  command = "pnpm run build"
 
 [context.branch-deploy]
-  command = "npm run build"
+  command = "pnpm run build"
 
 # Headers for security
 [[headers]]

@@ -12,7 +12,9 @@ import {
   SessionManager,
   type SessionData,
 } from '@/lib/progress/session-manager'
-import type { Tables } from '@/lib/supabase/database.types'
+import type { Database } from '@/lib/supabase/database.types'
+
+type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 import type { KitStep } from '@/types'
 
 type ClientProgress = Tables<'client_progress'>

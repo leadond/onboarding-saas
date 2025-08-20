@@ -342,7 +342,8 @@ export async function logSecurityEvent(
   try {
     const supabase = createClient()
     
-    await supabase.from('security_logs').insert({
+    const supabaseClient = await supabase
+    await supabaseClient.from('security_logs').insert({
       event,
       details,
       user_id: userId,
