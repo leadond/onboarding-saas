@@ -58,14 +58,25 @@ export function ClientProgressTable({
     'name' | 'progress' | 'last_activity' | 'created_at'
   >('last_activity')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-
-  const supabase = await getSupabaseClient()
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
-    loadClientProgress()
-  }, [kitId, refreshTrigger])
+    const initializeSupabase = async () => {
+      const client = await getSupabaseClient()
+      setSupabase(client)
+    }
+    initializeSupabase()
+  }, [])
+
+  useEffect(() => {
+    if (supabase) {
+      loadClientProgress()
+    }
+  }, [supabase, kitId, refreshTrigger])
 
   async function loadClientProgress() {
+    if (!supabase) return
+    
     setIsLoading(true)
     try {
       // Get all client progress data with kit information

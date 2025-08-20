@@ -70,14 +70,25 @@ export function AdminAnalyticsDashboard({
 
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
-
-  const supabase = await getSupabaseClient()
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
-    loadAnalytics()
-  }, [kitId, timeRange])
+    const initializeSupabase = async () => {
+      const client = await getSupabaseClient()
+      setSupabase(client)
+    }
+    initializeSupabase()
+  }, [])
+
+  useEffect(() => {
+    if (supabase) {
+      loadAnalytics()
+    }
+  }, [supabase, kitId, timeRange])
 
   async function loadAnalytics() {
+    if (!supabase) return
+    
     setIsLoading(true)
     try {
       // Calculate date range
