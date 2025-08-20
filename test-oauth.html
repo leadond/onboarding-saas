@@ -15,27 +15,53 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmdWhmcmpva3ZtZWN0d2ZyYXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwNTE3NjUsImV4cCI6MjA3MDYyNzc2NX0.tYKnTxnKqEVm3mMqo-s6vx06dKPEJBziADgkXJuQ8Ng'
         )
 
+        // Check for auth state on page load
+        window.addEventListener('load', async () => {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session) {
+                document.getElementById('result').innerHTML = `✅ Authenticated as: ${session.user.email}`
+            }
+        })
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            const result = document.getElementById('result')
+            if (event === 'SIGNED_IN' && session) {
+                result.innerHTML = `✅ Successfully signed in: ${session.user.email}`
+            } else if (event === 'SIGNED_OUT') {
+                result.innerHTML = 'Signed out'
+            }
+        })
+
         async function testOAuth() {
             const result = document.getElementById('result')
-            result.innerHTML = 'Testing OAuth...'
+            result.innerHTML = 'Initiating OAuth...'
             
             try {
                 const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: window.location.origin + '/auth/callback'
+                        redirectTo: `${window.location.origin}/auth/callback`
                     }
                 })
                 
                 if (error) {
-                    result.innerHTML = `❌ Error: ${error.message}`
-                } else {
-                    result.innerHTML = `✅ OAuth URL generated: ${data.url}`
-                    // Redirect to OAuth
-                    window.location.href = data.url
+                    console.error('OAuth error:', error)
+                    result.innerHTML = `❌ OAuth Error: ${error.message}`
+                    return
                 }
+                
+                if (!data?.url) {
+                    result.innerHTML = '❌ No OAuth URL received'
+                    return
+                }
+                
+                result.innerHTML = '🔄 Redirecting to Google...'
+                setTimeout(() => window.location.href = data.url, 1000)
+                
             } catch (err) {
-                result.innerHTML = `❌ Exception: ${err.message}`
+                console.error('OAuth exception:', err)
+                result.innerHTML = `❌ Exception: ${err.message || 'Unknown error'}`
             }
         }
     </script>

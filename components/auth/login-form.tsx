@@ -275,8 +275,18 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
         </p>
       </div>
 
-      {/* Security notice */}
-      <div className="text-center">
+      {/* Legal Links */}
+      <div className="text-center space-y-2">
+        <p className="text-xs text-muted-foreground">
+          By signing in, you agree to our{' '}
+          <Link href="/terms" className="text-primary hover:underline">
+            Terms of Service
+          </Link>
+          {' '}and{' '}
+          <Link href="/privacy" className="text-primary hover:underline">
+            Privacy Policy
+          </Link>
+        </p>
         <p className="text-xs text-muted-foreground/80 flex items-center justify-center gap-2">
           <span>🔒</span>
           Protected by industry-standard security. Your data is encrypted and secure.

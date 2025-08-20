@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Native Google OAuth Test</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <h1>Native Google OAuth Test</h1>
+    <div id="g_id_onload"
+         data-client_id="534312515723-m24e6si8gp52he7o2mefbpif6mkue5b0.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+    
+    <button onclick="signOut()">Sign Out</button>
+    <div id="result"></div>
+
+    <script>
+        // Replace with your actual Google Client ID
+        const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID';
+        
+        function handleCredentialResponse(response) {
+            const result = document.getElementById('result');
+            
+            try {
+                // Decode JWT token (basic decode - don't use in production without verification)
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                
+                result.innerHTML = `
+                    <h3>✅ Google OAuth Success!</h3>
+                    <p><strong>Name:</strong> ${payload.name}</p>
+                    <p><strong>Email:</strong> ${payload.email}</p>
+                    <p><strong>Picture:</strong> <img src="${payload.picture}" width="50" height="50"></p>
+                    <p><strong>Token:</strong> ${response.credential.substring(0, 50)}...</p>
+                `;
+                
+                // Send to your backend
+                sendToBackend(response.credential, payload);
+                
+            } catch (error) {
+                result.innerHTML = `❌ Error parsing response: ${error.message}`;
+            }
+        }
+        
+        async function sendToBackend(credential, userInfo) {
+            try {
+                const response = await fetch('/api/auth/google-native', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        credential,
+                        userInfo
+                    })
+                });
+                
+                const result = await response.json();
+                console.log('Backend response:', result);
+                
+            } catch (error) {
+                console.error('Backend error:', error);
+            }
+        }
+        
+        function signOut() {
+            google.accounts.id.disableAutoSelect();
+            document.getElementById('result').innerHTML = 'Signed out';
+        }
+        
+        // Initialize when page loads
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse
+            });
+        }
+    </script>
+</body>
+</html>
