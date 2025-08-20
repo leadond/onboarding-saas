@@ -60,7 +60,7 @@ export class WebhookManager {
    * Emit a webhook event to all subscribed endpoints
    */
   async emit(event: WebhookEvent): Promise<void> {
-    // Supabase client will be created in useEffect
+    const supabase = await getSupabaseClient()
 
     // Get all active webhook endpoints for this user that subscribe to this event type
     const { data: endpoints, error } = await supabase
@@ -127,7 +127,7 @@ export class WebhookManager {
    * Attempt to deliver a webhook
    */
   private async attemptDelivery(deliveryId: string): Promise<void> {
-    // Supabase client will be created in useEffect
+    const supabase = await getSupabaseClient()
 
     // Get delivery details with endpoint info
     const { data: delivery, error } = await supabase
@@ -236,7 +236,7 @@ export class WebhookManager {
     errorMessage: string,
     httpStatusCode?: number
   ): Promise<void> {
-    // Supabase client will be created in useEffect
+    const supabase = await getSupabaseClient()
 
     if (attemptCount < maxRetries) {
       // Schedule retry with exponential backoff
@@ -310,7 +310,7 @@ export class WebhookManager {
    * Process pending webhook deliveries (for background job)
    */
   async processPendingDeliveries(): Promise<void> {
-    // Supabase client will be created in useEffect
+    const supabase = await getSupabaseClient()
 
     const { data: pendingDeliveries, error } = await supabase
       .from('webhook_deliveries')
@@ -333,7 +333,7 @@ export class WebhookManager {
    * Clean up old webhook deliveries
    */
   async cleanupOldDeliveries(daysToKeep: number = 30): Promise<number> {
-    // Supabase client will be created in useEffect
+    const supabase = await getSupabaseClient()
     const cutoffDate = new Date()
     cutoffDate.setDate(cutoffDate.getDate() - daysToKeep)
 

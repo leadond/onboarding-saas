@@ -161,8 +161,8 @@ export default function UsersPage() {
                         <div className="font-medium">{user.full_name || 'No name'}</div>
                         <div className="text-sm text-gray-500">{user.email}</div>
                         <div className="flex items-center space-x-1 mt-1">
-                          <Badge variant={user.provider === 'google' ? 'default' : 'secondary'} className="text-xs">
-                            {user.provider === 'google' ? 'Google' : 'Email'}
+                          <Badge variant="secondary" className="text-xs">
+                            Email
                           </Badge>
                         </div>
                       </div>

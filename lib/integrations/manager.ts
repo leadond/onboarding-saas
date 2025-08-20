@@ -374,9 +374,9 @@ export class IntegrationManager {
     
     switch (actionType) {
       case 'calendar.create_event':
-        return await calendly.createEvent(parameters)
+        return await calendly.createEvent(parameters as any)
       case 'calendar.book_meeting':
-        return await calendly.bookMeeting(parameters)
+        return await calendly.bookMeeting(parameters as any)
       default:
         throw new Error(`Calendly action ${actionType} not implemented`)
     }
@@ -438,7 +438,7 @@ export class IntegrationManager {
       await this.executeAction(
         integration.user_id,
         'zapier',
-        'zapier.trigger',
+        'zapier.trigger' as any,
         {
           trigger_type: triggerType,
           event_data: eventData

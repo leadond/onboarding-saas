@@ -27,9 +27,6 @@ interface AuthActions {
     requiresConfirmation?: boolean
   }>
   signOut: () => Promise<{ success: boolean; error?: string }>
-  signInWithOAuth: (
-    provider: 'google' | 'azure'
-  ) => Promise<{ success: boolean; error?: string }>
   resetPassword: (
     email: string
   ) => Promise<{ success: boolean; error?: string }>
@@ -366,45 +363,7 @@ export function useAuth(): AuthHook {
     }
   }, [router])
 
-  // Sign in with OAuth
-  const signInWithOAuth = useCallback(
-    async (provider: 'google' | 'azure') => {
-      try {
-        setState(prev => ({ ...prev, loading: true, error: null }))
 
-        // Always use the current domain the user is on
-        const baseUrl = window.location.origin
-
-        if (!supabase) {
-          throw new Error('Supabase client not initialized')
-        }
-        
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: provider === 'azure' ? 'azure' : 'google',
-          options: {
-            redirectTo: `${baseUrl}/auth/callback`,
-          },
-        })
-
-        if (error) {
-          setState(prev => ({
-            ...prev,
-            loading: false,
-            error: error.message,
-          }))
-          return { success: false, error: error.message }
-        }
-
-        return { success: true }
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : 'OAuth sign in failed'
-        setState(prev => ({ ...prev, loading: false, error: errorMessage }))
-        return { success: false, error: errorMessage }
-      }
-    },
-    [supabase]
-  )
 
   // Reset password
   const resetPassword = useCallback(
@@ -512,7 +471,6 @@ export function useAuth(): AuthHook {
     signIn,
     signUp,
     signOut,
-    signInWithOAuth,
     resetPassword,
     updatePassword,
     refreshSession,

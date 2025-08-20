@@ -183,9 +183,9 @@ export class RealNylasClient {
       account_id: accountId,
       name: contact.name || 'New Contact',
       email: contact.email || 'contact@example.com',
-      phone: contact.phone,
-      company: contact.company,
-      notes: contact.notes,
+      phone: (contact as any).phone,
+      company: (contact as any).company,
+      notes: (contact as any).notes,
     };
   }
 

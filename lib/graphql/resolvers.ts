@@ -10,6 +10,7 @@
  */
 
 import { getSupabaseClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { rbacManager, UserContext } from '@/lib/auth/rbac'
 
 // GraphQL context type

@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const authUser = authUsers.users.find(u => u.email === email)
+    const authUser = authUsers.users.find((u: any) => u.email === email)
     
     if (!authUser) {
       return NextResponse.json(

@@ -41,7 +41,7 @@ interface StepRendererProps {
   clientId?: string
   currentStepIndex: number
   totalSteps: number
-  progress?: ClientProgress
+  progress?: any
   clientData?: any
   kitData?: any
   onComplete: (data: any) => void | Promise<void>
@@ -62,7 +62,7 @@ interface StepComponentProps {
   onNext?: () => void
   onPrevious?: () => void
   isLoading?: boolean
-  progress?: ClientProgress
+  progress?: any
   className?: string
 }
 
@@ -198,7 +198,7 @@ export function useStepRenderer() {
     new Set()
   )
   const [stepProgress, setStepProgress] = React.useState<
-    Record<string, ClientProgress>
+    Record<string, any>
   >({})
 
   const goToStep = (stepIndex: number, totalSteps: number) => {
@@ -222,7 +222,7 @@ export function useStepRenderer() {
   const markStepCompleted = (
     stepIndex: number,
     stepId: string,
-    progress: ClientProgress
+    progress: any
   ) => {
     setCompletedSteps(prev => new Set(prev).add(stepIndex))
     setStepProgress(prev => ({
@@ -235,7 +235,7 @@ export function useStepRenderer() {
     return completedSteps.has(stepIndex)
   }
 
-  const getStepProgress = (stepId: string): ClientProgress | undefined => {
+  const getStepProgress = (stepId: string): any | undefined => {
     return stepProgress[stepId]
   }
 

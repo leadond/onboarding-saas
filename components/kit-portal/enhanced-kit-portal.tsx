@@ -286,7 +286,7 @@ export function EnhancedKitPortal({
                   clientId={clientIdentifier}
                   currentStepIndex={currentStepIndex}
                   totalSteps={steps.length}
-                  progress={getStepProgress(currentStep.id) || undefined}
+                  progress={getStepProgress(currentStep.id) as any || undefined}
                   onComplete={handleStepComplete}
                   onNext={
                     currentStepIndex < steps.length - 1

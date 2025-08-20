@@ -194,7 +194,7 @@ export function useProgressAnalytics({
   useEffect(() => {
     if (Object.keys(progressData).length === 0) return
 
-    const calculator = new ProgressCalculator(steps, progressData)
+    const calculator = new ProgressCalculator(steps, progressData as any)
 
     // Calculate all metrics
     setProgressMetrics(calculator.calculateMetrics())
@@ -507,19 +507,19 @@ export function useProgressAnalytics({
   const getRecommendations = useCallback((): string[] => {
     if (!progressMetrics) return []
 
-    const calculator = new ProgressCalculator(steps, progressData)
+    const calculator = new ProgressCalculator(steps, progressData as any)
     return calculator.getRecommendations()
   }, [steps, progressData, progressMetrics])
 
   const isAtRisk = useCallback((): boolean => {
     if (!progressMetrics) return false
 
-    const calculator = new ProgressCalculator(steps, progressData)
+    const calculator = new ProgressCalculator(steps, progressData as any)
     return calculator.isAtRisk()
   }, [steps, progressData, progressMetrics])
 
   const getNextBestAction = useCallback((): string | null => {
-    const calculator = new ProgressCalculator(steps, progressData)
+    const calculator = new ProgressCalculator(steps, progressData as any)
     const nextStep = calculator.getNextRecommendedStep()
 
     if (!nextStep) return null

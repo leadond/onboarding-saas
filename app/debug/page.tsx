@@ -32,15 +32,13 @@ export default function DebugPage() {
     initializeAuth()
   }, [])
 
-  const testGoogleAuth = async () => {
+  const testEmailAuth = async () => {
     const supabase = await getSupabaseClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
-      }
+    const { error } = await supabase.auth.signInWithPassword({
+      email: 'test@example.com',
+      password: 'testpassword'
     })
-    if (error) console.error('OAuth error:', error)
+    if (error) console.error('Email auth error:', error)
   }
 
   if (loading) return <div>Loading...</div>
@@ -51,10 +49,10 @@ export default function DebugPage() {
       
       <div className="space-y-4">
         <button 
-          onClick={testGoogleAuth}
+          onClick={testEmailAuth}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          Test Google Auth
+          Test Email Auth
         </button>
         
         <div>

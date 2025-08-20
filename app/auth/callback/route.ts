@@ -28,48 +28,18 @@ export async function GET(request: NextRequest) {
         .eq('id', data.user.id)
         .single()
 
-      const isNewUser = !existingProfile
       const needsSetup = !existingProfile?.full_name || !existingProfile?.company_name
 
-      // Allow new Google OAuth users if public signup is enabled
-      const allowPublicSignup = process.env.ENABLE_PUBLIC_SIGNUP === 'true'
-      if (!existingProfile && data.user.app_metadata?.provider === 'google' && !allowPublicSignup) {
-        // Google OAuth user without existing profile - reject only if signup disabled
-        await supabase.auth.signOut()
-        return NextResponse.redirect(`${origin}/login?error=signup_disabled`)
-      }
-
-      // Check if user profile exists by email (for linking existing accounts)
-      const { data: profileByEmail } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('email', data.user.email)
-        .single()
-
-      if (profileByEmail && !profileByEmail.auth_user_id) {
-        // Link Google auth to existing profile
-        await supabase
-          .from('user_profiles')
-          .update({
-            auth_user_id: data.user.id,
-            google_id: data.user.user_metadata?.sub || data.user.id,
-            provider: 'google',
-            avatar_url: data.user.user_metadata?.avatar_url || profileByEmail.avatar_url,
-            last_sign_in: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', profileByEmail.id)
-      } else if (!existingProfile) {
-        // Create new user profile for Google OAuth users
+      if (!existingProfile) {
+        // Create new user profile for email confirmation users
         await supabase
           .from('user_profiles')
           .insert({
             id: crypto.randomUUID(),
             auth_user_id: data.user.id,
             email: data.user.email,
-            full_name: data.user.user_metadata?.full_name || data.user.user_metadata?.name,
-            avatar_url: data.user.user_metadata?.avatar_url,
-            provider: data.user.app_metadata?.provider || 'google',
+            full_name: data.user.user_metadata?.full_name || '',
+            provider: 'email',
             role: data.user.email === 'leadond@gmail.com' ? 'global_admin' : 'user',
             status: 'active',
             last_sign_in: new Date().toISOString(),
@@ -96,8 +66,8 @@ export async function GET(request: NextRequest) {
       return response
     }
     
-    console.error('OAuth callback error:', error)
+    console.error('Email confirmation callback error:', error)
   }
 
-  return NextResponse.redirect(`${origin}/login?error=oauth_failed`)
+  return NextResponse.redirect(`${origin}/login?error=confirmation_failed`)
 }
