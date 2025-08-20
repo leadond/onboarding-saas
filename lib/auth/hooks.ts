@@ -18,13 +18,26 @@ import { getSupabaseClient } from '@/lib/supabase';
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = await getSupabaseClient();
+  const [supabase, setSupabase] = useState<any>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const initializeAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const supabaseClient = await getSupabaseClient();
+        setSupabase(supabaseClient);
+        
+        const { data: { session } } = await supabaseClient.auth.getSession();
         setUser(session?.user ?? null);
+        
+        // Listen for auth state changes
+        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
+          (_event, session) => {
+            setUser(session?.user ?? null);
+            setIsLoading(false);
+          }
+        );
+
+        return () => subscription.unsubscribe();
       } catch (error) {
         console.error('Error fetching user:', error);
         setUser(null);
@@ -33,17 +46,7 @@ export function useUser() {
       }
     };
 
-    fetchUser();
-
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
+    initializeAuth();
   }, []);
 
   return { user, isLoading };

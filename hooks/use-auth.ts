@@ -53,7 +53,7 @@ export function useAuth(): AuthHook {
   const router = useRouter()
   
   // Create supabase client only once per hook instance
-  const [supabase] = useState(() => await getSupabaseClient())
+  const [supabase, setSupabase] = useState<any>(null)
 
   // Fetch user profile data
   const fetchUserProfile = useCallback(
@@ -84,15 +84,19 @@ export function useAuth(): AuthHook {
 
     const initializeAuth = async () => {
       try {
+        // Initialize supabase client
+        const supabaseClient = await getSupabaseClient()
+        setSupabase(supabaseClient)
+        
         // Add safety check for supabase client
-        if (!supabase?.auth) {
+        if (!supabaseClient?.auth) {
           throw new Error('Supabase client not initialized')
         }
 
         const {
           data: { session },
           error,
-        } = await supabase.auth.getSession()
+        } = await supabaseClient.auth.getSession()
 
         if (error) {
           console.error('Error getting session:', error)
@@ -172,7 +176,7 @@ export function useAuth(): AuthHook {
     try {
       const {
         data: { subscription: authSubscription },
-      } = supabase.auth.onAuthStateChange(async (event, session) => {
+      } = supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (!mounted) return
 
         try {
@@ -235,7 +239,7 @@ export function useAuth(): AuthHook {
         clearTimeout(timeoutId)
       }
     }
-  }, [supabase.auth, fetchUserProfile, router])
+  }, [fetchUserProfile, router])
 
   // Sign in with email and password
   const signIn = useCallback(
@@ -371,6 +375,10 @@ export function useAuth(): AuthHook {
         // Always use the current domain the user is on
         const baseUrl = window.location.origin
 
+        if (!supabase) {
+          throw new Error('Supabase client not initialized')
+        }
+        
         const { error } = await supabase.auth.signInWithOAuth({
           provider: provider === 'azure' ? 'azure' : 'google',
           options: {
@@ -395,7 +403,7 @@ export function useAuth(): AuthHook {
         return { success: false, error: errorMessage }
       }
     },
-    [supabase.auth]
+    [supabase]
   )
 
   // Reset password
@@ -407,6 +415,10 @@ export function useAuth(): AuthHook {
         // Always use the current domain the user is on
         const baseUrl = window.location.origin
 
+        if (!supabase) {
+          throw new Error('Supabase client not initialized')
+        }
+        
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${baseUrl}/reset-password`,
         })
@@ -426,7 +438,7 @@ export function useAuth(): AuthHook {
         return { success: false, error: errorMessage }
       }
     },
-    [supabase.auth]
+    [supabase]
   )
 
   // Update password
@@ -435,6 +447,10 @@ export function useAuth(): AuthHook {
       try {
         setState(prev => ({ ...prev, loading: true, error: null }))
 
+        if (!supabase) {
+          throw new Error('Supabase client not initialized')
+        }
+        
         const { error } = await supabase.auth.updateUser({ password })
 
         setState(prev => ({ ...prev, loading: false }))
@@ -452,12 +468,17 @@ export function useAuth(): AuthHook {
         return { success: false, error: errorMessage }
       }
     },
-    [supabase.auth]
+    [supabase]
   )
 
   // Refresh session
   const refreshSession = useCallback(async () => {
     try {
+      if (!supabase) {
+        console.error('Supabase client not initialized')
+        return
+      }
+      
       const {
         data: { session },
         error,
@@ -479,7 +500,7 @@ export function useAuth(): AuthHook {
     } catch (error) {
       console.error('Session refresh error:', error)
     }
-  }, [supabase.auth, fetchUserProfile])
+  }, [supabase, fetchUserProfile])
 
   // Clear error
   const clearError = useCallback(() => {

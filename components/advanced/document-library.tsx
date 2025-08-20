@@ -57,7 +57,8 @@ export function DocumentLibrary({
     new Set()
   )
 
-  const supabase = await getSupabaseClient()
+  // Note: getSupabaseClient() should be called in useEffect or async functions
+  // const supabase = getSupabaseClient()
 
   // Sample documents data
   const sampleDocuments: Document[] = [

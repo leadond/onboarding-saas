@@ -31,49 +31,54 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const supabase = await getSupabaseClient()
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
     let sessionManager: SessionManager | null = null
 
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+    const initializeAuth = async () => {
+      const supabaseClient = await getSupabaseClient()
+      setSupabase(supabaseClient)
+      
+      const { data: { session } } = await supabaseClient.auth.getSession()
       setUser(session?.user ?? null)
       setLoading(false)
 
       if (session?.user) {
         sessionManager = new SessionManager()
       }
-    }
 
-    getSession()
+      const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
+        async (event, session) => {
+          setUser(session?.user ?? null)
+          setLoading(false)
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
-
-        if (event === 'SIGNED_IN' && session?.user) {
-          sessionManager = new SessionManager()
-        } else if (event === 'SIGNED_OUT') {
-          if (sessionManager) {
-            sessionManager.destroy()
-            sessionManager = null
+          if (event === 'SIGNED_IN' && session?.user) {
+            sessionManager = new SessionManager()
+          } else if (event === 'SIGNED_OUT') {
+            if (sessionManager) {
+              sessionManager.destroy()
+              sessionManager = null
+            }
           }
         }
-      }
-    )
+      )
 
-    return () => {
-      subscription.unsubscribe()
-      if (sessionManager) {
-        sessionManager.destroy()
+      return () => {
+        subscription.unsubscribe()
+        if (sessionManager) {
+          sessionManager.destroy()
+        }
       }
     }
-  }, [supabase.auth])
+
+    initializeAuth()
+  }, [])
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
   }
 
   return (

@@ -77,7 +77,8 @@ export function ChatWidget({
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messageInputRef = useRef<HTMLInputElement>(null)
-  const supabase = await getSupabaseClient()
+  // Note: getSupabaseClient() should be called in useEffect or async functions
+  // const supabase = getSupabaseClient()
 
   // Scroll to bottom of messages
   const scrollToBottom = useCallback(() => {

@@ -19,9 +19,9 @@ export default function DebugPage() {
   const [loading, setLoading] = useState(true)
   
   useEffect(() => {
-    const supabase = await getSupabaseClient()
-    
-    const getSession = async () => {
+    const initializeAuth = async () => {
+      const supabase = await getSupabaseClient()
+      
       const { data: { session }, error } = await supabase.auth.getSession()
       setSession(session)
       setLoading(false)
@@ -29,7 +29,7 @@ export default function DebugPage() {
       console.log('Error:', error)
     }
     
-    getSession()
+    initializeAuth()
   }, [])
 
   const testGoogleAuth = async () => {
