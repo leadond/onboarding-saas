@@ -20,11 +20,11 @@ import {
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { RepresentativeForm } from '@/components/companies/representative-form'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-export default function CompanyRepresentativesPage({ params }: { params: { companyId: string } }) {
+export default function CompanyRepresentativesPage({ params }: { params: Promise<{ companyId: string }> }) {
   const [showRepresentativeForm, setShowRepresentativeForm] = useState(false)
-  const companyId = params.companyId
+  const { companyId } = React.use(params)
 
   return (
     <div className="space-y-8">

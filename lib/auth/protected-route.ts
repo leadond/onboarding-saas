@@ -10,20 +10,38 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { verifyToken } from '@/lib/auth/jwt'
 
 export async function protectedRoute(
   request: NextRequest,
   handler: (user: any) => Promise<NextResponse>
 ): Promise<NextResponse> {
   try {
-    // Mock authentication - in production, use real auth
-    const mockUser = {
-      id: 'user-1',
-      email: 'user@example.com',
-      name: 'Test User',
+    // Extract token from cookie or Authorization header
+    let token: string | undefined
+
+    const cookieHeader = request.headers.get('cookie') || ''
+    const cookies = Object.fromEntries(cookieHeader.split(';').map(c => c.trim().split('=')))
+    token = cookies['session_token']
+
+    if (!token) {
+      const authHeader = request.headers.get('authorization')
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7)
+      }
     }
 
-    return await handler(mockUser)
+    if (!token) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const payload = verifyToken(token)
+    if (!payload) {
+      return NextResponse.json({ success: false, error: 'Invalid or expired token' }, { status: 401 })
+    }
+
+    // Pass user info to handler
+    return await handler(payload)
   } catch (error) {
     console.error('Protected route error:', error)
     return NextResponse.json(

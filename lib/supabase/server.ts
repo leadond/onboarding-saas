@@ -48,21 +48,16 @@ export async function createServerSupabaseClient() {
 }
 
 export function createAdminClient() {
-  return createServerClient<Database>(
+  const { createClient } = require('@supabase/supabase-js')
+  
+  return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
-      cookies: {
-        get() {
-          return undefined
-        },
-        set() {
-          // No-op
-        },
-        remove() {
-          // No-op
-        },
-      },
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
     }
   )
 }

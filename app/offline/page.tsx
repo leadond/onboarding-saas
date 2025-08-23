@@ -1,11 +1,11 @@
 /*
  * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
+ *
  * PROPRIETARY AND CONFIDENTIAL
- * 
+ *
  * This software contains proprietary and confidential information.
  * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
+ *
  * For licensing information, contact: legal@devapphero.com
  */
 
@@ -60,8 +60,8 @@ export default function OfflinePage() {
                   No internet connection detected. Some features may be limited.
                 </p>
               </div>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="sm"
                 onClick={() => window.location.reload()}
                 className="flex items-center space-x-2"
@@ -93,7 +93,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">Access recently viewed onboarding kits</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                 <div>
@@ -101,7 +101,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">Create and edit kits locally</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                 <div>
@@ -109,7 +109,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">View cached analytics data</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                 <div>
@@ -141,7 +141,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">Saved locally, will sync automatically</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2"></div>
                 <div>
@@ -149,7 +149,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">Queued for upload when online</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2"></div>
                 <div>
@@ -157,7 +157,7 @@ export default function OfflinePage() {
                   <p className="text-sm text-gray-600">Tracked locally, will sync later</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-amber-500 rounded-full mt-2"></div>
                 <div>
@@ -199,7 +199,7 @@ export default function OfflinePage() {
                 <span>Installable</span>
               </Badge>
             </div>
-            
+
             <div className="text-sm text-gray-600 space-y-2">
               <p>
                 • Install Onboard Hero on your device for quick access
@@ -219,15 +219,15 @@ export default function OfflinePage() {
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button 
+          <Button
             onClick={() => window.location.href = '/dashboard'}
             className="flex items-center space-x-2"
           >
             <CheckCircle className="h-4 w-4" />
             <span>Continue Offline</span>
           </Button>
-          
-          <Button 
+
+          <Button
             variant="outline"
             onClick={() => window.location.reload()}
             className="flex items-center space-x-2"

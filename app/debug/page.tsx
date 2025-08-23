@@ -13,8 +13,13 @@
 
 import { useEffect, useState } from 'react'
 import { getSupabaseClient } from '@/lib/supabase'
+import { redirect } from 'next/navigation'
 
 export default function DebugPage() {
+  // Only allow access in development
+  if (process.env.NODE_ENV === 'production') {
+    redirect('/dashboard')
+  }
   const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   

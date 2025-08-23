@@ -1,43 +1,26 @@
-/*
- * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
- * PROPRIETARY AND CONFIDENTIAL
- * 
- * This software contains proprietary and confidential information.
- * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
- * For licensing information, contact: legal@devapphero.com
- */
+'use client'
 
-import * as React from 'react'
-import { cn } from '@/lib/utils/cn'
-
-export interface LoadingSpinnerProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  size?: 'sm' | 'md' | 'lg'
+export function LoadingSpinner() {
+  return (
+    <svg
+      className="animate-spin h-5 w-5 text-gray-500"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      ></path>
+    </svg>
+  )
 }
-
-const LoadingSpinner = React.forwardRef<HTMLDivElement, LoadingSpinnerProps>(
-  ({ className, size = 'md', ...props }, ref) => {
-    const sizeClasses = {
-      sm: 'h-4 w-4',
-      md: 'h-6 w-6',
-      lg: 'h-8 w-8',
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'animate-spin rounded-full border-2 border-gray-300 border-t-primary',
-          sizeClasses[size],
-          className
-        )}
-        {...props}
-      />
-    )
-  }
-)
-LoadingSpinner.displayName = 'LoadingSpinner'
-
-export { LoadingSpinner }

@@ -14,6 +14,9 @@
 import React from 'react'
 
 import { useState, useEffect } from 'react'
+import { useLoading } from '@/hooks/use-loading'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { UserSelector } from './user-selector'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -103,13 +106,7 @@ interface TeamMember {
     avatar_url?: string
   }
   role: 'lead' | 'member'
-  status: 'active' | 'inactive'
-  added_by: {
-    id: string
-    email: string
-    full_name: string
-  }
-  added_at: string
+  joined_at: string
 }
 
 interface Organization {
@@ -140,6 +137,11 @@ export function TeamManagementDashboard({
   const [showAddMemberDialog, setShowAddMemberDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null)
 
+  // Loading states for different actions
+  const createTeamLoading = useLoading()
+  const addMemberLoading = useLoading()
+  const removeMemberLoading = useLoading()
+
   // Form states
   const [newTeam, setNewTeam] = useState({
     name: '',
@@ -149,7 +151,7 @@ export function TeamManagementDashboard({
   })
 
   const [newMember, setNewMember] = useState({
-    user_id: '',
+    email: '',
     role: 'member' as 'lead' | 'member'
   })
 
@@ -199,7 +201,7 @@ export function TeamManagementDashboard({
       
       if (response.ok) {
         const result = await response.json()
-        setTeamMembers(result.data.members)
+        setTeamMembers(result.data)
       }
     } catch (error) {
       console.error('Failed to fetch team members:', error)
@@ -209,86 +211,97 @@ export function TeamManagementDashboard({
   }
 
   const createTeam = async () => {
-    try {
-      const response = await fetch(`/api/v1/organizations/${organizationId}/teams`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Organization-ID': organizationId
-        },
-        body: JSON.stringify(newTeam)
-      })
+    await createTeamLoading.withLoading(async () => {
+      try {
+        const response = await fetch(`/api/v1/organizations/${organizationId}/teams`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Organization-ID': organizationId
+          },
+          body: JSON.stringify(newTeam)
+        })
 
-      if (response.ok) {
-        const result = await response.json()
-        setTeams([...teams, result.data])
-        setShowCreateDialog(false)
-        setNewTeam({ name: '', description: '', color: '#0066cc', team_lead_id: '' })
-        
-        // Select the new team
-        setSelectedTeam(result.data)
+        if (response.ok) {
+          const result = await response.json()
+          setTeams([...teams, result.data])
+          setShowCreateDialog(false)
+          setNewTeam({ name: '', description: '', color: '#0066cc', team_lead_id: '' })
+          
+          // Select the new team
+          setSelectedTeam(result.data)
+        }
+      } catch (error) {
+        console.error('Failed to create team:', error)
       }
-    } catch (error) {
-      console.error('Failed to create team:', error)
-    }
+    })
   }
 
   const addTeamMember = async () => {
     if (!selectedTeam) return
 
-    try {
-      const response = await fetch(`/api/v1/organizations/${organizationId}/teams/${selectedTeam.id}/members`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Organization-ID': organizationId
-        },
-        body: JSON.stringify(newMember)
-      })
+    await addMemberLoading.withLoading(async () => {
+      try {
+        const response = await fetch(`/api/v1/organizations/${organizationId}/teams/${selectedTeam.id}/members`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Organization-ID': organizationId
+          },
+          body: JSON.stringify(newMember)
+        })
 
-      if (response.ok) {
-        const result = await response.json()
-        setTeamMembers([...teamMembers, result.data])
-        setShowAddMemberDialog(false)
-        setNewMember({ user_id: '', role: 'member' })
-        
-        // Update team member count
-        setTeams(teams.map(team => 
-          team.id === selectedTeam.id 
-            ? { ...team, member_count: team.member_count + 1 }
-            : team
-        ))
+        if (response.ok) {
+          const result = await response.json()
+          setTeamMembers([...teamMembers, result.data])
+          setShowAddMemberDialog(false)
+          setNewMember({ email: '', role: 'member' })
+          
+          // Update team member count
+          setTeams(teams.map(team => 
+            team.id === selectedTeam.id 
+              ? { ...team, member_count: team.member_count + 1 }
+              : team
+          ))
+        } else {
+          const errorData = await response.json()
+          console.error('Failed to add team member:', errorData.error)
+          // You could add a toast notification here
+          alert(errorData.error || 'Failed to add team member')
+        }
+      } catch (error) {
+        console.error('Failed to add team member:', error)
       }
-    } catch (error) {
-      console.error('Failed to add team member:', error)
-    }
+    })
   }
 
   const removeTeamMember = async (memberId: string) => {
     if (!selectedTeam) return
 
-    try {
-      const response = await fetch(`/api/v1/organizations/${organizationId}/teams/${selectedTeam.id}/members/${memberId}`, {
-        method: 'DELETE',
-        headers: {
-          'X-Organization-ID': organizationId
-        }
-      })
+    await removeMemberLoading.withLoading(async () => {
+      try {
+        const response = await fetch(`/api/v1/organizations/${organizationId}/teams/${selectedTeam.id}/members/${memberId}`, {
+          method: 'DELETE',
+          headers: {
+            'X-Organization-ID': organizationId
+          }
+        })
 
-      if (response.ok) {
-        setTeamMembers(teamMembers.filter(member => member.id !== memberId))
-        setShowDeleteDialog(null)
-        
-        // Update team member count
-        setTeams(teams.map(team => 
-          team.id === selectedTeam.id 
-            ? { ...team, member_count: team.member_count - 1 }
-            : team
-        ))
+        if (response.ok) {
+          setTeamMembers(teamMembers.filter(member => member.id !== memberId))
+          setShowDeleteDialog(null)
+          
+          // Update team member count
+          setTeams(teams.map(team => 
+            team.id === selectedTeam.id 
+              ? { ...team, member_count: team.member_count - 1 }
+              : team
+          ))
+        }
+      } catch (error) {
+        console.error('Failed to remove team member:', error)
       }
-    } catch (error) {
-      console.error('Failed to remove team member:', error)
-    }
+    })
   }
 
   const filteredMembers = teamMembers.filter(member => {
@@ -521,7 +534,7 @@ export function TeamManagementDashboard({
                               </span>
                               <span className="flex items-center space-x-1">
                                 <Calendar className="h-3 w-3" />
-                                <span>Added {new Date(member.added_at).toLocaleDateString()}</span>
+                                <span>Joined {new Date(member.joined_at).toLocaleDateString()}</span>
                               </span>
                             </div>
                           </div>
@@ -635,7 +648,12 @@ export function TeamManagementDashboard({
             <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={createTeam} disabled={!newTeam.name}>
+            <Button 
+              onClick={createTeam} 
+              disabled={!newTeam.name}
+              loading={createTeamLoading.loading}
+              loadingText="Creating..."
+            >
               Create Team
             </Button>
           </DialogFooter>
@@ -653,13 +671,26 @@ export function TeamManagementDashboard({
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="member-email">Member Email</Label>
-              <Input
-                id="member-email"
-                value={newMember.user_id}
-                onChange={(e) => setNewMember({ ...newMember, user_id: e.target.value })}
-                placeholder="Enter member email or ID"
+              <Label htmlFor="member-email">Select User</Label>
+              <UserSelector
+                organizationId={organizationId}
+                value={newMember.email}
+                onValueChange={(email) => setNewMember({ ...newMember, email })}
+                placeholder="Select a user to add to the team"
               />
+              <div className="mt-2">
+                <Label htmlFor="manual-email" className="text-sm text-muted-foreground">
+                  Or enter email manually:
+                </Label>
+                <Input
+                  id="manual-email"
+                  type="email"
+                  value={newMember.email}
+                  onChange={(e) => setNewMember({ ...newMember, email: e.target.value })}
+                  placeholder="user@example.com"
+                  className="mt-1"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="member-role">Role</Label>
@@ -681,7 +712,12 @@ export function TeamManagementDashboard({
             <Button variant="outline" onClick={() => setShowAddMemberDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={addTeamMember} disabled={!newMember.user_id}>
+            <Button 
+              onClick={addTeamMember} 
+              disabled={!newMember.email}
+              loading={addMemberLoading.loading}
+              loadingText="Adding..."
+            >
               Add Member
             </Button>
           </DialogFooter>
@@ -702,8 +738,16 @@ export function TeamManagementDashboard({
             <AlertDialogAction 
               onClick={() => showDeleteDialog && removeTeamMember(showDeleteDialog)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={removeMemberLoading.loading}
             >
-              Remove Member
+              {removeMemberLoading.loading ? (
+                <div className="flex items-center gap-2">
+                  <LoadingSpinner />
+                  Removing...
+                </div>
+              ) : (
+                'Remove Member'
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

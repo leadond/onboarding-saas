@@ -16,6 +16,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import SuspenseWrapper from '@/components/suspense-wrapper'
 
 interface Kit {
   id: string
@@ -30,7 +31,7 @@ interface Kit {
   clients_count?: number
 }
 
-export default function KitsPage() {
+function KitsPageComponent() {
   const [kits, setKits] = useState<Kit[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -224,5 +225,13 @@ export default function KitsPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function KitsPage() {
+  return (
+    <SuspenseWrapper>
+      <KitsPageComponent />
+    </SuspenseWrapper>
   )
 }

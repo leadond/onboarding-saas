@@ -10,11 +10,11 @@
  */
 
 import { getSupabaseClient } from '@/lib/supabase'
-import { cookies } from 'next/headers'
+
 
 export async function getCurrentUser() {
   try {
-    const cookieStore = cookies()
+
     const supabase = await getSupabaseClient()
     
     const { data: { session }, error } = await supabase.auth.getSession()

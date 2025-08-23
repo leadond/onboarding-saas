@@ -27,6 +27,17 @@ export class SessionManager {
     this.checkSessionValidity()
   }
 
+  private async getSupabaseInstance() {
+    if (!this.supabase) {
+      try {
+        this.supabase = await getSupabaseClient()
+      } catch (error) {
+        console.error('Failed to initialize Supabase client:', error)
+      }
+    }
+    return this.supabase
+  }
+
   private setupActivityTracking() {
     const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click', 'focus', 'blur']
     
@@ -89,11 +100,18 @@ export class SessionManager {
 
   private async logout() {
     try {
-      await this.supabase.auth.signOut()
+      // Get Supabase instance and attempt signOut
+      const supabase = await this.getSupabaseInstance()
+      if (supabase?.auth) {
+        await supabase.auth.signOut()
+      }
       localStorage.removeItem(ACTIVITY_KEY)
       window.location.href = '/login'
     } catch (error) {
       console.error('Logout error:', error)
+      // Even if signOut fails, still redirect to login
+      localStorage.removeItem(ACTIVITY_KEY)
+      window.location.href = '/login'
     }
   }
 

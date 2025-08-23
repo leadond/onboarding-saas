@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -58,9 +58,9 @@ type KitStep = {
 export default function NewStepPage({
   params,
 }: {
-  params: { kitId: string }
+  params: Promise<{ kitId: string }>
 }) {
-  const { kitId } = params
+  const { kitId } = React.use(params)
   const router = useRouter()
   const [kit, setKit] = useState<Kit | null>(null)
   const [isLoading, setIsLoading] = useState(true)

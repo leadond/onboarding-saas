@@ -1,101 +1,75 @@
-/*
- * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
- * PROPRIETARY AND CONFIDENTIAL
- * 
- * This software contains proprietary and confidential information.
- * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
- * For licensing information, contact: legal@devapphero.com
- */
+import { NextResponse } from 'next/server'
+import bcrypt from 'bcrypt'
+import { createServerSupabaseClient } from '@/lib/supabase/server'
+import { verifyToken } from '@/lib/auth/jwt'
 
-import { NextRequest, NextResponse } from 'next/server'
-import { getSupabaseClient } from '@/lib/supabase'
-import { updatePasswordSchema } from '@/lib/validations/auth'
-import { z } from 'zod'
+const MIN_PASSWORD_LENGTH = 8
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
+    if (request.headers.get('content-type') !== 'application/json') {
+      return NextResponse.json({ error: 'Expected application/json' }, { status: 400 })
+    }
+
     const body = await request.json()
-    
-    // Validate request body
-    const validatedData = updatePasswordSchema.parse(body)
-    const { currentPassword, newPassword } = validatedData
+    const { currentPassword, newPassword } = body
 
-    // Create Supabase client
-    const supabase = await getSupabaseClient()
-
-    // Get current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
+    if (typeof newPassword !== 'string' || newPassword.length < MIN_PASSWORD_LENGTH) {
+      return NextResponse.json({ error: `New password must be at least ${MIN_PASSWORD_LENGTH} characters` }, { status: 400 })
     }
 
-    // Verify current password by attempting to sign in
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: user.email!,
-      password: currentPassword,
-    })
+    // Get token from cookie
+    const cookieHeader = request.headers.get('cookie') || ''
+    const cookies = Object.fromEntries(cookieHeader.split(';').map(c => c.trim().split('=')))
+    const token = cookies['session_token']
 
-    if (signInError) {
-      return NextResponse.json(
-        { error: 'Current password is incorrect' },
-        { status: 400 }
-      )
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Update password
-    const { error: updateError } = await supabase.auth.updateUser({
-      password: newPassword
-    })
+    const payload = verifyToken(token)
+    if (!payload) {
+      return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 })
+    }
+
+    const supabase = await createServerSupabaseClient()
+
+    // Fetch user by ID
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', payload.userId)
+      .single()
+
+    if (error || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Verify current password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password_hash)
+    if (!passwordMatch) {
+      return NextResponse.json({ error: 'Current password is incorrect' }, { status: 401 })
+    }
+
+    // Hash new password
+    const newPasswordHash = await bcrypt.hash(newPassword, 10)
+
+    // Update password and clear force_password_change flag
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        password_hash: newPasswordHash,
+        force_password_change: false,
+      })
+      .eq('id', payload.userId)
 
     if (updateError) {
-      console.error('Password update error:', updateError)
-      return NextResponse.json(
-        { error: 'Failed to update password' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to update password' }, { status: 500 })
     }
 
-    // Clear force_password_change flag
-    try {
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .update({ 
-          force_password_change: false,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id)
-
-      if (profileError) {
-        console.warn('Failed to update password change flag:', profileError)
-      }
-    } catch (profileError) {
-      console.warn('Failed to update user profile:', profileError)
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Password updated successfully'
-    })
-
+    return NextResponse.json({ success: true, message: 'Password changed successfully' })
   } catch (error) {
     console.error('Change password error:', error)
-    
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Invalid request data', details: error.errors },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

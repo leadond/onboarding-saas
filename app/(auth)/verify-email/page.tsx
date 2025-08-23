@@ -1,116 +1,112 @@
-/*
- * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
- * PROPRIETARY AND CONFIDENTIAL
- * 
- * This software contains proprietary and confidential information.
- * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
- * For licensing information, contact: legal@devapphero.com
- */
-
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import Link from 'next/link'
-import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils/cn'
-import { LogoIcon as Logo, ChevronLeftIcon as ChevronLeft } from '@/components/icons'
+import { Check, Mail } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { AuthLoadingSpinner } from '@/components/auth/auth-provider'
 
 export const metadata: Metadata = {
-  title: 'Verify Email | Onboard Hero',
-  description: 'Verify your email address to complete your Onboard Hero account setup.',
+  title: 'Verify Email | OnboardKit',
+  description: 'Verify your email address to complete your OnboardKit account setup.',
 }
 
-export default function VerifyEmailPage() {
+function VerifyEmailPageContent() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary-50/30 to-background relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-20"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl"></div>
-      
-      {/* Color Line Separator - Top */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700"></div>
-      
-      <div className="container flex h-screen w-screen flex-col items-center justify-center relative z-10">
-        <Link
-          href="/login"
-          className={cn(
-            buttonVariants({ variant: 'glass' }),
-            'absolute left-4 top-4 md:left-8 md:top-8 backdrop-blur-md'
-          )}
-        >
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Back to Login
-        </Link>
-        
-        <div className="mx-auto flex w-full flex-col justify-center space-y-8 sm:w-[420px]">
-          {/* Header Section */}
-          <div className="relative">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl blur-lg opacity-30"></div>
-                <div className="relative bg-gradient-to-r from-primary-500 to-primary-600 p-4 rounded-2xl shadow-glow">
-                  <Logo className="h-12 w-12 text-white" />
-                </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        {/* Header */}
+        <div className="text-center">
+          <Link href="/" className="inline-flex items-center space-x-2 mb-8">
+            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
+              <span className="text-white font-bold text-lg">O</span>
+            </div>
+            <span className="text-2xl font-bold text-gray-900">OnboardKit</span>
+          </Link>
+        </div>
+
+        {/* Content */}
+        <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+          <div className="text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="rounded-full bg-blue-100 p-3">
+                <Mail className="h-6 w-6 text-blue-600" />
               </div>
-              <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                Check Your Email
+            </div>
+            
+            <div className="space-y-2">
+              <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+                Check your email
               </h1>
-              <p className="text-base text-muted-foreground">
-                We've sent you a verification link. Please check your email and click the link to verify your account.
+              <p className="text-sm text-gray-600">
+                We've sent a verification link to your email address. Please click the link in the email to verify your account and complete your registration.
               </p>
             </div>
-            
-            {/* Color Line Separator */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full"></div>
-          </div>
-          
-          {/* Content Section */}
-          <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card/80 backdrop-blur-sm shadow-strong p-8">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-50/20 to-transparent"></div>
-            <div className="relative z-10 text-center space-y-6">
-              <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-2xl">📧</span>
+
+            <div className="space-y-4">
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <Check className="h-5 w-5 text-blue-400" />
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-blue-800">
+                      What happens next?
+                    </h3>
+                    <div className="mt-2 text-sm text-blue-700">
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Check your email inbox (including spam folder)</li>
+                        <li>Click the verification link in the email</li>
+                        <li>You'll be automatically signed in to your account</li>
+                        <li>Complete your profile setup</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              <div className="space-y-3">
-                <h2 className="text-xl font-semibold">Verification Email Sent</h2>
-                <p className="text-muted-foreground">
-                  Please check your email inbox and click the verification link to activate your account.
+
+              <div className="text-sm text-gray-600">
+                <p>
+                  Didn't receive the email? Check your spam folder or{' '}
+                  <button className="text-blue-600 hover:text-blue-500 underline">
+                    resend verification email
+                  </button>
                 </p>
-              </div>
-              
-              <div className="space-y-3 text-sm text-muted-foreground">
-                <p>Didn't receive the email?</p>
-                <ul className="space-y-1">
-                  <li>• Check your spam or junk folder</li>
-                  <li>• Make sure you entered the correct email address</li>
-                  <li>• Wait a few minutes for the email to arrive</li>
-                </ul>
               </div>
             </div>
           </div>
-          
-          {/* Footer Section */}
-          <div className="relative">
-            {/* Color Line Separator */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-full"></div>
-            
-            <p className="text-center text-sm text-muted-foreground pt-4">
+        </div>
+
+        {/* Actions */}
+        <div className="space-y-4">
+          <div className="flex justify-center">
+            <Link href="/login">
+              <Button className="w-full max-w-xs">
+                Continue to Login
+              </Button>
+            </Link>
+          </div>
+
+          <div className="text-center text-sm text-gray-600">
+            <p>
               Need help?{' '}
               <Link
-                href="/contact"
-                className="text-primary-600 hover:text-primary-700 font-medium underline underline-offset-4 transition-colors"
+                href="/support"
+                className="font-medium text-blue-600 hover:text-blue-500"
               >
-                Contact Support
+                Contact support
               </Link>
             </p>
           </div>
         </div>
       </div>
-      
-      {/* Color Line Separator - Bottom */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-500"></div>
     </div>
+  )
+}
+
+export default function VerifyEmailPage() {
+  return (
+    <Suspense fallback={<AuthLoadingSpinner />}>
+      <VerifyEmailPageContent />
+    </Suspense>
   )
 }

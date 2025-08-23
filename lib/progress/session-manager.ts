@@ -67,6 +67,17 @@ export class SessionManager {
     this.trackActivity()
   }
 
+  private async getSupabaseInstance() {
+    if (!this.supabase) {
+      try {
+        this.supabase = await getSupabaseClient()
+      } catch (error) {
+        console.error('Failed to initialize Supabase client:', error)
+      }
+    }
+    return this.supabase
+  }
+
   /**
    * Initialize a new session or recover existing one
    */
@@ -246,8 +257,11 @@ export class SessionManager {
     if (!this.sessionData) return
 
     try {
+      const supabase = await this.getSupabaseInstance()
+      if (!supabase) return
+
       // Save session metadata
-      await this.supabase.from('audit_logs').insert({
+      await supabase.from('audit_logs').insert({
         action: 'create',
         resource_type: 'session',
         resource_id: this.sessionData.sessionId,
@@ -258,7 +272,7 @@ export class SessionManager {
 
       // Update client progress records
       for (const progress of Object.values(this.sessionData.progress)) {
-        await this.supabase.from('client_progress').upsert({
+        await supabase.from('client_progress').upsert({
           ...progress,
           updated_at: new Date().toISOString(),
         })
@@ -292,7 +306,10 @@ export class SessionManager {
 
       // If no valid localStorage session, try to get latest progress from database
       if (!sessionData) {
-        const { data: progressData } = await this.supabase
+        const supabase = await this.getSupabaseInstance()
+        if (!supabase) return null
+
+        const { data: progressData } = await supabase
           .from('client_progress')
           .select('*')
           .eq('kit_id', kitId)

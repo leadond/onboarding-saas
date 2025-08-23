@@ -1,14 +1,3 @@
-/*
- * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
- * PROPRIETARY AND CONFIDENTIAL
- * 
- * This software contains proprietary and confidential information.
- * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
- * For licensing information, contact: legal@devapphero.com
- */
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -44,7 +33,6 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
   // Set initial error if provided
   useEffect(() => {
     if (initialError) {
-      // Set the error in the form state
       form.setError('root', {
         type: 'manual',
         message: initialError,
@@ -52,11 +40,17 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
     }
   }, [initialError, form])
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (formData: LoginFormData) => {
     clearError()
-    const result = await signIn(data)
+    const result = await signIn(formData)
 
-    if (!result.success) {
+    if (result.success) {
+      // Redirect to dashboard or specified location
+      window.location.href = redirectTo || '/dashboard'
+    } else if (result.forcePasswordChange) {
+      // Redirect to password change page
+      window.location.href = result.redirectTo || '/change-password'
+    } else {
       form.setError('root', {
         type: 'manual',
         message: result.error || 'Sign in failed',
@@ -64,27 +58,23 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
     }
   }
 
-
-
   return (
     <div className={cn('w-full space-y-8', className)}>
-      <div className="text-center space-y-4">
-        <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-          Sign in to your account
+      <div className="text-center space-y-4 mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">
+          Sign In
         </h1>
-        <p className="text-base text-muted-foreground leading-relaxed">
-          Welcome back! Please enter your details to continue.
+        <p className="text-gray-600">
+          Enter your credentials to access your account
         </p>
       </div>
-
-
 
       {/* Email/Password Form */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-3">
           <label
             htmlFor="email"
-            className="block text-sm font-semibold text-foreground"
+            className="block text-sm font-medium text-gray-900 mb-2"
           >
             Email address
           </label>
@@ -105,7 +95,7 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
         <div className="space-y-3">
           <label
             htmlFor="password"
-            className="block text-sm font-semibold text-foreground"
+            className="block text-sm font-medium text-gray-900 mb-2"
           >
             Password
           </label>
@@ -146,24 +136,24 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
               disabled={loading}
               {...form.register('remember')}
             />
-            <label htmlFor="remember" className="text-sm font-medium text-foreground">
-              Remember me for 30 days
+            <label htmlFor="remember" className="text-sm text-gray-900">
+              Remember me
             </label>
           </div>
 
           <Link
             href="/forgot-password"
-            className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+            className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
           >
             Forgot password?
           </Link>
         </div>
 
         {(error || form.formState.errors.root) && (
-          <div className="rounded-xl border-2 border-error-200 bg-error-50/50 p-4 backdrop-blur-sm">
+          <div className="rounded-xl border-2 border-red-200 bg-red-50 p-4">
             <div className="flex items-center">
-              <span className="text-error-500 mr-3 text-lg">⚠️</span>
-              <p className="text-sm text-error-700 font-medium">
+              <span className="text-red-500 mr-3 text-lg">⚠️</span>
+              <p className="text-sm text-red-700 font-medium">
                 {error || form.formState.errors.root?.message}
               </p>
             </div>
@@ -191,32 +181,28 @@ export function LoginForm({ className, redirectTo, initialError }: LoginFormProp
       <div className="w-full h-px bg-gradient-to-r from-transparent via-secondary-200 to-transparent"></div>
 
       <div className="text-center">
-        <p className="text-base text-muted-foreground">
-          Don&apos;t have an account?{' '}
+        <p className="text-gray-600">
+          Don't have an account?{' '}
           <Link
             href="/signup"
-            className="font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+            className="font-medium text-blue-600 hover:text-blue-500"
           >
-            Create one now
+            Sign up
           </Link>
         </p>
       </div>
 
       {/* Legal Links */}
       <div className="text-center space-y-2">
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-gray-500 text-center">
           By signing in, you agree to our{' '}
-          <Link href="/terms" className="text-primary hover:underline">
-            Terms of Service
-          </Link>
-          {' '}and{' '}
-          <Link href="/privacy" className="text-primary hover:underline">
+          <Link href="/terms" className="text-blue-600 hover:underline">
+            Terms
+          </Link>{' '}
+          and{' '}
+          <Link href="/privacy" className="text-blue-600 hover:underline">
             Privacy Policy
           </Link>
-        </p>
-        <p className="text-xs text-muted-foreground/80 flex items-center justify-center gap-2">
-          <span>🔒</span>
-          Protected by industry-standard security. Your data is encrypted and secure.
         </p>
       </div>
     </div>

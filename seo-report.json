@@ -1,0 +1,79 @@
+{
+  "timestamp": "2025-08-23T01:04:00.082Z",
+  "url": "http://localhost:3001",
+  "checks": {
+    "sitemap": {
+      "status": "fail",
+      "accessible": false,
+      "message": "❌ Sitemap not accessible (Status: 404)"
+    },
+    "robots": {
+      "status": "pass",
+      "accessible": true,
+      "hasSitemap": true,
+      "hasUserAgent": false,
+      "message": "✅ Robots.txt accessible and properly configured"
+    },
+    "canonical": {
+      "status": "pass",
+      "present": true,
+      "url": "https://onboard.devapphero.com",
+      "message": "✅ Canonical URL present: https://onboard.devapphero.com"
+    },
+    "metaTags": {
+      "status": "pass",
+      "title": {
+        "present": true,
+        "content": "Onboard Hero - AI-Powered Client Onboarding Platform | Reduce Churn by 86%",
+        "length": 74,
+        "optimal": false
+      },
+      "description": {
+        "present": true,
+        "content": "Transform client onboarding with AI automation. Eliminate manual bottlenecks, reduce 86% customer abandonment, and achieve 3x faster conversion rates. Start your free trial today.",
+        "length": 179,
+        "optimal": false
+      },
+      "keywords": {
+        "present": true,
+        "content": "client onboarding software,AI-powered onboarding,customer onboarding platform,SaaS onboarding automation,reduce customer churn,onboarding workflow,client success platform,automated onboarding process,enterprise onboarding solution,customer experience automation"
+      },
+      "message": "✅ Title: Present | ✅ Description: Present"
+    },
+    "structuredData": {
+      "status": "pass",
+      "present": true,
+      "schemas": [
+        "Organization",
+        "WebSite",
+        "SoftwareApplication"
+      ],
+      "count": 3,
+      "message": "✅ Structured data present (3 schemas: Organization, WebSite, SoftwareApplication)"
+    },
+    "socialImages": {
+      "status": "pass",
+      "foundImages": [
+        "/og-image.svg",
+        "/twitter-image.svg"
+      ],
+      "count": 2,
+      "message": "✅ Social images found: /og-image.svg, /twitter-image.svg"
+    },
+    "performance": {
+      "status": "pass",
+      "loadTime": 122,
+      "contentLength": 43823,
+      "hasGzip": false,
+      "hasCaching": true,
+      "message": "✅ Load time: 122ms | Size: 43KB | Gzip: No"
+    }
+  },
+  "score": 86,
+  "recommendations": [
+    "Make sitemap.xml accessible",
+    "Optimize title length (30-60 characters)",
+    "Optimize description length (120-160 characters)",
+    "Enable Gzip compression"
+  ]
+}

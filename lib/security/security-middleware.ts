@@ -17,12 +17,12 @@ import { getSupabaseClient } from '@/lib/supabase'
 export const securityHeaders = {
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https: blob:",
-    "font-src 'self' data:",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
-    "frame-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' chrome-extension: moz-extension:",
+    "style-src 'self' 'unsafe-inline' chrome-extension: moz-extension:",
+    "img-src 'self' data: https: blob: chrome-extension: moz-extension:",
+    "font-src 'self' data: chrome-extension: moz-extension:",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co chrome-extension: moz-extension:",
+    "frame-src 'self' chrome-extension: moz-extension:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

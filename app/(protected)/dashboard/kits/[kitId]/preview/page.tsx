@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
@@ -61,9 +61,9 @@ type KitStep = {
 export default function KitPreviewPage({
   params,
 }: {
-  params: { kitId: string }
+  params: Promise<{ kitId: string }>
 }) {
-  const { kitId } = params
+  const { kitId } = React.use(params)
   const [kit, setKit] = useState<Kit | null>(null)
   const [steps, setSteps] = useState<KitStep[]>([])
   const [isLoading, setIsLoading] = useState(true)

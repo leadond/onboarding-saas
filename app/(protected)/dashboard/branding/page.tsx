@@ -9,19 +9,59 @@
  * For licensing information, contact: legal@devapphero.com
  */
 
+'use client'
+
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LogoManagement } from '@/components/branding/logo-management'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import SuspenseWrapper from '@/components/suspense-wrapper'
 
-export default function BrandingPage() {
+function BrandingPageComponent() {
+  const [userRole, setUserRole] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+
+        const response = await fetch('/api/user/profile')
+        const result = await response.json()
+        
+        if (result.success && result.data?.user) {
+          setUserRole(result.data.user.role)
+        }
+      } catch (error) {
+        console.error('Error fetching user role:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchUserRole()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <LoadingSpinner className="h-8 w-8" />
+      </div>
+    )
+  }
+
   return (
     <div className="p-8 space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Branding</h1>
         <p className="text-gray-600">
-          Customize the look and feel of your onboarding kits
+          Manage your app branding and kit customization options
         </p>
       </div>
+
+      {/* Logo Management Section */}
+      <LogoManagement userRole={userRole} />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
@@ -47,28 +87,6 @@ export default function BrandingPage() {
               </div>
             </div>
             <Button>Save Colors</Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Logo & Assets</CardTitle>
-            <CardDescription>
-              Upload your logo and brand assets.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-                <span className="text-xl">🖼️</span>
-              </div>
-              <p className="text-sm text-gray-600 mb-2">
-                Drag and drop your logo here, or click to browse
-              </p>
-              <Button variant="outline" size="sm">
-                Choose File
-              </Button>
-            </div>
           </CardContent>
         </Card>
 
@@ -111,5 +129,13 @@ export default function BrandingPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+export default function BrandingPage() {
+  return (
+    <SuspenseWrapper>
+      <BrandingPageComponent />
+    </SuspenseWrapper>
   )
 }

@@ -19,6 +19,13 @@ async function setupIntegrationTables() {
   try {
     // Create tables
     const createTablesSQL = `
+      -- Drop existing tables in reverse order of dependency to ensure a clean setup.
+      -- This is necessary to resolve schema conflicts with older migration files.
+      DROP TABLE IF EXISTS integration_events CASCADE;
+      DROP TABLE IF EXISTS integration_webhooks CASCADE;
+      DROP TABLE IF EXISTS user_integrations CASCADE;
+      DROP TABLE IF EXISTS integration_providers CASCADE;
+
       -- Integration providers table
       CREATE TABLE IF NOT EXISTS integration_providers (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -27,7 +34,7 @@ async function setupIntegrationTables() {
         category TEXT NOT NULL,
         description TEXT,
         icon_url TEXT,
-        auth_type TEXT NOT NULL DEFAULT 'oauth2',
+        auth_type TEXT NOT NULL DEFAULT 'oauth2', -- oauth2, api_key, basic
         base_url TEXT,
         documentation_url TEXT,
         is_active BOOLEAN DEFAULT true,
@@ -44,9 +51,9 @@ async function setupIntegrationTables() {
         provider_slug TEXT NOT NULL,
         connection_name TEXT,
         is_active BOOLEAN DEFAULT true,
-        auth_data JSONB DEFAULT '{}',
-        settings JSONB DEFAULT '{}',
-        metadata JSONB DEFAULT '{}',
+        auth_data JSONB DEFAULT '{}', -- encrypted tokens, api keys
+        settings JSONB DEFAULT '{}',  -- user-specific settings
+        metadata JSONB DEFAULT '{}',  -- connection metadata
         last_sync TIMESTAMP WITH TIME ZONE,
         sync_status TEXT DEFAULT 'connected',
         error_message TEXT,
@@ -60,7 +67,7 @@ async function setupIntegrationTables() {
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
         integration_id UUID REFERENCES user_integrations(id) ON DELETE CASCADE,
-        event_type TEXT NOT NULL,
+        event_type TEXT NOT NULL, -- sync, webhook, action, error
         event_data JSONB DEFAULT '{}',
         status TEXT DEFAULT 'success',
         error_message TEXT,
@@ -71,26 +78,36 @@ async function setupIntegrationTables() {
       CREATE TABLE IF NOT EXISTS integration_webhooks (
         id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
         provider_slug TEXT NOT NULL,
-        webhook_id TEXT,
+        webhook_id TEXT, -- external webhook ID
         user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
         integration_id UUID REFERENCES user_integrations(id) ON DELETE CASCADE,
         endpoint_url TEXT NOT NULL,
         secret TEXT,
-        events JSONB DEFAULT '[]',
+        events JSONB DEFAULT '[]', -- array of subscribed events
         is_active BOOLEAN DEFAULT true,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `
 
-    const { error: tablesError } = await supabase.rpc('exec_sql', { sql: createTablesSQL })
-    if (tablesError) {
-      // Try direct SQL execution
-      const { error: directError } = await supabase.from('integration_providers').select('id').limit(1)
-      if (directError && directError.code === '42P01') {
-        console.log('⚠️ Tables do not exist, they need to be created manually in Supabase dashboard')
-        console.log('📋 Copy and paste the SQL from integrations_database_setup.sql into your Supabase SQL Editor')
-        return false
+    const statements = createTablesSQL
+      .split(';')
+      .map(stmt => stmt.trim())
+      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+
+    console.log(`📝 Executing ${statements.length} SQL statements for table creation...`);
+
+    for (const statement of statements) {
+      const { error } = await supabase.rpc('exec_sql', { sql: statement });
+      if (error) {
+        // Don't fail on non-critical errors for idempotency
+        if (error.message.includes('does not exist') || error.message.includes('already exists')) {
+          console.warn(`   -> Skipping: ${error.message.split('\n')[0]}`);
+        } else {
+          console.error('❌ SQL execution failed:', error.message);
+          console.error('   -> Failed statement:', statement.substring(0, 150) + '...');
+          throw error; // Re-throw the error to stop the script
+        }
       }
     }
 
@@ -226,10 +243,21 @@ async function setupIntegrationTables() {
       CREATE POLICY "Users can insert own integration events" ON integration_events
         FOR INSERT WITH CHECK (auth.uid() = user_id);
     `
-
-    // Note: RLS setup might need to be done manually in Supabase dashboard
-    console.log('📋 RLS policies need to be set up manually in Supabase dashboard')
-    console.log('💡 Copy the RLS SQL from integrations_database_setup.sql')
+    const rlsStatements = rlsSQL.split(';').map(s => s.trim()).filter(s => s.length > 0 && !s.startsWith('--'));
+    console.log(`📝 Executing ${rlsStatements.length} SQL statements for RLS policies...`);
+    for (const statement of rlsStatements) {
+      const { error } = await supabase.rpc('exec_sql', { sql: statement });
+      if (error) {
+        if (error.message.includes('already exists')) {
+          console.warn(`   -> Skipping: ${error.message.split('\n')[0]}`);
+        } else {
+          console.error('❌ RLS setup failed:', error.message);
+          console.error('   -> Failed statement:', statement.substring(0, 150) + '...');
+          throw error;
+        }
+      }
+    }
+    console.log('✅ Security policies applied successfully.');
 
     console.log('\n🎉 Integration database setup completed successfully!')
     console.log('📊 Total providers configured:', providers.length)

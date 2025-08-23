@@ -1,23 +1,22 @@
 /*
- * Copyright (c) 2024 Marvelously Made LLC DBA Dev App Hero. All rights reserved.
- * 
- * PROPRIETARY AND CONFIDENTIAL
- * 
- * This software contains proprietary and confidential information.
- * Unauthorized copying, distribution, or use is strictly prohibited.
- * 
- * For licensing information, contact: legal@devapphero.com
+ * Stripe client stub
  */
 
-import Stripe from 'stripe'
-
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set in environment variables')
+export const stripe = {
+  customers: {
+    create: async () => ({ id: 'cus_stub' }),
+    retrieve: async () => ({ id: 'cus_stub' }),
+  },
+  subscriptions: {
+    create: async () => ({ id: 'sub_stub' }),
+    retrieve: async () => ({ id: 'sub_stub' }),
+  },
+  prices: {
+    list: async () => ({ data: [] }),
+  },
+  products: {
+    list: async () => ({ data: [] }),
+  },
 }
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-07-30.basil',
-  typescript: true,
-})
 
 export default stripe

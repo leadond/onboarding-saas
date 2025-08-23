@@ -16,6 +16,13 @@
 -- Run this in Supabase SQL Editor to enable all integrations
 -- ===================================================================
 
+-- Drop existing tables in reverse order of dependency to ensure a clean setup.
+-- This is necessary to resolve schema conflicts with older migration files.
+DROP TABLE IF EXISTS integration_events CASCADE;
+DROP TABLE IF EXISTS integration_webhooks CASCADE;
+DROP TABLE IF EXISTS user_integrations CASCADE;
+DROP TABLE IF EXISTS integration_providers CASCADE;
+
 -- Integration providers table
 CREATE TABLE IF NOT EXISTS integration_providers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -226,14 +233,17 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+DROP TRIGGER IF EXISTS update_integration_providers_updated_at ON integration_providers;
 CREATE TRIGGER update_integration_providers_updated_at 
   BEFORE UPDATE ON integration_providers 
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_user_integrations_updated_at ON user_integrations;
 CREATE TRIGGER update_user_integrations_updated_at 
   BEFORE UPDATE ON user_integrations 
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+DROP TRIGGER IF EXISTS update_integration_webhooks_updated_at ON integration_webhooks;
 CREATE TRIGGER update_integration_webhooks_updated_at 
   BEFORE UPDATE ON integration_webhooks 
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

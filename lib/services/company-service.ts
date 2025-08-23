@@ -21,11 +21,14 @@ type RepresentativeInsert = Database['public']['Tables']['company_representative
 type RepresentativeUpdate = Database['public']['Tables']['company_representatives']['Update']
 
 export class CompanyService {
-  private supabase: any = null
+  private async getSupabase() {
+    return await getSupabaseClient()
+  }
 
   // Get all companies for a user
   async getCompanies(userId: string, limit: number = 100, offset: number = 0): Promise<Company[]> {
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('companies')
       .select('*')
       .eq('created_by', userId)
@@ -42,7 +45,8 @@ export class CompanyService {
 
   // Get a company by ID
   async getCompanyById(companyId: string, userId: string): Promise<Company | null> {
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('companies')
       .select('*')
       .eq('id', companyId)
@@ -59,7 +63,8 @@ export class CompanyService {
 
   // Create a new company
   async createCompany(companyData: CompanyInsert, userId: string): Promise<Company> {
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('companies')
       .insert({
         ...companyData,
@@ -79,7 +84,8 @@ export class CompanyService {
 
   // Update a company
   async updateCompany(companyId: string, companyData: CompanyUpdate, userId: string): Promise<Company> {
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('companies')
       .update({
         ...companyData,
@@ -101,7 +107,8 @@ export class CompanyService {
 
   // Delete a company
   async deleteCompany(companyId: string, userId: string): Promise<void> {
-    const { error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { error } = await supabase
       .from('companies')
       .delete()
       .eq('id', companyId)
@@ -121,7 +128,8 @@ export class CompanyService {
       throw new Error('Company not found')
     }
     
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('company_representatives')
       .select('*')
       .eq('company_id', companyId)
@@ -144,7 +152,8 @@ export class CompanyService {
       throw new Error('Company not found')
     }
     
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('company_representatives')
       .select('*')
       .eq('id', representativeId)
@@ -167,7 +176,8 @@ export class CompanyService {
       throw new Error('Company not found')
     }
     
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('company_representatives')
       .insert({
         ...representativeData,
@@ -194,7 +204,8 @@ export class CompanyService {
       throw new Error('Company not found')
     }
     
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from('company_representatives')
       .update({
         ...representativeData,
@@ -222,7 +233,8 @@ export class CompanyService {
       throw new Error('Company not found')
     }
     
-    const { error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { error } = await supabase
       .from('company_representatives')
       .delete()
       .eq('id', representativeId)

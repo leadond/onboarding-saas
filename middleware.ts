@@ -1,8 +1,9 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { securityHeaders } from '@/lib/security/security-middleware'
 
-const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/verify-email', '/auth', '/debug']
+const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/verify-email', '/auth']
 const publicApiRoutes = ['/api/auth', '/api/health', '/api/test-email', '/api/webhooks']
 const adminRoutes = ['/admin', '/dashboard/admin']
 
@@ -10,6 +11,13 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
     request: { headers: request.headers }
   })
+
+  const pathname = request.nextUrl.pathname
+
+  // Block debug route in production
+  if (pathname === '/debug' && process.env.NODE_ENV === 'production') {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,7 +41,9 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const pathname = request.nextUrl.pathname
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
   // Allow public routes
   if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
@@ -46,20 +56,14 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check authentication for protected routes
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
+  if (!session && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Update activity timestamp for authenticated users
-  if (user) {
-    response.cookies.set('last_activity', Date.now().toString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    })
-  }
+  // Apply security headers
+  Object.entries(securityHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
 
   return response
 }

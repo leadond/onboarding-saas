@@ -14,6 +14,7 @@
 import React from 'react'
 
 import { useState, useEffect } from 'react'
+import { useLoading } from '@/hooks/use-loading'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -133,6 +134,9 @@ export function AdvancedAnalyticsDashboard({ kitId, initialData }: AdvancedAnaly
   const [loading, setLoading] = useState(!initialData)
   const [period, setPeriod] = useState('30d')
   const [activeTab, setActiveTab] = useState('overview')
+  
+  const refreshLoading = useLoading()
+  const exportLoading = useLoading()
 
   useEffect(() => {
     if (!initialData) {
@@ -155,27 +159,34 @@ export function AdvancedAnalyticsDashboard({ kitId, initialData }: AdvancedAnaly
     }
   }
 
-  const refreshData = () => {
-    fetchAnalytics()
+  const refreshData = async () => {
+    await refreshLoading.withLoading(async () => {
+      await fetchAnalytics()
+    })
   }
 
-  const exportData = () => {
+  const exportData = async () => {
     if (!data) return
     
-    const exportData = {
-      ...data,
-      exported_at: new Date().toISOString()
-    }
-    
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `analytics-${kitId}-${period}-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    await exportLoading.withLoading(async () => {
+      // Simulate processing time for export
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      const exportData = {
+        ...data,
+        exported_at: new Date().toISOString()
+      }
+      
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `analytics-${kitId}-${period}-${new Date().toISOString().split('T')[0]}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    })
   }
 
   if (loading) {
@@ -264,10 +275,21 @@ export function AdvancedAnalyticsDashboard({ kitId, initialData }: AdvancedAnaly
               <SelectItem value="1y">Last year</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="sm" onClick={refreshData}>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={refreshData}
+            loading={refreshLoading.loading}
+          >
             <RefreshCw className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={exportData}>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={exportData}
+            loading={exportLoading.loading}
+            loadingText="Exporting..."
+          >
             <Download className="h-4 w-4" />
           </Button>
         </div>

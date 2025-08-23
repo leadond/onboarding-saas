@@ -11,43 +11,41 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
-import type { User } from '@supabase/supabase-js';
-import { getSupabaseClient } from '@/lib/supabase';
+import { useState, useEffect } from 'react'
+
+interface User {
+  userId: string
+  email: string
+  forcePasswordChange: boolean
+}
 
 export function useUser() {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [supabase, setSupabase] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const initializeAuth = async () => {
+    const fetchUser = async () => {
       try {
-        const supabaseClient = await getSupabaseClient();
-        setSupabase(supabaseClient);
-        
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        setUser(session?.user ?? null);
-        
-        // Listen for auth state changes
-        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
-          (_event, session) => {
-            setUser(session?.user ?? null);
-            setIsLoading(false);
-          }
-        );
-
-        return () => subscription.unsubscribe();
+        setIsLoading(true)
+        const response = await fetch('/api/auth/me', {
+          credentials: 'include',
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setUser(data.user ?? null)
+        } else {
+          setUser(null)
+        }
       } catch (error) {
-        console.error('Error fetching user:', error);
-        setUser(null);
+        console.error('Error fetching user:', error)
+        setUser(null)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    initializeAuth();
-  }, []);
+    fetchUser()
+  }, [])
 
-  return { user, isLoading };
+  return { user, isLoading }
 }

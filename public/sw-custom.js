@@ -1,10 +1,10 @@
 // OnboardKit Advanced Service Worker
 // Handles offline functionality, push notifications, and background sync
 
-const CACHE_NAME = 'onboardkit-v2.0.0'
+const CACHE_NAME = 'onboardkit-v2.1.0'
 const OFFLINE_URL = '/offline'
-const API_CACHE_NAME = 'onboardkit-api-v2.0.0'
-const STATIC_CACHE_NAME = 'onboardkit-static-v2.0.0'
+const API_CACHE_NAME = 'onboardkit-api-v2.1.0'
+const STATIC_CACHE_NAME = 'onboardkit-static-v2.1.0'
 
 // URLs to cache for offline functionality
 const STATIC_ASSETS = [
@@ -55,7 +55,7 @@ self.addEventListener('activate', (event) => {
         const cacheNames = await caches.keys()
         const oldCaches = cacheNames.filter(name => 
           name.startsWith('onboardkit-') && 
-          !name.includes('v2.0.0')
+          !name.includes('v2.1.0')
         )
         
         await Promise.all(

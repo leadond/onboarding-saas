@@ -14,6 +14,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { AppLogo } from '@/components/branding/app-logo'
 
 export default function ProtectedLayout({
   children,
@@ -29,6 +30,8 @@ export default function ProtectedLayout({
 
   const fetchUserRole = async () => {
     try {
+
+
       const response = await fetch('/api/user/profile')
       const result = await response.json()
       
@@ -37,6 +40,7 @@ export default function ProtectedLayout({
       }
     } catch (error) {
       console.error('Error fetching user role:', error)
+
     }
   }
 
@@ -55,10 +59,20 @@ export default function ProtectedLayout({
         {/* Sidebar */}
         <aside className="min-h-screen w-72 border-r border-border/50 bg-card/80 backdrop-blur-sm shadow-soft">
           {/* Logo Section */}
-          <div className="p-8 border-b border-border/50">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
-              Onboard Hero
-            </h1>
+          <div className="pt-4 pb-6 px-6 border-b border-border/50">
+            <div className="flex flex-col items-center space-y-2">
+              {/* Text above logo */}
+              <div className="text-center">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
+                  Onboard Hero
+                </h1>
+                <p className="text-sm text-primary-500 font-medium -mt-1">
+                  AI-Powered Automation
+                </p>
+              </div>
+              {/* Logo icon only */}
+              <AppLogo size="2xl" variant="icon" />
+            </div>
           </div>
           
           {/* Color Line Separator */}
@@ -77,7 +91,11 @@ export default function ProtectedLayout({
                 { href: '/dashboard/integrations', label: 'Integrations', icon: '🔗' },
                 { href: '/dashboard/branding', label: 'Branding', icon: '🎨' },
                 ...(canSeeBilling ? [{ href: '/dashboard/billing', label: 'Billing', icon: '💳' }] : []),
-                ...(isAdmin ? [{ href: '/dashboard/users', label: 'Users', icon: '👤' }] : []),
+                ...(isAdmin ? [
+                  { href: '/dashboard/users', label: 'Users', icon: '👤' },
+                  { href: '/dashboard/admin', label: 'Admin Panel', icon: '🔧' },
+                  { href: '/dashboard/system', label: 'System', icon: '⚙️' },
+                ] : []),
                 { href: '/dashboard/settings', label: 'Settings', icon: '⚙️' },
               ].map((item, index) => (
                 <div key={item.href}>

@@ -15,6 +15,7 @@ import { useState } from 'react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import type { Kit } from '@/types'
 import { cn } from '@/lib/utils/cn'
+import { KitLogo } from '@/components/branding/kit-logo'
 
 interface KitHeaderProps {
   kit: Kit & {
@@ -76,16 +77,14 @@ export function KitHeader({
               )}
             </button>
 
-            {/* Logo */}
-            {kit.logo_url && (
-              <div className="flex-shrink-0">
-                <img
-                  src={kit.logo_url}
-                  alt={`${companyName} Logo`}
-                  className="h-10 w-10 rounded-lg object-cover shadow-sm ring-2 ring-white"
-                />
-              </div>
-            )}
+            {/* Kit Logo */}
+            <div className="flex-shrink-0">
+              <KitLogo
+                logoUrl={kit.logo_url}
+                companyName={companyName}
+                size="md"
+              />
+            </div>
 
             {/* Kit and Company Info */}
             <div className="min-w-0">

@@ -33,38 +33,33 @@ export const GET = createProtectedRoute(
         )
       }
 
-      // For now, return mock team members data
-      // In a production environment, this would query the actual database
-      const mockMembers = [
-        {
-          id: '1',
-          name: 'John Doe',
-          email: 'john@example.com',
-          role: 'lead',
-          joinedAt: '2024-01-15T00:00:00.000Z',
-          avatar_url: null
-        },
-        {
-          id: '2',
-          name: 'Jane Smith',
-          email: 'jane@example.com',
-          role: 'member',
-          joinedAt: '2024-01-16T00:00:00.000Z',
-          avatar_url: null
-        },
-        {
-          id: '3',
-          name: 'Mike Johnson',
-          email: 'mike@example.com',
-          role: 'member',
-          joinedAt: '2024-01-18T00:00:00.000Z',
-          avatar_url: null
-        }
-      ]
+      // Query actual team members from database
+      const { data: members, error } = await supabase
+        .from('team_members')
+        .select(`
+          id,
+          role,
+          joined_at,
+          user:users(
+            id,
+            email,
+            full_name,
+            avatar_url
+          )
+        `)
+        .eq('team_id', teamId)
+
+      if (error) {
+        console.error('Database error:', error)
+        return NextResponse.json(
+          { error: 'Failed to fetch team members' },
+          { status: 500 }
+        )
+      }
 
       return NextResponse.json({
         success: true,
-        data: mockMembers,
+        data: members || [],
       })
     } catch (error) {
       console.error('Error in team members API:', error)
@@ -82,11 +77,12 @@ export const POST = createProtectedRoute(
     try {
       const { organizationId, teamId } = context.params
       const body = await request.json()
-      const { email, role } = body
+      const { user_id, email, role } = body
 
-      if (!email) {
+      // Accept either user_id or email
+      if (!user_id && !email) {
         return NextResponse.json(
-          { error: 'Email is required' },
+          { error: 'Either user_id or email is required' },
           { status: 400 }
         )
       }
@@ -106,15 +102,76 @@ export const POST = createProtectedRoute(
         )
       }
 
-      // For now, return a mock created member
-      // In a production environment, this would create a real team member
-      const newMember = {
-        id: Date.now().toString(),
-        name: email.split('@')[0], // Extract name from email as placeholder
-        email: email,
-        role: role || 'member',
-        joinedAt: new Date().toISOString(),
-        avatar_url: null
+      let targetUserId = user_id
+
+      // If email provided instead of user_id, find the user
+      if (!targetUserId && email) {
+        console.log('Looking up user by email:', email)
+        const { data: user, error: userError } = await supabase
+          .from('users')
+          .select('id, email, full_name')
+          .eq('email', email.toLowerCase().trim())
+          .single()
+
+        console.log('User lookup result:', { user, userError })
+
+        if (userError || !user) {
+          console.log('User not found, error:', userError)
+          return NextResponse.json(
+            { error: `User not found with email: ${email}. Make sure the user has an account in this organization.` },
+            { status: 404 }
+          )
+        }
+        targetUserId = user.id
+        console.log('Found user:', user.full_name, 'with ID:', targetUserId)
+      }
+
+      // Check if user is already a team member
+      const { data: existingMember } = await supabase
+        .from('team_members')
+        .select('id')
+        .eq('team_id', teamId)
+        .eq('user_id', targetUserId)
+        .single()
+
+      if (existingMember) {
+        return NextResponse.json(
+          { error: 'User is already a member of this team' },
+          { status: 409 }
+        )
+      }
+
+      // Add the team member
+      console.log('Inserting team member:', { team_id: teamId, user_id: targetUserId, role: role || 'member' })
+      
+      const { data: newMember, error: insertError } = await supabase
+        .from('team_members')
+        .insert({
+          team_id: teamId,
+          user_id: targetUserId,
+          role: role || 'member'
+        })
+        .select(`
+          id,
+          role,
+          joined_at,
+          user:users(
+            id,
+            email,
+            full_name,
+            avatar_url
+          )
+        `)
+        .single()
+
+      console.log('Insert result:', { newMember, insertError })
+
+      if (insertError) {
+        console.error('Database error inserting team member:', insertError)
+        return NextResponse.json(
+          { error: `Failed to add team member: ${insertError.message}` },
+          { status: 500 }
+        )
       }
 
       return NextResponse.json({

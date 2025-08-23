@@ -11,7 +11,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { format, subDays } from 'date-fns'
 
@@ -110,9 +110,9 @@ type AnalyticsData = {
 export default function KitAnalyticsPage({
   params,
 }: {
-  params: { kitId: string }
+  params: Promise<{ kitId: string }>
 }) {
-  const { kitId } = params
+  const { kitId } = React.use(params)
   const [kit, setKit] = useState<Kit | null>(null)
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
   const [isLoading, setIsLoading] = useState(true)

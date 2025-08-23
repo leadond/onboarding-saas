@@ -17,7 +17,8 @@ export default function NewCompanyPage() {
     industry: '',
     website_url: '',
     email: '',
-    phone: ''
+    phone: '',
+    description: ''
   })
 
   const handleInputChange = (field: string, value: string) => {
@@ -45,16 +46,22 @@ export default function NewCompanyPage() {
           industry: formData.industry || null,
           website_url: formData.website_url || null,
           email: formData.email || null,
-          phone: formData.phone || null
+          phone: formData.phone || null,
+          description: formData.description || null
         })
       })
 
+      const data = await response.json()
+      
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.message || 'Failed to create company')
+        throw new Error(data.error || 'Failed to create company')
       }
 
-      router.push('/dashboard/companies')
+      if (data.success) {
+        router.push('/dashboard/companies')
+      } else {
+        throw new Error(data.error || 'Failed to create company')
+      }
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to create company')
     } finally {
@@ -151,6 +158,19 @@ export default function NewCompanyPage() {
                 placeholder="+1 (555) 123-4567"
                 value={formData.phone}
                 onChange={e => handleInputChange('phone', e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="description" className="mb-1 block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <Input
+                id="description"
+                type="text"
+                placeholder="Brief company description"
+                value={formData.description}
+                onChange={e => handleInputChange('description', e.target.value)}
               />
             </div>
 

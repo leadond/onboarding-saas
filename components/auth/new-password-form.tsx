@@ -60,6 +60,22 @@ export function NewPasswordForm({ className }: NewPasswordFormProps) {
         return
       }
 
+      // Clear the force_password_change flag
+      try {
+        const response = await fetch('/api/user/clear-password-flag', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        
+        if (!response.ok) {
+          console.error('Failed to clear password change flag')
+        }
+      } catch (err) {
+        console.error('Error clearing password change flag:', err)
+      }
+
       setSuccess(true)
       
       // Redirect to dashboard after a short delay

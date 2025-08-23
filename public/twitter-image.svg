@@ -1,0 +1,45 @@
+<svg width="1200" height="600" viewBox="0 0 1200 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <defs>
+    <linearGradient id="twitterBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="600" fill="url(#twitterBg)"/>
+  
+  <!-- Logo -->
+  <g transform="translate(80, 120)">
+    <path d="M52 12L16 56h24v28l36-44h-24V12z" fill="#06b6d4" stroke="#0891b2" stroke-width="2"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="160" y="160" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="white">
+    Onboard Hero
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="160" y="210" font-family="Arial, sans-serif" font-size="20" fill="#06b6d4">
+    AI-Powered Client Onboarding
+  </text>
+  
+  <!-- Key Metric -->
+  <text x="160" y="280" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#10b981">
+    86% Churn Reduction
+  </text>
+  
+  <text x="160" y="320" font-family="Arial, sans-serif" font-size="24" fill="#f59e0b">
+    3x Faster Conversions
+  </text>
+  
+  <!-- CTA -->
+  <rect x="160" y="370" width="180" height="45" rx="22" fill="#06b6d4"/>
+  <text x="250" y="398" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">
+    Get Started Free
+  </text>
+  
+  <!-- Decorative -->
+  <circle cx="900" cy="200" r="120" fill="#06b6d4" opacity="0.08"/>
+  <circle cx="1000" cy="350" r="80" fill="#10b981" opacity="0.08"/>
+</svg>

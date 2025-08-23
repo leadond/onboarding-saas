@@ -120,6 +120,7 @@ export default function KitSettingsPage({
   const [activeTab, setActiveTab] = useState('basic')
   const [showPassword, setShowPassword] = useState(false)
   const [passwordInput, setPasswordInput] = useState('')
+  const [userRole, setUserRole] = useState<string>('')
 
   const fetchSettings = async () => {
     try {
@@ -145,6 +146,20 @@ export default function KitSettingsPage({
   }
 
   useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+
+        const response = await fetch('/api/user/profile')
+        const result = await response.json()
+        
+        if (result.success && result.data?.user) {
+          setUserRole(result.data.user.role)
+        }
+      } catch (error) {
+        console.error('Error fetching user role:', error)
+      }
+    }
+
     const fetchKit = async () => {
       try {
         const response = await fetch(`/api/kits/${kitId}`)
@@ -161,6 +176,7 @@ export default function KitSettingsPage({
       }
     }
 
+    fetchUserRole()
     fetchKit()
     fetchSettings()
   }, [kitId])
@@ -239,6 +255,10 @@ export default function KitSettingsPage({
     const currentArray = (settings[section] as any)[field] || []
     updateSettings(section, field, currentArray.filter((_: any, i: number) => i !== index))
   }
+
+  // Role-based access control
+  const isSuperAdmin = ['super_admin', 'global_admin'].includes(userRole)
+  const canEditKitLogo = isSuperAdmin
 
   if (isLoading) {
     return (
@@ -402,7 +422,7 @@ export default function KitSettingsPage({
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="logo_url" className="text-sm font-medium">
-                  Logo URL
+                  Kit Logo URL
                 </label>
                 <Input
                   id="logo_url"
@@ -410,7 +430,18 @@ export default function KitSettingsPage({
                   value={settings?.branding.logo_url || ''}
                   onChange={(e) => updateSettings('branding', 'logo_url', e.target.value)}
                   placeholder="https://example.com/logo.png"
+                  disabled={!canEditKitLogo}
                 />
+                {!canEditKitLogo && (
+                  <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded p-2">
+                    ⚠️ Only Super Admins can change kit logos. This is separate from the main app logo.
+                  </p>
+                )}
+                {canEditKitLogo && (
+                  <p className="text-xs text-gray-500">
+                    This logo will appear in the kit portal header for client branding.
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
