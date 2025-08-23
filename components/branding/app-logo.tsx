@@ -14,7 +14,7 @@
 import { LogoIcon } from '@/components/icons';
 import Image from 'next/image';
 
-import logo from '../../public/my-company-logo.png';
+
 
 interface AppLogoProps {
   className?: string;
@@ -90,7 +90,7 @@ export function AppLogo({
     return (
       <div className={`${sizeClasses[size].icon} relative`}>
         <Image
-          src={logo}
+          src="/my-company-logo.png"
           alt={`${APP_LOGO_CONFIG.appName} Logo`}
           width={500}
           height={500}
