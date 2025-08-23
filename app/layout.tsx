@@ -12,11 +12,11 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import { AuthProvider } from '@/components/auth/auth-provider'
-import { Toaster } from '@/components/ui/toaster'
-import { ErrorBoundary } from '@/components/error-boundary'
-import { GoogleAnalytics } from '@/components/analytics'
+// import { ThemeProvider } from '@/components/theme-provider'
+// import { AuthProvider } from '@/components/auth/auth-provider'
+// import { Toaster } from '@/components/ui/toaster'
+// import { ErrorBoundary } from '@/components/error-boundary'
+// import { GoogleAnalytics } from '@/components/analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -201,20 +201,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <GoogleAnalytics />
-        <ErrorBoundary>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <AuthProvider>
-              {children}
-              <Toaster />
-            </AuthProvider>
-          </ThemeProvider>
-        </ErrorBoundary>
+        {children}
       </body>
     </html>
   )
