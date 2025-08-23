@@ -13,7 +13,7 @@
 
 import { LogoIcon } from '@/components/icons';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+
 import logo from '../../public/my-company-logo.png';
 
 interface AppLogoProps {
@@ -35,11 +35,7 @@ export function AppLogo({
   variant = 'full',
   layout = 'horizontal'
 }: AppLogoProps) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  // Removed mounting check to prevent hydration mismatch
   // App logo configuration - only changeable by global admin
   const APP_LOGO_CONFIG = {
     // Set to null to use the default LogoIcon, or provide a path to your custom logo
@@ -137,10 +133,6 @@ export function AppLogo({
 
   if (variant === 'text') {
     return <div className={className}>{renderText()}</div>
-  }
-
-  if (!isMounted) {
-    return null;
   }
 
   return (
