@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { NewPasswordForm } from '@/components/auth/password-reset-form'
+import { PasswordResetForm } from '@/components/auth/password-reset-form'
 import { AuthLoadingSpinner } from '@/components/auth/auth-provider'
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ function ResetPasswordPageContent() {
 
         {/* Form */}
         <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
-          <NewPasswordForm />
+          <PasswordResetForm />
         </div>
 
         {/* Footer */}
