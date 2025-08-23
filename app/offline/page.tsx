@@ -14,19 +14,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import {
-  WifiOff,
-  RefreshCw,
-  Smartphone,
-  Monitor,
-  Cloud,
-  Download,
-  CheckCircle,
-  Clock,
-  AlertCircle
-} from 'lucide-react'
-
-
+import Icon from '@/components/icon'
 
 export default function OfflinePage() {
   return (
@@ -35,7 +23,7 @@ export default function OfflinePage() {
         {/* Header */}
         <div className="text-center space-y-4">
           <div className="mx-auto w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center">
-            <WifiOff className="h-10 w-10 text-blue-600" />
+            <Icon name="wifi-off" className="h-10 w-10 text-blue-600" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">You're Offline</h1>
@@ -49,7 +37,7 @@ export default function OfflinePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <AlertCircle className="h-5 w-5 text-amber-500" />
+              <Icon name="alert-circle" className="h-5 w-5 text-amber-500" />
               <span>Connection Status</span>
             </CardTitle>
           </CardHeader>
@@ -66,7 +54,7 @@ export default function OfflinePage() {
                 onClick={() => window.location.reload()}
                 className="flex items-center space-x-2"
               >
-                <RefreshCw className="h-4 w-4" />
+                <Icon name="refresh-cw" className="h-4 w-4" />
                 <span>Retry</span>
               </Button>
             </div>
@@ -77,7 +65,7 @@ export default function OfflinePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
+              <Icon name="check-circle" className="h-5 w-5 text-green-500" />
               <span>Available Offline</span>
             </CardTitle>
             <CardDescription>
@@ -125,7 +113,7 @@ export default function OfflinePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Clock className="h-5 w-5 text-amber-500" />
+              <Icon name="clock" className="h-5 w-5 text-amber-500" />
               <span>Limited Offline</span>
             </CardTitle>
             <CardDescription>
@@ -173,7 +161,7 @@ export default function OfflinePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Smartphone className="h-5 w-5 text-blue-500" />
+              <Icon name="smartphone" className="h-5 w-5 text-blue-500" />
               <span>Progressive Web App</span>
             </CardTitle>
             <CardDescription>
@@ -183,19 +171,19 @@ export default function OfflinePage() {
           <CardContent>
             <div className="flex flex-wrap gap-2 mb-4">
               <Badge variant="secondary" className="flex items-center space-x-1">
-                <Monitor className="h-3 w-3" />
+                <Icon name="monitor" className="h-3 w-3" />
                 <span>Desktop</span>
               </Badge>
               <Badge variant="secondary" className="flex items-center space-x-1">
-                <Smartphone className="h-3 w-3" />
+                <Icon name="smartphone" className="h-3 w-3" />
                 <span>Mobile</span>
               </Badge>
               <Badge variant="secondary" className="flex items-center space-x-1">
-                <Cloud className="h-3 w-3" />
+                <Icon name="cloud" className="h-3 w-3" />
                 <span>Offline Ready</span>
               </Badge>
               <Badge variant="secondary" className="flex items-center space-x-1">
-                <Download className="h-3 w-3" />
+                <Icon name="download" className="h-3 w-3" />
                 <span>Installable</span>
               </Badge>
             </div>
@@ -223,7 +211,7 @@ export default function OfflinePage() {
             onClick={() => window.location.href = '/dashboard'}
             className="flex items-center space-x-2"
           >
-            <CheckCircle className="h-4 w-4" />
+            <Icon name="check-circle" className="h-4 w-4" />
             <span>Continue Offline</span>
           </Button>
 
@@ -232,7 +220,7 @@ export default function OfflinePage() {
             onClick={() => window.location.reload()}
             className="flex items-center space-x-2"
           >
-            <RefreshCw className="h-4 w-4" />
+            <Icon name="refresh-cw" className="h-4 w-4" />
             <span>Check Connection</span>
           </Button>
         </div>

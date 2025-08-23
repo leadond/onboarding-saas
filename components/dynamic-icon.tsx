@@ -9,9 +9,10 @@ interface IconProps extends Omit<LucideProps, 'ref'> {
   name: keyof typeof dynamicIconImports;
 }
 
-const Icon = ({ name, ...props }: IconProps) => {
+const DynamicIcon = ({ name, ...props }: IconProps) => {
   const LucideIcon = dynamic(dynamicIconImports[name]);
 
+  // Use a more specific fallback with appropriate dimensions
   const fallback = (
     <div
       style={{
@@ -29,4 +30,4 @@ const Icon = ({ name, ...props }: IconProps) => {
   );
 };
 
-export default Icon;
+export default DynamicIcon;
